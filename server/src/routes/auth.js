@@ -1,10 +1,12 @@
 import { Router } from "express";
 import crypto from "node:crypto";
+import { OAuth2Client } from "google-auth-library";
 import { prisma } from "../db.js";
 import { signToken, hashPassword, comparePassword, requireAuth } from "../lib/auth.js";
 import { sendEmail } from "../lib/email.js";
 
 const router = Router();
+const googleClient = process.env.GOOGLE_CLIENT_ID ? new OAuth2Client(process.env.GOOGLE_CLIENT_ID) : null;
 
 function randomOtp() {
   return String(Math.floor(100000 + Math.random() * 900000));
@@ -22,9 +24,36 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) return res.status(400).json({ error: "Email and password required" });
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !(await comparePassword(password, user.password_hash))) {
+  if (!user || !user.password_hash || !(await comparePassword(password, user.password_hash))) {
     return res.status(401).json({ error: "Invalid email or password" });
   }
+  const token = signToken(user);
+  res.json({ access_token: token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role } });
+});
+
+router.post("/google", async (req, res) => {
+  const { credential } = req.body || {};
+  if (!credential) return res.status(400).json({ error: "Missing Google credential" });
+  if (!googleClient) return res.status(500).json({ error: "Google sign-in isn't configured on this server" });
+
+  let payload;
+  try {
+    const ticket = await googleClient.verifyIdToken({ idToken: credential, audience: process.env.GOOGLE_CLIENT_ID });
+    payload = ticket.getPayload();
+  } catch {
+    return res.status(401).json({ error: "Invalid Google credential" });
+  }
+  if (!payload?.email) return res.status(401).json({ error: "Google account has no email" });
+
+  let user = await prisma.user.findUnique({ where: { email: payload.email } });
+  if (!user) {
+    user = await prisma.user.create({
+      data: { email: payload.email, full_name: payload.name || "", google_id: payload.sub },
+    });
+  } else if (!user.google_id) {
+    user = await prisma.user.update({ where: { id: user.id }, data: { google_id: payload.sub } });
+  }
+
   const token = signToken(user);
   res.json({ access_token: token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role } });
 });

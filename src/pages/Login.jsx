@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Link } from 'react-router-dom';
 import { Wifi, Loader2 } from 'lucide-react';
+import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -24,10 +25,6 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleLogin = () => {
-    base44.auth.loginWithProvider('google', '/');
   };
 
   return (
@@ -58,9 +55,7 @@ export default function Login() {
           </form>
 
           <div className="mt-4">
-            <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
-              Sign in with Google
-            </Button>
+            <GoogleLoginButton redirectTo="/" />
           </div>
 
           <div className="mt-4 text-center text-sm text-slate-500 space-y-1">

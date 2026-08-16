@@ -102,8 +102,10 @@ export const base44 = {
       const target = fromUrl || window.location.href;
       window.location.href = `/login?redirect=${encodeURIComponent(target)}`;
     },
-    loginWithProvider() {
-      window.alert("Google sign-in isn't configured on this server. Please use email + password.");
+    async loginWithGoogleCredential(credential) {
+      const data = await request("/api/auth/google", { method: "POST", body: { credential } });
+      setToken(data.access_token);
+      return data;
     },
   },
 

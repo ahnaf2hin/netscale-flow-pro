@@ -14,7 +14,8 @@ datasource db {
 model User {
   id                String    @id @default(cuid())
   email             String    @unique
-  password_hash     String
+  password_hash     String?
+  google_id         String?   @unique
   full_name         String?
   role              String    @default("user") // "admin" | "user"
   otp_code          String?

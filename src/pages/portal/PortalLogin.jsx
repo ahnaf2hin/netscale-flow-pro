@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Wifi, Loader2, ArrowLeft } from "lucide-react";
+import GoogleLoginButton from "@/components/auth/GoogleLoginButton";
 
 export default function PortalLogin() {
   const [email, setEmail] = useState("");
@@ -25,8 +26,6 @@ export default function PortalLogin() {
       setLoading(false);
     }
   };
-
-  const handleGoogle = () => base44.auth.loginWithProvider("google", "/portal/dashboard");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-indigo-50 p-4">
@@ -54,7 +53,7 @@ export default function PortalLogin() {
             </Button>
           </form>
           <div className="mt-4">
-            <Button variant="outline" className="w-full" onClick={handleGoogle}>Sign in with Google</Button>
+            <GoogleLoginButton redirectTo="/portal/dashboard" />
           </div>
           <div className="mt-4 text-center text-sm text-slate-500 space-y-1">
             <Link to="/forgot-password" className="text-emerald-600 hover:underline block">Forgot password?</Link>
