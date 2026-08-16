@@ -1,0 +1,31 @@
+{
+  "name": "PPPoEProfile",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "rate_limit": {
+      "type": "string"
+    },
+    "ip_pool": {
+      "type": "string"
+    },
+    "shared_users": {
+      "type": "number",
+      "default": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "name",
+    "status"
+  ]
+}

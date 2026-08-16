@@ -1,0 +1,94 @@
+{
+  "name": "Customer",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "zone": {
+      "type": "string",
+      "description": "Service zone / area name (e.g. MOTIJHEEL)"
+    },
+    "latitude": {
+      "type": "number"
+    },
+    "longitude": {
+      "type": "number"
+    },
+    "connection_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "suspended",
+        "inactive"
+      ],
+      "default": "active"
+    },
+    "package_id": {
+      "type": "string"
+    },
+    "pppoe_username": {
+      "type": "string"
+    },
+    "pppoe_password": {
+      "type": "string"
+    },
+    "customer_code": {
+      "type": "string",
+      "description": "Unique customer ID used as a reference when making payments"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "provided_devices": {
+      "type": "string",
+      "description": "Devices and cables provided at installation (e.g. 1x ONU, 50m fiber)"
+    },
+    "connection_charge": {
+      "type": "number",
+      "default": 0,
+      "description": "One-time connection/installation charge in BDT"
+    },
+    "discount": {
+      "type": "number",
+      "default": 0,
+      "description": "Recurring monthly discount in BDT"
+    },
+    "package_discount": {
+      "type": "number",
+      "default": 0,
+      "description": "Additional discount on package price in BDT"
+    },
+    "referral": {
+      "type": "string",
+      "description": "Referral name or code"
+    },
+    "connected_by": {
+      "type": "string",
+      "description": "Name of the staff member who performed the connection"
+    },
+    "free_connection": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, connection charge is waived"
+    }
+  },
+  "required": [
+    "name",
+    "phone",
+    "status"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "name": "SmsProvider",
+  "type": "object",
+  "properties": {
+    "provider": {
+      "type": "string",
+      "enum": [
+        "ssl_wireless",
+        "bulksmsbd",
+        "revesms",
+        "twilio",
+        "custom"
+      ],
+      "default": "ssl_wireless"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "api_url": {
+      "type": "string",
+      "description": "SMS gateway API endpoint URL"
+    },
+    "api_key": {
+      "type": "string",
+      "description": "API key / username / account SID"
+    },
+    "api_secret": {
+      "type": "string",
+      "description": "API secret / password / auth token"
+    },
+    "sender_id": {
+      "type": "string",
+      "description": "Sender mask / from name"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_default": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "provider",
+    "display_name",
+    "is_active"
+  ]
+}

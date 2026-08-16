@@ -1,0 +1,33 @@
+{
+  "name": "MapSetting",
+  "type": "object",
+  "properties": {
+    "provider": {
+      "type": "string",
+      "enum": [
+        "esri",
+        "google"
+      ],
+      "default": "esri"
+    },
+    "google_maps_api_key": {
+      "type": "string",
+      "description": "Google Maps JavaScript API key"
+    },
+    "google_map_type": {
+      "type": "string",
+      "enum": [
+        "roadmap",
+        "satellite",
+        "hybrid"
+      ],
+      "default": "roadmap"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "provider"
+  ]
+}

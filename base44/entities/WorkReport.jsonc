@@ -1,0 +1,51 @@
+{
+  "name": "WorkReport",
+  "type": "object",
+  "properties": {
+    "staff_id": {
+      "type": "string"
+    },
+    "staff_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "report_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "hours": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "in_progress",
+        "completed"
+      ],
+      "default": "pending"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "installation",
+        "maintenance",
+        "support",
+        "meeting",
+        "other"
+      ],
+      "default": "other"
+    }
+  },
+  "required": [
+    "title",
+    "report_date",
+    "status"
+  ]
+}

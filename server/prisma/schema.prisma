@@ -1,0 +1,573 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ---------------------------------------------------------------------------
+// Auth
+// ---------------------------------------------------------------------------
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  password_hash     String
+  full_name         String?
+  role              String    @default("user") // "admin" | "user"
+  otp_code          String?
+  otp_expires       DateTime?
+  reset_token       String?
+  reset_token_expires DateTime?
+  created_date      DateTime  @default(now())
+  updated_date      DateTime  @updatedAt
+}
+
+model AppSetting {
+  key   String @id
+  value String @db.Text
+}
+
+// ---------------------------------------------------------------------------
+// Core CRM
+// ---------------------------------------------------------------------------
+
+model Customer {
+  id                 String   @id @default(cuid())
+  name               String
+  phone              String
+  email              String?
+  address            String?  @db.Text
+  zone               String?
+  latitude           Float?
+  longitude          Float?
+  connection_date    String?
+  status             String   @default("active") // active | suspended | inactive
+  package_id         String?
+  pppoe_username     String?
+  pppoe_password     String?
+  customer_code      String?
+  notes              String?  @db.Text
+  provided_devices   String?  @db.Text
+  connection_charge  Float    @default(0)
+  discount           Float    @default(0)
+  package_discount   Float    @default(0)
+  referral           String?
+  connected_by       String?
+  free_connection    Boolean  @default(false)
+  reseller_id        String?
+  user_id            String?
+  created_date       DateTime @default(now())
+  updated_date       DateTime @updatedAt
+
+  @@index([email])
+  @@index([pppoe_username])
+  @@index([status])
+  @@index([package_id])
+}
+
+model Invoice {
+  id             String   @id @default(cuid())
+  customer_id    String
+  customer_name  String?
+  package_name   String?
+  amount         Float
+  paid_amount    Float    @default(0)
+  due_date       String?
+  billing_month  String?
+  status         String   @default("unpaid") // paid | unpaid | overdue
+  paid_date      String?
+  payment_method String?
+  created_date   DateTime @default(now())
+  updated_date   DateTime @updatedAt
+
+  @@index([customer_id])
+  @@index([status])
+  @@index([billing_month])
+}
+
+model Payment {
+  id           String   @id @default(cuid())
+  invoice_id   String?
+  customer_id  String
+  amount       Float
+  gateway      String   @default("cash") // sslcommerz | bkash | nagad | cash | bank_transfer | stripe
+  transaction_id String?
+  status       String   @default("pending") // pending | completed | failed
+  paid_at      String?
+  description  String?  @db.Text
+  collected_by String?
+  notes        String?  @db.Text
+  created_date DateTime @default(now())
+
+  @@index([customer_id])
+  @@index([invoice_id])
+  @@index([transaction_id])
+}
+
+model Package {
+  id             String   @id @default(cuid())
+  name           String
+  speed_mbps     Float
+  monthly_price  Float
+  validity_days  Int      @default(30)
+  description    String?  @db.Text
+  is_active      Boolean  @default(true)
+  created_date   DateTime @default(now())
+  updated_date   DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// Settings / integrations
+// ---------------------------------------------------------------------------
+
+model PaymentGateway {
+  id           String   @id @default(cuid())
+  provider     String   @default("sslcommerz") // sslcommerz | stripe | bkash | nagad | cash | bank_transfer
+  display_name String
+  api_key      String?
+  secret_key   String?
+  api_base     String?
+  mode         String   @default("sandbox") // sandbox | live
+  currency     String   @default("BDT")
+  is_active    Boolean  @default(true)
+  is_default   Boolean  @default(false)
+  notes        String?  @db.Text
+  created_date DateTime @default(now())
+  updated_date DateTime @updatedAt
+}
+
+model SmsProvider {
+  id           String   @id @default(cuid())
+  provider     String   @default("ssl_wireless") // ssl_wireless | bulksmsbd | revesms | twilio | custom
+  display_name String
+  api_url      String?
+  api_key      String?
+  api_secret   String?
+  sender_id    String?
+  is_active    Boolean  @default(true)
+  is_default   Boolean  @default(false)
+  notes        String?  @db.Text
+  created_date DateTime @default(now())
+  updated_date DateTime @updatedAt
+}
+
+model SMSMessage {
+  id             String   @id @default(cuid())
+  recipient      String
+  recipient_name String?
+  message        String   @db.Text
+  type           String   @default("single") // single | bulk | reminder | notification
+  status         String   @default("queued") // queued | sent | failed | delivered
+  sent_at        String?
+  created_date   DateTime @default(now())
+}
+
+model MapSetting {
+  id                  String   @id @default(cuid())
+  provider            String   @default("esri") // esri | google
+  google_maps_api_key String?  @db.Text
+  google_map_type     String?
+  notes               String?  @db.Text
+  created_date        DateTime @default(now())
+  updated_date        DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// MikroTik / PPPoE
+// ---------------------------------------------------------------------------
+
+model MikrotikRouter {
+  id              String   @id @default(cuid())
+  name            String
+  host            String
+  api_port        Int      @default(8728)
+  username        String
+  password        String?
+  snmp_community  String   @default("public")
+  snmp_port       Int      @default(161)
+  location        String?
+  latitude        Float?
+  longitude       Float?
+  status          String   @default("offline") // online | offline
+  last_synced     String?
+  router_version  String?
+  router_uptime   String?
+  free_memory     Float?
+  cpu_load        Float?
+  board_name      String?
+  created_date    DateTime @default(now())
+  updated_date    DateTime @updatedAt
+}
+
+model PPPoESession {
+  id                  String   @id @default(cuid())
+  customer_id         String?
+  customer_name       String?
+  customer_code       String?
+  router_id           String
+  router_name         String?
+  pppoe_username      String
+  password            String?
+  profile             String?
+  secret_id           String?
+  disabled            Boolean  @default(false)
+  ip_address          String?
+  upload_speed_kbps   Float    @default(0)
+  download_speed_kbps Float    @default(0)
+  download_bytes      Float    @default(0)
+  upload_bytes        Float    @default(0)
+  uptime              String?
+  status              String   @default("offline") // online | offline | suspended
+  last_synced         String?
+  created_date        DateTime @default(now())
+
+  @@index([router_id])
+  @@index([pppoe_username])
+  @@index([customer_id])
+  @@index([status])
+}
+
+model PPPoEProfile {
+  id            String   @id @default(cuid())
+  name          String
+  rate_limit    String?
+  ip_pool       String?
+  shared_users  Int      @default(1)
+  status        String   @default("active") // active | inactive
+  created_date  DateTime @default(now())
+  updated_date  DateTime @updatedAt
+}
+
+model CommandQueue {
+  id             String   @id @default(cuid())
+  customer_id    String
+  command_type   String   // suspend | reconnect
+  router_id      String?
+  pppoe_username String?
+  status         String   @default("pending") // pending | executing | completed | failed
+  result         String?  @db.Text
+  created_date   DateTime @default(now())
+
+  @@index([router_id, status])
+}
+
+model BandwidthLog {
+  id                    String   @id @default(cuid())
+  log_date              String
+  router_id             String?
+  router_name           String?
+  total_download_kbps   Float
+  total_upload_kbps     Float
+  active_sessions       Int      @default(0)
+  created_date          DateTime @default(now())
+
+  @@index([log_date])
+}
+
+model CustomerBandwidthLog {
+  id                 String   @id @default(cuid())
+  customer_id        String
+  log_date           String
+  avg_download_kbps  Float    @default(0)
+  avg_upload_kbps    Float    @default(0)
+  download_gb        Float    @default(0)
+  upload_gb          Float    @default(0)
+  created_date       DateTime @default(now())
+
+  @@index([customer_id, log_date])
+}
+
+model VlanTraffic {
+  id           String   @id @default(cuid())
+  router_id    String
+  router_name  String?
+  vlan_id      String
+  vlan_name    String?
+  tx_kbps      Float    @default(0)
+  rx_kbps      Float    @default(0)
+  tx_bytes     Float    @default(0)
+  rx_bytes     Float    @default(0)
+  monitored    Boolean  @default(false)
+  favorite     Boolean  @default(false)
+  last_synced  String?
+  created_date DateTime @default(now())
+
+  @@index([router_id])
+}
+
+// ---------------------------------------------------------------------------
+// OLT / network map
+// ---------------------------------------------------------------------------
+
+model OLTDevice {
+  id               String   @id @default(cuid())
+  name             String
+  vendor           String?
+  ip_address       String
+  snmp_community   String   @default("public")
+  location         String?
+  latitude         Float?
+  longitude        Float?
+  status           String   @default("online") // online | offline
+  total_pon_ports  Int?
+  created_date     DateTime @default(now())
+  updated_date     DateTime @updatedAt
+}
+
+model ONU {
+  id             String   @id @default(cuid())
+  olt_id         String
+  olt_name       String?
+  pon_port       String?
+  serial_number  String
+  customer_id    String?
+  customer_name  String?
+  rx_power_dbm   Float?
+  tx_power_dbm   Float?
+  status         String   @default("offline") // online | offline | los | dying_gasp
+  last_synced    String?
+  created_date   DateTime @default(now())
+
+  @@index([olt_id])
+  @@index([customer_id])
+  @@index([serial_number])
+}
+
+model NetworkDevice {
+  id           String   @id @default(cuid())
+  name         String
+  type         String   @default("switch") // switch | splitter | distribution_box | joint
+  latitude     Float?
+  longitude    Float?
+  description  String?  @db.Text
+  status       String   @default("active")
+  ports_total  Int      @default(0)
+  ports_used   Int      @default(0)
+  notes        String?  @db.Text
+  created_date DateTime @default(now())
+}
+
+model CableRoute {
+  id             String   @id @default(cuid())
+  name           String
+  cable_type     String   @default("fiber") // fiber | utp | coaxial | drop_cable
+  color          String?
+  is_live        Boolean  @default(false)
+  path           String?  @db.LongText // JSON-encoded array of {lat,lng}
+  start_lat      Float?
+  start_lng      Float?
+  end_lat        Float?
+  end_lng        Float?
+  length_meters  Float?
+  notes          String?  @db.Text
+  created_date   DateTime @default(now())
+}
+
+model Office {
+  id           String   @id @default(cuid())
+  name         String
+  type         String   @default("sub_office") // head_office | sub_office
+  address      String?  @db.Text
+  latitude     Float?
+  longitude    Float?
+  phone        String?
+  is_active    Boolean  @default(true)
+  notes        String?  @db.Text
+  created_date DateTime @default(now())
+  updated_date DateTime @updatedAt
+}
+
+model Zone {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?  @db.Text
+  color        String   @default("#6366f1")
+  status       String   @default("active") // active | inactive
+  created_date DateTime @default(now())
+  updated_date DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// HR / staff
+// ---------------------------------------------------------------------------
+
+model Staff {
+  id           String   @id @default(cuid())
+  name         String
+  email        String?
+  phone        String?
+  role         String   @default("support") // admin | manager | technician | support | billing
+  department   String?
+  status       String   @default("active") // active | inactive
+  address      String?  @db.Text
+  salary       Float?
+  join_date    String?
+  user_id      String?
+  created_date DateTime @default(now())
+  updated_date DateTime @updatedAt
+}
+
+model WorkReport {
+  id           String   @id @default(cuid())
+  staff_id     String?
+  staff_name   String?
+  title        String
+  description  String?  @db.Text
+  report_date  String
+  hours        Float    @default(0)
+  status       String   @default("pending") // pending | in_progress | completed
+  category     String   @default("other") // installation | maintenance | support | meeting | other
+  created_date DateTime @default(now())
+
+  @@index([staff_id])
+  @@index([staff_name])
+}
+
+model Reseller {
+  id                String   @id @default(cuid())
+  name              String
+  company           String?
+  phone             String
+  email             String?
+  address           String?  @db.Text
+  balance           Float    @default(0)
+  commission_rate   Float    @default(0)
+  total_customers   Int      @default(0)
+  status            String   @default("active") // active | inactive | blocked
+  join_date         String?
+  created_date      DateTime @default(now())
+  updated_date      DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// Support
+// ---------------------------------------------------------------------------
+
+model SupportTicket {
+  id            String   @id @default(cuid())
+  customer_id   String?
+  customer_name String?
+  subject       String
+  description   String?  @db.Text
+  priority      String   @default("medium") // low | medium | high | urgent
+  status        String   @default("open") // open | in_progress | resolved | closed
+  category      String   @default("connectivity") // connectivity | billing | hardware | speed | other
+  assigned_to   String?
+  resolution    String?  @db.Text
+  created_date  DateTime @default(now())
+  updated_date  DateTime @updatedAt
+}
+
+model SupportCategory {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?  @db.Text
+  color        String   @default("indigo")
+  status       String   @default("active") // active | inactive
+  created_date DateTime @default(now())
+}
+
+model SignupRequest {
+  id            String   @id @default(cuid())
+  name          String
+  phone         String
+  email         String?
+  address       String?  @db.Text
+  package_id    String?
+  package_name  String?
+  status        String   @default("pending") // pending | approved | rejected | contacted
+  notes         String?  @db.Text
+  request_date  String?
+  created_date  DateTime @default(now())
+  updated_date  DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// Accounting
+// ---------------------------------------------------------------------------
+
+model AccountingTransaction {
+  id             String   @id @default(cuid())
+  type           String   @default("income") // income | expense
+  category       String?
+  description    String?  @db.Text
+  amount         Float
+  date           String
+  payment_method String   @default("cash") // cash | bank_transfer | mobile_banking | cheque
+  reference      String?
+  created_date   DateTime @default(now())
+
+  @@index([type])
+  @@index([date])
+}
+
+// ---------------------------------------------------------------------------
+// Hotspot
+// ---------------------------------------------------------------------------
+
+model HotspotUser {
+  id            String   @id @default(cuid())
+  username      String
+  password      String?
+  profile       String?
+  ip_address    String?
+  mac_address   String?
+  uptime        String?
+  bytes_in      Float    @default(0)
+  bytes_out     Float    @default(0)
+  limit_uptime  String?
+  status        String   @default("active") // active | expired | disabled
+  comment       String?  @db.Text
+  created_date  DateTime @default(now())
+  updated_date  DateTime @updatedAt
+}
+
+model HotspotProfile {
+  id               String   @id @default(cuid())
+  name             String
+  shared_users     Int      @default(1)
+  rate_limit       String?
+  session_timeout  String?
+  validity         String?
+  price            Float    @default(0)
+  status           String   @default("active") // active | inactive
+  created_date     DateTime @default(now())
+  updated_date     DateTime @updatedAt
+}
+
+model HotspotVoucher {
+  id            String   @id @default(cuid())
+  code          String
+  profile       String
+  status        String   @default("unused") // unused | used | expired
+  customer_name String?
+  validity      String?
+  price         Float    @default(0)
+  used_at       String?
+  created_date  DateTime @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Payment gateway staging (idempotent checkout completion)
+// ---------------------------------------------------------------------------
+
+model PaymentIntent {
+  id            String   @id @default(cuid())
+  gateway       String
+  type          String   // bill | upgrade | admin_bill
+  invoice_id    String?
+  package_id    String?
+  customer_id   String
+  amount        Float
+  status        String   @default("pending") // pending | completed | failed | cancelled
+  gateway_ref   String?
+  raw_response  String?  @db.LongText
+  created_date  DateTime @default(now())
+  updated_date  DateTime @updatedAt
+
+  @@index([gateway, gateway_ref])
+  @@index([status])
+}

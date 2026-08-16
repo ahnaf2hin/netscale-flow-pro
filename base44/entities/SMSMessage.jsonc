@@ -1,0 +1,44 @@
+{
+  "name": "SMSMessage",
+  "type": "object",
+  "properties": {
+    "recipient": {
+      "type": "string"
+    },
+    "recipient_name": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "single",
+        "bulk",
+        "reminder",
+        "notification"
+      ],
+      "default": "single"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "sent",
+        "failed",
+        "delivered"
+      ],
+      "default": "queued"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "recipient",
+    "message",
+    "status"
+  ]
+}

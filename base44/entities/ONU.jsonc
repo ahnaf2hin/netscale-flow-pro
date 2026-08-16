@@ -1,0 +1,48 @@
+{
+  "name": "ONU",
+  "type": "object",
+  "properties": {
+    "olt_id": {
+      "type": "string"
+    },
+    "olt_name": {
+      "type": "string"
+    },
+    "pon_port": {
+      "type": "string"
+    },
+    "serial_number": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "rx_power_dbm": {
+      "type": "number"
+    },
+    "tx_power_dbm": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "online",
+        "offline",
+        "los",
+        "dying_gasp"
+      ],
+      "default": "offline"
+    },
+    "last_synced": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "olt_id",
+    "serial_number"
+  ]
+}

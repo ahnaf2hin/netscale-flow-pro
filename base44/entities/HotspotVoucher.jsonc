@@ -1,0 +1,40 @@
+{
+  "name": "HotspotVoucher",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "profile": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "unused",
+        "used",
+        "expired"
+      ],
+      "default": "unused"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "validity": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "used_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "code",
+    "profile",
+    "status"
+  ]
+}

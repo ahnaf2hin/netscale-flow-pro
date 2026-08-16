@@ -1,0 +1,54 @@
+{
+  "name": "VlanTraffic",
+  "type": "object",
+  "properties": {
+    "router_id": {
+      "type": "string"
+    },
+    "router_name": {
+      "type": "string"
+    },
+    "vlan_id": {
+      "type": "string"
+    },
+    "vlan_name": {
+      "type": "string"
+    },
+    "tx_kbps": {
+      "type": "number",
+      "default": 0
+    },
+    "rx_kbps": {
+      "type": "number",
+      "default": 0
+    },
+    "tx_bytes": {
+      "type": "number",
+      "default": 0,
+      "description": "Cumulative TX bytes for speed delta computation"
+    },
+    "rx_bytes": {
+      "type": "number",
+      "default": 0,
+      "description": "Cumulative RX bytes for speed delta computation"
+    },
+    "monitored": {
+      "type": "boolean",
+      "default": false,
+      "description": "Admin selected this interface for dashboard monitoring"
+    },
+    "favorite": {
+      "type": "boolean",
+      "default": false,
+      "description": "Pinned to top of monitor list"
+    },
+    "last_synced": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "router_id",
+    "vlan_id"
+  ]
+}

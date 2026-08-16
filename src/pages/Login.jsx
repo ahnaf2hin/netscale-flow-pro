@@ -1,0 +1,74 @@
+import React, { useState } from 'react';
+import { base44 } from '@/api/base44Client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Link } from 'react-router-dom';
+import { Wifi, Loader2 } from 'lucide-react';
+
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      await base44.auth.loginViaEmailPassword(email, password);
+      window.location.href = '/';
+    } catch (err) {
+      setError(err.message || 'Invalid credentials');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    base44.auth.loginWithProvider('google', '/');
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-8">
+          <div className="w-14 h-14 rounded-xl bg-emerald-600 flex items-center justify-center mx-auto mb-4">
+            <Wifi className="w-7 h-7 text-white" />
+          </div>
+          <h1 className="text-xl font-bold text-slate-900">ISP Manager</h1>
+          <p className="text-sm text-slate-500 mt-1">Sign in to your account</p>
+        </div>
+
+        <div className="bg-white rounded-xl border border-slate-200 p-6">
+          <form onSubmit={handleLogin} className="space-y-4">
+            {error && <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
+            <div>
+              <Label className="text-xs">Email</Label>
+              <Input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+            </div>
+            <div>
+              <Label className="text-xs">Password</Label>
+              <Input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+            </div>
+            <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700" disabled={loading}>
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
+            </Button>
+          </form>
+
+          <div className="mt-4">
+            <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
+              Sign in with Google
+            </Button>
+          </div>
+
+          <div className="mt-4 text-center text-sm text-slate-500 space-y-1">
+            <Link to="/forgot-password" className="text-emerald-600 hover:underline block">Forgot password?</Link>
+            <p>Don't have an account? <Link to="/register" className="text-emerald-600 hover:underline">Register</Link></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

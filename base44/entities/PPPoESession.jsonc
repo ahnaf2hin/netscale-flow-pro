@@ -1,0 +1,81 @@
+{
+  "name": "PPPoESession",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "description": "Linked Customer entity id (empty if no client record yet)"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "customer_code": {
+      "type": "string",
+      "description": "Denormalized customer payment code for quick display"
+    },
+    "router_id": {
+      "type": "string"
+    },
+    "router_name": {
+      "type": "string"
+    },
+    "pppoe_username": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string",
+      "description": "Cached PPPoE password from last sync"
+    },
+    "profile": {
+      "type": "string"
+    },
+    "secret_id": {
+      "type": "string",
+      "description": "RouterOS internal .id of the ppp secret, used for enable/disable/delete"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "ip_address": {
+      "type": "string"
+    },
+    "upload_speed_kbps": {
+      "type": "number",
+      "description": "Live upload speed in kbps (computed from byte delta between syncs)"
+    },
+    "download_speed_kbps": {
+      "type": "number",
+      "description": "Live download speed in kbps (computed from byte delta between syncs)"
+    },
+    "download_bytes": {
+      "type": "number",
+      "description": "Cumulative download bytes from router, used to compute speed delta"
+    },
+    "upload_bytes": {
+      "type": "number",
+      "description": "Cumulative upload bytes from router, used to compute speed delta"
+    },
+    "uptime": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "online",
+        "offline",
+        "suspended"
+      ],
+      "default": "offline"
+    },
+    "last_synced": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "customer_id",
+    "router_id",
+    "pppoe_username"
+  ]
+}

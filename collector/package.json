@@ -1,0 +1,15 @@
+{
+  "name": "mikrotik-collector",
+  "version": "2.0.0",
+  "description": "Local collector agent that polls Mikrotik routers via SNMP (UDP) and pushes PPPoE sessions + system resource data to the ISP app.",
+  "type": "module",
+  "scripts": {
+    "start": "node collector.js",
+    "start:dev": "node --watch collector.js",
+    "start:routeros": "node collector.routeros.bak.js"
+  },
+  "dependencies": {
+    "net-snmp": "^3.26.3",
+    "node-routeros": "^1.5.0"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "HotspotUser",
+  "type": "object",
+  "properties": {
+    "username": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "profile": {
+      "type": "string"
+    },
+    "ip_address": {
+      "type": "string"
+    },
+    "mac_address": {
+      "type": "string"
+    },
+    "uptime": {
+      "type": "string"
+    },
+    "bytes_in": {
+      "type": "number",
+      "default": 0
+    },
+    "bytes_out": {
+      "type": "number",
+      "default": 0
+    },
+    "limit_uptime": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "disabled"
+      ],
+      "default": "active"
+    },
+    "comment": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "username",
+    "status"
+  ]
+}

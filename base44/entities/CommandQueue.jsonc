@@ -1,0 +1,40 @@
+{
+  "name": "CommandQueue",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string"
+    },
+    "command_type": {
+      "type": "string",
+      "enum": [
+        "suspend",
+        "reconnect"
+      ]
+    },
+    "router_id": {
+      "type": "string"
+    },
+    "pppoe_username": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "executing",
+        "completed",
+        "failed"
+      ],
+      "default": "pending"
+    },
+    "result": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "customer_id",
+    "command_type",
+    "status"
+  ]
+}

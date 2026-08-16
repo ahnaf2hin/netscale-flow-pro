@@ -1,0 +1,78 @@
+{
+  "name": "MikrotikRouter",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "host": {
+      "type": "string"
+    },
+    "api_port": {
+      "type": "number",
+      "default": 8728
+    },
+    "username": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "snmp_community": {
+      "type": "string",
+      "default": "public",
+      "description": "SNMP community string (enable SNMP on router: /snmp set enabled=yes)"
+    },
+    "snmp_port": {
+      "type": "number",
+      "default": 161,
+      "description": "SNMP UDP port"
+    },
+    "location": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "number"
+    },
+    "longitude": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "online",
+        "offline"
+      ],
+      "default": "offline"
+    },
+    "last_synced": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "router_version": {
+      "type": "string",
+      "description": "RouterOS version from /system/resource"
+    },
+    "router_uptime": {
+      "type": "string",
+      "description": "Router uptime from /system/resource"
+    },
+    "free_memory": {
+      "type": "number",
+      "description": "Free memory in bytes from /system/resource"
+    },
+    "cpu_load": {
+      "type": "number",
+      "description": "CPU load percentage from /system/resource"
+    },
+    "board_name": {
+      "type": "string",
+      "description": "Board name from /system/resource"
+    }
+  },
+  "required": [
+    "name",
+    "host",
+    "username"
+  ]
+}
