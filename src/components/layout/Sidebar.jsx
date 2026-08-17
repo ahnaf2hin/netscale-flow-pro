@@ -77,14 +77,14 @@ function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-slate-800">
+      <div className="flex items-center gap-3 px-4 py-5 border-b border-zinc-800">
         <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 shadow-lg shadow-indigo-900/40 flex items-center justify-center flex-shrink-0">
           <Wifi className="w-5 h-5 text-white" />
         </div>
         {!collapsed && (
           <div className="overflow-hidden">
             <h1 className="text-sm font-bold text-white tracking-wide">NetScale Flow Pro</h1>
-            <p className="text-[10px] text-slate-400 uppercase tracking-widest">ISP Management</p>
+            <p className="text-[10px] text-zinc-400 uppercase tracking-widest">ISP Management</p>
           </div>
         )}
       </div>
@@ -105,23 +105,23 @@ function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ease-out group flex-1 ${
                     active || parentActive
                       ? "bg-indigo-600 text-white shadow-md shadow-indigo-900/30"
-                      : "text-slate-400 hover:text-white hover:bg-slate-800/80 hover:translate-x-0.5"
+                      : "text-zinc-400 hover:text-white hover:bg-zinc-800/80 hover:translate-x-0.5"
                   }`}
                 >
-                  <Icon className={`w-[18px] h-[18px] flex-shrink-0 transition-transform duration-200 group-hover:scale-110 ${active || parentActive ? "text-white" : "text-slate-500 group-hover:text-white"}`} />
+                  <Icon className={`w-[18px] h-[18px] flex-shrink-0 transition-transform duration-200 group-hover:scale-110 ${active || parentActive ? "text-white" : "text-zinc-500 group-hover:text-white"}`} />
                   {!collapsed && <span>{item.label}</span>}
                 </Link>
                 {item.children && !collapsed && (
                   <button
                     onClick={(e) => { e.preventDefault(); toggleExpand(idx); }}
-                    className={`p-1.5 rounded-md transition-colors ${active || parentActive ? "text-white hover:bg-indigo-500" : "text-slate-500 hover:text-white hover:bg-slate-800"}`}
+                    className={`p-1.5 rounded-md transition-colors ${active || parentActive ? "text-white hover:bg-indigo-500" : "text-zinc-500 hover:text-white hover:bg-zinc-800"}`}
                   >
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isOpen ? "rotate-180" : ""}`} />
                   </button>
                 )}
               </div>
               {item.children && !collapsed && isOpen && (
-                <div className="ml-6 mt-1 space-y-1 border-l border-slate-800 pl-3">
+                <div className="ml-6 mt-1 space-y-1 border-l border-zinc-800 pl-3">
                   {item.children.map((child, ci) => (
                     <Link
                       key={ci}
@@ -130,10 +130,10 @@ function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand
                       className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs transition-colors ${
                         isActive(child.path)
                           ? "text-white bg-indigo-600/30"
-                          : "text-slate-400 hover:text-white hover:bg-slate-800"
+                          : "text-zinc-400 hover:text-white hover:bg-zinc-800"
                       }`}
                     >
-                      <span className={`w-1 h-1 rounded-full ${isActive(child.path) ? "bg-indigo-400" : "bg-slate-600"}`} />
+                      <span className={`w-1 h-1 rounded-full ${isActive(child.path) ? "bg-indigo-400" : "bg-zinc-600"}`} />
                       {child.label}
                     </Link>
                   ))}
@@ -145,10 +145,10 @@ function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand
       </nav>
 
       {/* Footer */}
-      <div className="px-3 py-4 border-t border-slate-800">
+      <div className="px-3 py-4 border-t border-zinc-800">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-all w-full"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:text-red-400 hover:bg-zinc-800 transition-all w-full"
         >
           <LogOut className="w-[18px] h-[18px] flex-shrink-0" />
           {!collapsed && <span>Logout</span>}
@@ -189,7 +189,7 @@ export default function Sidebar() {
       <button
         onClick={() => setMobileOpen((o) => !o)}
         aria-label={mobileOpen ? "Close menu" : "Open menu"}
-        className="lg:hidden fixed top-4 left-4 z-[60] w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg border border-white/10 bg-slate-900/70 backdrop-blur-md transition-all duration-200 hover:bg-slate-800/80 hover:scale-105 active:scale-95"
+        className="lg:hidden fixed top-4 left-4 z-[60] w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg border border-white/10 bg-zinc-900/60 backdrop-blur-xl backdrop-saturate-150 transition-all duration-200 hover:bg-zinc-800/70 hover:scale-105 active:scale-95"
       >
         <span className="relative w-5 h-5 block">
           <Menu className={`absolute inset-0 w-5 h-5 transition-all duration-200 ${mobileOpen ? "opacity-0 rotate-90 scale-75" : "opacity-100 rotate-0 scale-100"}`} />
@@ -205,12 +205,12 @@ export default function Sidebar() {
       >
         {/* Glassmorphism backdrop */}
         <div
-          className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm"
+          className="absolute inset-0 bg-zinc-950/60 backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
         />
         {/* Glassmorphism drawer panel */}
         <div
-          className={`absolute left-0 top-0 bottom-0 w-64 overflow-y-auto border-r border-white/10 bg-slate-900/80 backdrop-blur-xl shadow-2xl transition-transform duration-300 ease-out ${
+          className={`absolute left-0 top-0 bottom-0 w-64 overflow-y-auto border-r border-white/10 bg-zinc-900/75 backdrop-blur-2xl backdrop-saturate-150 shadow-2xl transition-transform duration-300 ease-out ${
             mobileOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -218,16 +218,18 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Desktop sidebar */}
+      {/* Desktop sidebar — solid (not glass): it's a persistent nav rail, not an overlay, so
+          there's no page content behind it for translucency to read against. Glassmorphism is
+          reserved for the hamburger menu's overlay + drawer below, where it actually shows. */}
       <div
-        className={`hidden lg:flex flex-col bg-slate-900 border-r border-slate-800 h-screen sticky top-0 transition-all duration-200 ${
+        className={`hidden lg:flex flex-col bg-zinc-900 border-r border-zinc-800 h-screen sticky top-0 transition-all duration-200 ${
           collapsed ? "w-[68px]" : "w-60"
         }`}
       >
         <NavContent {...navProps} />
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="absolute -right-3 top-8 w-6 h-6 bg-slate-700 border border-slate-600 rounded-full flex items-center justify-center text-slate-300 hover:bg-indigo-600 hover:border-indigo-500 hover:text-white hover:scale-110 active:scale-95 transition-all duration-200"
+          className="absolute -right-3 top-8 w-6 h-6 bg-zinc-700 border border-zinc-600 rounded-full flex items-center justify-center text-zinc-300 hover:bg-indigo-600 hover:border-indigo-500 hover:text-white hover:scale-110 active:scale-95 transition-all duration-200"
         >
           <ChevronRight className={`w-3 h-3 transition-transform duration-300 ${collapsed ? "" : "rotate-180"}`} />
         </button>
