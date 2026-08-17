@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { netscaleApi } from "@/api/apiClient";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Wifi, MapPin, Phone, Mail, Calendar, Loader2, Signal, Activity, Clock, Cpu, Play, Pause } from "lucide-react";
+import { ArrowLeft, Wifi, MapPin, Phone, Mail, Calendar, Loader2, Signal, Activity, Clock, Cpu, Play, Pause, RefreshCw } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import CustomerActions from "@/components/customer/CustomerActions";
 import LiveSpeedChart from "@/components/customer/LiveSpeedChart";
@@ -22,6 +22,7 @@ export default function CustomerDetail() {
   const [loading, setLoading] = useState(true);
   const [liveMode, setLiveMode] = useState(false);
   const [bandwidthLogs, setBandwidthLogs] = useState([]);
+  const [syncing, setSyncing] = useState(false);
 
   useEffect(() => {
     loadCustomer();
@@ -96,6 +97,23 @@ export default function CustomerDetail() {
       if (results[4].status === 'fulfilled') setBandwidthLogs(results[4].value);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
+  };
+
+  const handleSyncNow = async () => {
+    if (!session?.router_id || !customer?.pppoe_username || syncing) return;
+    setSyncing(true);
+    try {
+      const res = await netscaleApi.functions.invoke("syncCustomerSpeed", {
+        router_id: session.router_id,
+        pppoe_username: customer.pppoe_username,
+      });
+      setSession((prev) => ({ ...prev, ...res.data }));
+      toast({ title: "Synced", description: "Live speed data refreshed from the router" });
+    } catch (err) {
+      toast({ title: "Sync failed", description: err.message || "Could not reach the router", variant: "destructive" });
+    } finally {
+      setSyncing(false);
+    }
   };
 
   if (loading) {
@@ -220,6 +238,13 @@ export default function CustomerDetail() {
               <Activity className="w-4 h-4 text-emerald-500" /> Real-time Speed
             </h2>
             <div className="flex items-center gap-1">
+              <button
+                onClick={handleSyncNow}
+                disabled={!session?.router_id || syncing}
+                className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full transition-colors bg-slate-100 text-slate-500 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <RefreshCw className={`w-3 h-3 ${syncing ? "animate-spin" : ""}`} /> Sync Now
+              </button>
               <button
                 onClick={() => setLiveMode(true)}
                 className={`flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${liveMode ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"}`}
