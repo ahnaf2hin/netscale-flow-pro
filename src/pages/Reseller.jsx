@@ -75,7 +75,7 @@ export default function Reseller() {
   if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-amber-600 flex items-center justify-center">
@@ -103,14 +103,14 @@ export default function Reseller() {
         <StatCard label="Reseller Clients" value={totalCustomers} icon={Users} bg="bg-amber-500" iconBg="bg-amber-600" />
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 mb-4">
+      <div className="glass-card p-4 mb-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, company, phone..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="glass-card overflow-hidden">
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-slate-400">
             <Store className="w-12 h-12 mb-3" />

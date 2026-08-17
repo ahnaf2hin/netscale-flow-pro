@@ -161,7 +161,7 @@ export default function PaymentGateways() {
   }
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-slate-700 flex items-center justify-center">
@@ -183,7 +183,7 @@ export default function PaymentGateways() {
       </div>
 
       {gateways.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200 p-10 text-center">
+        <div className="glass-card p-10 text-center">
           <CreditCard className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <h3 className="text-sm font-semibold text-slate-900">No payment gateways configured</h3>
           <p className="text-xs text-slate-500 mt-1 mb-4">Add your first gateway to enable online bill payments in the customer portal.</p>
@@ -196,7 +196,7 @@ export default function PaymentGateways() {
           {gateways.map(gw => {
             const pMeta = PROVIDERS.find(p => p.value === gw.provider);
             return (
-              <div key={gw.id} className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col">
+              <div key={gw.id} className="glass-card p-5 flex flex-col">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">

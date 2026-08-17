@@ -33,7 +33,7 @@ export default function RouterInfoPanel() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl border border-slate-200 p-6 mb-4 flex items-center justify-center">
+      <div className="glass-card p-6 mb-4 flex items-center justify-center">
         <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
       </div>
     );
@@ -64,7 +64,7 @@ export default function RouterInfoPanel() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {routers.map(router => (
-          <div key={router.id} className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div key={router.id} className="glass-card p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-bold text-slate-900">{router.name}</h3>
               <span className={`flex items-center gap-1.5 text-[10px] font-bold uppercase ${router.status === "online" ? "text-emerald-600" : "text-slate-400"}`}>

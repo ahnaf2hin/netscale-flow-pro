@@ -108,7 +108,7 @@ export default function Offices() {
   }
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-slate-700 flex items-center justify-center">
@@ -130,7 +130,7 @@ export default function Offices() {
       </div>
 
       {offices.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200 p-10 text-center">
+        <div className="glass-card p-10 text-center">
           <Building2 className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <h3 className="text-sm font-semibold text-slate-900">No offices added yet</h3>
           <p className="text-xs text-slate-500 mt-1 mb-4">Add your head office first — the network map will center on it automatically.</p>
@@ -141,7 +141,7 @@ export default function Offices() {
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {offices.map(o => (
-            <div key={o.id} className="bg-white rounded-xl border border-slate-200 p-5">
+            <div key={o.id} className="glass-card p-5">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${o.type === "head_office" ? "bg-indigo-50" : "bg-amber-50"}`}>

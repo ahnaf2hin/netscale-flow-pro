@@ -119,7 +119,7 @@ export default function OltOnu() {
   if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -166,7 +166,7 @@ export default function OltOnu() {
         </TabsList>
 
         <TabsContent value="olts" className="mt-4">
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="glass-card overflow-hidden">
             {olts.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-slate-400">
                 <HardDrive className="w-12 h-12 mb-3" /><p className="text-sm">No OLT devices added yet</p>
@@ -216,7 +216,7 @@ export default function OltOnu() {
         </TabsContent>
 
         <TabsContent value="onus" className="mt-4">
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="glass-card overflow-hidden">
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
               <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
                 <Signal className="w-4 h-4 text-cyan-500" /> ONUs List
@@ -235,7 +235,7 @@ export default function OltOnu() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-slate-800 text-white">
+                    <tr className="bg-slate-50/90 backdrop-blur-sm text-slate-500 border-b border-slate-200">
                       <th className="text-left text-[11px] font-semibold uppercase px-4 py-3">ONU ID</th>
                       <th className="text-left text-[11px] font-semibold uppercase px-4 py-3">Name / Description</th>
                       <th className="text-left text-[11px] font-semibold uppercase px-4 py-3 hidden sm:table-cell">MAC / Serial</th>

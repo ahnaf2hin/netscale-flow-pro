@@ -5,7 +5,7 @@ export default function UpgradeSection({ packages, currentPackageId, upgradingId
   const sorted = [...packages].sort((a, b) => (a.speed_mbps || 0) - (b.speed_mbps || 0));
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+    <div className="glass-card p-6">
       <div className="flex items-center gap-2 mb-4">
         <TrendingUp className="w-5 h-5 text-emerald-600" />
         <h3 className="font-semibold text-slate-900">Upgrade Your Package</h3>

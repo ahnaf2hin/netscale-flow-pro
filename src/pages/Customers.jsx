@@ -245,7 +245,7 @@ export default function Customers() {
   if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
         <div className="flex items-center gap-3">
@@ -276,7 +276,7 @@ export default function Customers() {
       </div>
 
       {/* Filter Region */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-4">
+      <div className="glass-card mb-4">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <FilterIcon className="w-4 h-4 text-indigo-500" />
@@ -306,7 +306,7 @@ export default function Customers() {
       </div>
 
       {/* Client Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="glass-card overflow-hidden">
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-slate-400">
             <Users className="w-12 h-12 mb-3" />
@@ -316,7 +316,7 @@ export default function Customers() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[1100px]">
               <thead>
-                <tr className="bg-slate-800 text-white">
+                <tr className="bg-slate-50/90 backdrop-blur-sm text-slate-500 border-b border-slate-200">
                   <th className="w-10 px-4 py-3.5">
                     <input type="checkbox" checked={allFilteredSelected} onChange={toggleSelectAll} className="w-4 h-4 rounded border-slate-400 text-indigo-500 cursor-pointer" />
                   </th>

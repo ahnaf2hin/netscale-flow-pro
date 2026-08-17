@@ -100,7 +100,7 @@ export default function InvoiceManager({ customer, invoices, onUpdated }) {
   const paymentMethods = ["cash", "bank_transfer", "mobile_banking", "cheque", "stripe"];
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-6 mt-6">
+    <div className="glass-card p-6 mt-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">
           <Receipt className="w-4 h-4 text-indigo-500" /> Invoices & Payments

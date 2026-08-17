@@ -64,7 +64,7 @@ export default function MapSettings() {
   const isGoogle = form.provider === "google";
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-slate-700 flex items-center justify-center">
@@ -80,7 +80,7 @@ export default function MapSettings() {
         </button>
       </div>
 
-      <div className="max-w-2xl bg-white rounded-xl border border-slate-200 p-6 space-y-5">
+      <div className="max-w-2xl glass-card p-6 space-y-5">
         <div className="flex items-start gap-2 bg-sky-50 border border-sky-200 rounded-lg p-3 text-xs text-sky-800">
           <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
           <span>Google Maps requires an API key with <b>Maps JavaScript API</b> enabled in your Google Cloud project (billing may apply). No key? Leave the provider as <b>Esri Satellite</b> for a free live satellite map.</span>

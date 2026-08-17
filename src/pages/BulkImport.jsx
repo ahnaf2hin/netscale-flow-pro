@@ -107,14 +107,14 @@ export default function BulkImport() {
   };
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <PageHeader icon={UploadCloud} iconBg="bg-indigo-600" title="Bulk Import Customers" subtitle="Upload a spreadsheet to import existing customer data in one go">
         <button onClick={downloadTemplate} className="flex items-center gap-2 text-xs text-slate-600 hover:text-slate-800 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><Download className="w-3.5 h-3.5" /> Download Template</button>
       </PageHeader>
 
       <div className="max-w-3xl mx-auto space-y-5">
         {/* Step 1: Upload */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+        <div className="glass-card p-6">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">1</span>
             <h2 className="text-sm font-semibold text-slate-800">Select Spreadsheet File</h2>
@@ -168,7 +168,7 @@ export default function BulkImport() {
 
         {/* Step 2: Preview */}
         {stage === "preview" && (
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+          <div className="glass-card p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span className="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">2</span>

@@ -40,7 +40,7 @@ export default function Configuration() {
   ];
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-slate-700 flex items-center justify-center">
@@ -60,7 +60,7 @@ export default function Configuration() {
         {modules.map(m => {
           const Icon = m.icon;
           return (
-            <Link key={m.path} to={m.path} className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition-shadow group">
+            <Link key={m.path} to={m.path} className="glass-card p-5 hover:shadow-md transition-shadow group">
               <div className={`w-11 h-11 rounded-xl ${m.bg} flex items-center justify-center mb-3`}>
                 <Icon className="w-6 h-6 text-white" />
               </div>

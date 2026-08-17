@@ -102,7 +102,7 @@ export default function Reports() {
   const EmptyChart = ({ height = 200 }) => <div className="flex items-center justify-center text-slate-400 text-sm" style={{ height }}>No data for this period</div>;
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <PageHeader icon={BarChart3} iconBg="bg-indigo-600" title="Business Reports" subtitle="Day-wise, monthly & yearly performance across customers, finance, and collections">
         <div className="flex items-center gap-2">
           <div className="flex bg-white border border-slate-200 rounded-lg overflow-hidden">
@@ -125,7 +125,7 @@ export default function Reports() {
 
       {/* New Customers + Income vs Expense */}
       <div className="grid lg:grid-cols-2 gap-4 mb-4">
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+        <div className="glass-card p-4">
           <h2 className="text-sm font-semibold text-slate-800 mb-3">New Customers</h2>
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
@@ -138,7 +138,7 @@ export default function Reports() {
             </AreaChart>
           </ResponsiveContainer>
         </div>
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+        <div className="glass-card p-4">
           <h2 className="text-sm font-semibold text-slate-800 mb-3">Income vs Expense</h2>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
@@ -156,7 +156,7 @@ export default function Reports() {
 
       {/* Profit + Cash Collections */}
       <div className="grid lg:grid-cols-2 gap-4 mb-4">
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+        <div className="glass-card p-4">
           <h2 className="text-sm font-semibold text-slate-800 mb-3">Net Profit Trend</h2>
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={chartData.map(d => ({ ...d, profit: d.income - d.expense }))} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
@@ -169,7 +169,7 @@ export default function Reports() {
             </AreaChart>
           </ResponsiveContainer>
         </div>
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+        <div className="glass-card p-4">
           <h2 className="text-sm font-semibold text-slate-800 mb-3">Cash Collections</h2>
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
@@ -186,7 +186,7 @@ export default function Reports() {
 
       {/* Staff Collections + Payment Method Breakdown */}
       <div className="grid lg:grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+        <div className="glass-card p-4">
           <h2 className="text-sm font-semibold text-slate-800 mb-3">Staff Collections</h2>
           {staffData.length === 0 ? (
             <EmptyChart />
@@ -211,7 +211,7 @@ export default function Reports() {
             </div>
           )}
         </div>
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+        <div className="glass-card p-4">
           <h2 className="text-sm font-semibold text-slate-800 mb-3">Payment Method Breakdown</h2>
           {methodData.length === 0 ? (
             <EmptyChart />

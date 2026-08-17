@@ -135,7 +135,7 @@ export default function CustomerDetail() {
       </Link>
 
       {/* Header */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+      <div className="glass-card p-6 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-5">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-3">
@@ -191,7 +191,7 @@ export default function CustomerDetail() {
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Connection Info */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <div className="glass-card p-6">
           <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Connection</h2>
           <div className="space-y-0">
             <div className="flex justify-between items-center text-sm py-2.5 border-b border-slate-100">
@@ -214,7 +214,7 @@ export default function CustomerDetail() {
         </div>
 
         {/* Real-time Speed Usage */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <div className="glass-card p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">
               <Activity className="w-4 h-4 text-emerald-500" /> Real-time Speed
@@ -281,7 +281,7 @@ export default function CustomerDetail() {
         </div>
 
         {/* ONU Info */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <div className="glass-card p-6">
           <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
             <Cpu className="w-4 h-4 text-blue-500" /> ONU Info
           </h2>
@@ -351,7 +351,7 @@ export default function CustomerDetail() {
 
         {/* Map */}
         {hasLocation && (
-          <div className="bg-white rounded-xl border border-slate-200 p-6">
+          <div className="glass-card p-6">
             <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
               <MapPin className="w-4 h-4 text-red-500" /> Location
             </h2>
@@ -371,7 +371,7 @@ export default function CustomerDetail() {
       <CustomerFullDetails customer={customer} pkg={pkg} />
 
       {/* Monthly Bandwidth Usage */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 mt-6">
+      <div className="glass-card p-6 mt-6">
         <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
           <Activity className="w-4 h-4 text-blue-500" /> Monthly Bandwidth Usage (Last 6 Months)
         </h2>

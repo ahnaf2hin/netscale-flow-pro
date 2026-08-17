@@ -91,7 +91,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -132,7 +132,7 @@ export default function Dashboard() {
       {/* Charts + Tables row */}
       <div className="grid lg:grid-cols-2 gap-4 mb-4">
         {/* Bandwidth */}
-        <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+        <div className="glass-card p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold text-slate-800">Client Growth (Last 30 Days)</h2>
             <div className="flex gap-3 text-[11px]">
@@ -167,7 +167,7 @@ export default function Dashboard() {
         </div>
 
         {/* Recent Customers */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="glass-card overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
             <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2"><Users className="w-4 h-4 text-indigo-500" /> New Client Signups</h2>
             <Link to="/customers" className="text-xs text-indigo-600 hover:underline">View All</Link>
@@ -203,7 +203,7 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Invoices */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="glass-card overflow-hidden">
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
           <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2"><CreditCard className="w-4 h-4 text-teal-500" /> Recent Invoices</h2>
           <Link to="/billing" className="text-xs text-indigo-600 hover:underline">View All</Link>

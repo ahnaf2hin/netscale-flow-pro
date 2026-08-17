@@ -130,7 +130,7 @@ export default function Billing() {
   if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -182,7 +182,7 @@ export default function Billing() {
 
         {/* INVOICES */}
         <TabsContent value="invoices" className="mt-4">
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 mb-4">
+          <div className="glass-card p-4 mb-4">
             <p className="text-xs font-semibold text-slate-600 uppercase mb-3">Filter Bills</p>
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="relative flex-1">
@@ -200,7 +200,7 @@ export default function Billing() {
               </Select>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="glass-card overflow-hidden">
             {filteredInvoices.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-slate-400">
                 <CreditCard className="w-12 h-12 mb-3" />
@@ -264,7 +264,7 @@ export default function Billing() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {packages.map((p) => (
-              <div key={p.id} className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition-shadow">
+              <div key={p.id} className="glass-card p-5 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between mb-3">
                   <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center"><Package className="w-5 h-5 text-indigo-600" /></div>
                   <Button variant="ghost" size="sm" className="text-xs h-7" onClick={() => openEditPkg(p)}>Edit</Button>
@@ -281,7 +281,7 @@ export default function Billing() {
 
         {/* PAYMENTS */}
         <TabsContent value="payments" className="mt-4">
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="glass-card overflow-hidden">
             {payments.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-slate-400"><CreditCard className="w-12 h-12 mb-3" /><p className="text-sm">No payments recorded yet</p></div>
             ) : (

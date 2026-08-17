@@ -137,7 +137,7 @@ export default function InterfaceMonitorPanel() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm mb-4">
+      <div className="glass-card p-4 shadow-sm mb-4">
         <div className="flex items-center gap-2 text-sm text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> Loading interface monitor...</div>
       </div>
     );
@@ -145,7 +145,7 @@ export default function InterfaceMonitorPanel() {
 
   if (routers.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm mb-4">
+      <div className="glass-card p-4 shadow-sm mb-4">
         <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2 mb-2"><Activity className="w-4 h-4 text-cyan-500" /> Interface Speed Monitor</h2>
         <p className="text-sm text-slate-400 text-center py-4">No routers registered. Add routers in Mikrotik Monitor first.</p>
       </div>
@@ -153,7 +153,7 @@ export default function InterfaceMonitorPanel() {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm mb-4">
+    <div className="glass-card p-4 shadow-sm mb-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-3 flex-wrap">
           <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2">

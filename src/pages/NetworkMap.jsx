@@ -201,7 +201,7 @@ export default function NetworkMap() {
 
       {/* Editor toolbar */}
       {editMode && (
-        <div className="bg-white rounded-xl border border-slate-200 p-3 mb-4 flex flex-wrap items-center gap-2">
+        <div className="glass-card p-3 mb-4 flex flex-wrap items-center gap-2">
           <span className="text-xs font-medium text-slate-500 mr-1">Tool:</span>
           <button
             onClick={() => setTool("cable")}
@@ -312,7 +312,7 @@ export default function NetworkMap() {
         ))}
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden" style={{ height: "calc(100vh - 240px)", minHeight: "400px" }}>
+      <div className="glass-card overflow-hidden" style={{ height: "calc(100vh - 240px)", minHeight: "400px" }}>
         {useGoogle ? (
           <GoogleNetworkMap apiKey={mapSetting.google_maps_api_key} mapType={googleMapType} {...rendererProps} />
         ) : !hasContent && !editMode ? (

@@ -192,7 +192,7 @@ export default function ActiveConnections() {
   if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-cyan-600 flex items-center justify-center"><Activity className="w-6 h-6 text-white" /></div>
@@ -220,7 +220,7 @@ export default function ActiveConnections() {
         <StatCard label="Disabled" value={disabledCount} icon={PowerOff} bg="bg-rose-500" iconBg="bg-rose-600" />
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 mb-4">
+      <div className="glass-card p-4 mb-4">
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
@@ -232,7 +232,7 @@ export default function ActiveConnections() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="glass-card overflow-hidden">
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-slate-400">
             <Wifi className="w-12 h-12 mb-3" />
@@ -242,7 +242,7 @@ export default function ActiveConnections() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-slate-800 text-white">
+                <tr className="bg-slate-50/90 backdrop-blur-sm text-slate-500 border-b border-slate-200">
                   <th className="text-left text-[11px] font-semibold uppercase px-4 py-3">#</th>
                   <th className="text-left text-[11px] font-semibold uppercase px-4 py-3">Username</th>
                   <th className="text-left text-[11px] font-semibold uppercase px-4 py-3">Password</th>

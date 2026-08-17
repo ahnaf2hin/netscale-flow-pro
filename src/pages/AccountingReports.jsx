@@ -44,7 +44,7 @@ export default function AccountingReports() {
   if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <PageHeader icon={BarChart3} iconBg="bg-indigo-600" title="Financial Reports" subtitle="Profit & loss overview, trends and breakdowns">
         <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
       </PageHeader>
@@ -57,7 +57,7 @@ export default function AccountingReports() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-4 mb-4">
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+        <div className="glass-card p-4">
           <h2 className="text-sm font-semibold text-slate-800 mb-3">Income vs Expense (6 months)</h2>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={monthlyData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
@@ -72,7 +72,7 @@ export default function AccountingReports() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+        <div className="glass-card p-4">
           <h2 className="text-sm font-semibold text-slate-800 mb-3">Expense Breakdown</h2>
           {pieData.length === 0 ? (
             <div className="flex items-center justify-center h-[240px] text-slate-400 text-sm">No expense data</div>
@@ -89,7 +89,7 @@ export default function AccountingReports() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+      <div className="glass-card p-4">
         <h2 className="text-sm font-semibold text-slate-800 mb-3">Monthly Profit Trend</h2>
         {monthlyData.length === 0 ? (
           <div className="flex items-center justify-center h-[200px] text-slate-400 text-sm">No data</div>

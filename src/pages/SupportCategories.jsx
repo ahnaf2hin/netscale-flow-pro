@@ -61,7 +61,7 @@ export default function SupportCategories() {
   if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <PageHeader icon={FolderKanban} iconBg="bg-indigo-600" title="Support Categories" subtitle="Organize support tickets by category">
         <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
         <button onClick={() => open()} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add Category</button>
@@ -75,7 +75,7 @@ export default function SupportCategories() {
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {categories.map(c => (
-          <div key={c.id} className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition-shadow">
+          <div key={c.id} className="glass-card p-5 hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between mb-2">
               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${colorBg(c.color)}`}>{c.name}</span>
               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${c.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>{c.status}</span>

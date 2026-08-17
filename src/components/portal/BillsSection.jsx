@@ -9,7 +9,7 @@ const statusStyle = {
 
 export default function BillsSection({ invoices, payingId, onPay }) {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+    <div className="glass-card p-6">
       <div className="flex items-center gap-2 mb-4">
         <Receipt className="w-5 h-5 text-slate-400" />
         <h3 className="font-semibold text-slate-900">Bill History</h3>

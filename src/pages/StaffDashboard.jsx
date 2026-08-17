@@ -68,7 +68,7 @@ export default function StaffDashboard() {
   }
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-indigo-600 flex items-center justify-center">
@@ -85,7 +85,7 @@ export default function StaffDashboard() {
       </div>
 
       {/* Staff profile banner */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 mb-6 flex items-center gap-4">
+      <div className="glass-card p-4 mb-6 flex items-center gap-4">
         <div className="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0">
           <UserCircle className="w-7 h-7 text-indigo-600" />
         </div>
@@ -112,7 +112,7 @@ export default function StaffDashboard() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-3 mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
+      <div className="glass-card p-3 mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search your tasks..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
@@ -130,7 +130,7 @@ export default function StaffDashboard() {
       {/* Task list */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map(r => (
-          <div key={r.id} className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-sm transition-shadow">
+          <div key={r.id} className="glass-card p-4 hover:shadow-sm transition-shadow">
             <div className="flex items-start justify-between mb-2">
               <span className="text-[10px] text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">{CATEGORY_LABELS[r.category] || r.category || "Other"}</span>
               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${r.status === "completed" ? "bg-emerald-100 text-emerald-700" : r.status === "in_progress" ? "bg-cyan-100 text-cyan-700" : "bg-amber-100 text-amber-700"}`}>

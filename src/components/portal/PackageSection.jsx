@@ -4,7 +4,7 @@ import { Zap, Clock, DollarSign, Gauge } from "lucide-react";
 export default function PackageSection({ pkg }) {
   if (!pkg) {
     return (
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+      <div className="glass-card p-6">
         <h3 className="font-semibold text-slate-900 mb-1">Current Package</h3>
         <p className="text-sm text-slate-400">No active package assigned. Please contact support.</p>
       </div>
@@ -18,7 +18,7 @@ export default function PackageSection({ pkg }) {
   ];
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+    <div className="glass-card p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-slate-900">Current Package</h3>
         <span className="text-[10px] font-bold uppercase bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full">Active</span>

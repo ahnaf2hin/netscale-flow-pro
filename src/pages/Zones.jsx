@@ -49,7 +49,7 @@ export default function Zones() {
   if (loading) return <div className="flex items-center justify-center h-screen"><Loader2 className="w-8 h-8 animate-spin text-slate-400" /></div>;
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-indigo-500 flex items-center justify-center">
@@ -64,14 +64,14 @@ export default function Zones() {
       </div>
 
       {zones.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200 p-12 text-center text-slate-400">
+        <div className="glass-card p-12 text-center text-slate-400">
           <MapPin className="w-10 h-10 mx-auto mb-2 opacity-30" />
           <p className="text-sm">No zones yet — add your first service area</p>
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {zones.map(z => (
-            <div key={z.id} className="bg-white rounded-xl border border-slate-200 p-5">
+            <div key={z.id} className="glass-card p-5">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded-full" style={{ background: z.color || "#6366f1" }} />

@@ -16,7 +16,7 @@ export default function CustomerFullDetails({ customer, pkg }) {
   ];
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-6 mt-6">
+    <div className="glass-card p-6 mt-6">
       <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
         <CreditCard className="w-4 h-4 text-indigo-500" /> Full Customer Details
       </h2>

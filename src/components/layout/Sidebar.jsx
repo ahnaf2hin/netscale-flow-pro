@@ -218,11 +218,10 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Desktop sidebar — solid (not glass): it's a persistent nav rail, not an overlay, so
-          there's no page content behind it for translucency to read against. Glassmorphism is
-          reserved for the hamburger menu's overlay + drawer below, where it actually shows. */}
+      {/* Desktop sidebar — same glass material as the mobile drawer, so the nav reads as one
+          consistent surface everywhere. AppLayout's ambient gradient sits directly behind it. */}
       <div
-        className={`hidden lg:flex flex-col bg-zinc-900 border-r border-zinc-800 h-screen sticky top-0 transition-all duration-200 ${
+        className={`hidden lg:flex flex-col glass-dark border-y-0 border-l-0 h-screen sticky top-0 transition-all duration-200 ${
           collapsed ? "w-[68px]" : "w-60"
         }`}
       >

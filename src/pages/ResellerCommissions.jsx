@@ -42,7 +42,7 @@ export default function ResellerCommissions() {
   if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <PageHeader icon={Handshake} iconBg="bg-amber-600" title="Reseller Commissions" subtitle="Manage commission rates & track earnings per reseller">
         <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
       </PageHeader>
@@ -54,7 +54,7 @@ export default function ResellerCommissions() {
         <ColorStatCard label="Est. Payout" value={formatBDT(totalCommission)} icon={DollarSign} bg="bg-teal-500" iconBg="bg-teal-600" />
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="glass-card overflow-hidden">
         {resellers.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-slate-400"><Handshake className="w-12 h-12 mb-3" /><p className="text-sm">No resellers yet</p></div>
         ) : (

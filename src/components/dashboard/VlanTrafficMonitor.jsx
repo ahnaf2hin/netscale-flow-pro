@@ -89,7 +89,7 @@ export default function VlanTrafficMonitor() {
   const selectedKeys = [...selected];
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+    <div className="glass-card p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">

@@ -157,7 +157,7 @@ export default function SmsProviders() {
   }
 
   return (
-    <div className="p-4 lg:p-6 bg-slate-50 min-h-screen">
+    <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-slate-700 flex items-center justify-center">
@@ -179,7 +179,7 @@ export default function SmsProviders() {
       </div>
 
       {providers.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200 p-10 text-center">
+        <div className="glass-card p-10 text-center">
           <MessageSquare className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <h3 className="text-sm font-semibold text-slate-900">No SMS providers configured</h3>
           <p className="text-xs text-slate-500 mt-1 mb-4">Add your bulk SMS gateway credentials to send notifications and reminders.</p>
@@ -192,7 +192,7 @@ export default function SmsProviders() {
           {providers.map(p => {
             const pMeta = PROVIDERS.find(x => x.value === p.provider);
             return (
-              <div key={p.id} className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col">
+              <div key={p.id} className="glass-card p-5 flex flex-col">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">

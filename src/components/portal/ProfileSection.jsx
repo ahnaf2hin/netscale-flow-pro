@@ -16,7 +16,7 @@ export default function ProfileSection({ customer }) {
   ];
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="glass-card overflow-hidden">
       <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-5 text-white">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center"><User className="w-6 h-6" /></div>
