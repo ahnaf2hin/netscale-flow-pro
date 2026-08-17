@@ -8,16 +8,13 @@ import InterfaceMonitorPanel from "@/components/dashboard/InterfaceMonitorPanel"
 
 const StatCard = ({ label, value, icon: Icon, bg, iconBg, href }) => {
   const inner = (
-    <div className={`${bg} rounded-xl p-4 flex items-center justify-between relative overflow-hidden group transition-all duration-200 ${href ? "cursor-pointer hover:scale-[1.03] hover:shadow-xl active:scale-[0.98]" : ""}`}>
-      {/* Glassmorphism sheen */}
-      <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-xl" />
-      <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-white/5 blur-xl" />
+    <div className={`group bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between relative overflow-hidden transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 ${href ? "cursor-pointer" : ""}`}>
       <div className="relative">
-        <p className="text-white/70 text-xs font-medium uppercase tracking-wide">{label}</p>
-        <p className="text-white text-2xl font-bold mt-1">{value}</p>
-        {href && <p className="text-white/50 text-[10px] mt-1 group-hover:text-white/80 transition-colors">View all →</p>}
+        <p className="text-slate-500 text-xs font-medium uppercase tracking-wide">{label}</p>
+        <p className="text-slate-900 text-2xl font-bold mt-1">{value}</p>
+        {href && <p className="text-slate-400 text-[10px] mt-1 group-hover:text-slate-600 transition-colors">View all →</p>}
       </div>
-      <div className={`${iconBg} w-10 h-10 rounded-lg flex items-center justify-center relative backdrop-blur-sm border border-white/20 shadow-inner`}>
+      <div className={`${iconBg || bg} w-10 h-10 rounded-lg flex items-center justify-center relative shadow-sm transition-transform duration-200 group-hover:scale-110`}>
         <Icon className="w-5 h-5 text-white" />
       </div>
     </div>
