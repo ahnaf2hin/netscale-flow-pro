@@ -28,19 +28,19 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-slate-50 to-emerald-50 p-4">
+      <div className="w-full max-w-sm animate-in fade-in slide-in-from-bottom-2 duration-500">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-xl bg-emerald-600 flex items-center justify-center mx-auto mb-4">
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 shadow-lg shadow-emerald-900/20 flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-105">
             <Wifi className="w-7 h-7 text-white" />
           </div>
           <h1 className="text-xl font-bold text-slate-900">ISP Manager</h1>
           <p className="text-sm text-slate-500 mt-1">Sign in to your account</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <div className="glass rounded-xl shadow-xl p-6">
           <form onSubmit={handleLogin} className="space-y-4">
-            {error && <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
+            {error && <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg animate-in fade-in slide-in-from-top-1 duration-200">{error}</p>}
             <div>
               <Label className="text-xs">Email</Label>
               <Input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
@@ -49,7 +49,7 @@ export default function Login() {
               <Label className="text-xs">Password</Label>
               <Input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
             </div>
-            <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700" disabled={loading}>
+            <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 hover:shadow-emerald-500/30" disabled={loading}>
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
             </Button>
           </form>
@@ -59,8 +59,8 @@ export default function Login() {
           </div>
 
           <div className="mt-4 text-center text-sm text-slate-500 space-y-1">
-            <Link to="/forgot-password" className="text-emerald-600 hover:underline block">Forgot password?</Link>
-            <p>Don't have an account? <Link to="/register" className="text-emerald-600 hover:underline">Register</Link></p>
+            <Link to="/forgot-password" className="text-emerald-600 hover:underline block transition-colors">Forgot password?</Link>
+            <p>Don't have an account? <Link to="/register" className="text-emerald-600 hover:underline transition-colors">Register</Link></p>
           </div>
         </div>
       </div>
