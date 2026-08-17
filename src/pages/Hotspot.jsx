@@ -50,13 +50,13 @@ export default function Hotspot() {
   const active = users.filter(u => u.status === "active").length;
   const expired = users.filter(u => u.status === "expired").length;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-cyan-600 flex items-center justify-center"><Wifi className="w-6 h-6 text-white" /></div>
+          <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center"><Wifi className="w-6 h-6 text-white" /></div>
           <div>
             <h1 className="text-xl font-bold text-slate-900">Hotspot Management</h1>
             <p className="text-xs text-slate-500">Hotspot users, vouchers & active sessions</p>
@@ -64,12 +64,12 @@ export default function Hotspot() {
         </div>
         <div className="flex gap-2">
           <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
-          <button onClick={openCreate} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add User</button>
+          <button onClick={openCreate} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add User</button>
         </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <ColorStatCard label="Total Users" value={users.length} icon={User} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <ColorStatCard label="Total Users" value={users.length} icon={User} bg="bg-blue-500" iconBg="bg-blue-600" />
         <ColorStatCard label="Active" value={active} icon={Wifi} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <ColorStatCard label="Expired" value={expired} icon={Ticket} bg="bg-amber-500" iconBg="bg-amber-600" />
         <ColorStatCard label="Profiles" value={new Set(users.map(u => u.profile).filter(Boolean)).size} icon={Ticket} bg="bg-violet-500" iconBg="bg-violet-600" />
@@ -78,7 +78,7 @@ export default function Hotspot() {
       <div className="glass-card p-4 mb-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search username, MAC..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search username, MAC..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
         </div>
       </div>
 
@@ -137,7 +137,7 @@ export default function Hotspot() {
               <div><Label className="text-xs">MAC Address</Label><Input value={form.mac_address} onChange={e => setForm({ ...form, mac_address: e.target.value })} /></div>
             </div>
             <div><Label className="text-xs">Comment</Label><Input value={form.comment} onChange={e => setForm({ ...form, comment: e.target.value })} /></div>
-            <Button onClick={saveUser} className="w-full bg-indigo-600 hover:bg-indigo-700">{editUser ? "Update User" : "Add User"}</Button>
+            <Button onClick={saveUser} className="w-full bg-blue-600 hover:bg-blue-700">{editUser ? "Update User" : "Add User"}</Button>
           </div>
         </DialogContent>
       </Dialog>

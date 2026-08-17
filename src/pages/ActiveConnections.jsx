@@ -189,13 +189,13 @@ export default function ActiveConnections() {
   const enabledCount = sessions.filter(s => !s.disabled).length;
   const disabledCount = sessions.filter(s => s.disabled).length;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-cyan-600 flex items-center justify-center"><Activity className="w-6 h-6 text-white" /></div>
+          <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center"><Activity className="w-6 h-6 text-white" /></div>
           <div>
             <h1 className="text-xl font-bold text-slate-900">PPPoE Management</h1>
             <p className="text-xs text-slate-500">{syncing ? "Syncing with MikroTik…" : "Full control of PPPoE users · auto-refresh 60s"}</p>
@@ -209,22 +209,22 @@ export default function ActiveConnections() {
           <button onClick={() => syncFromRouter(selectedRouter)} disabled={syncing} className="flex items-center gap-2 text-xs text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm disabled:opacity-50">
             <RefreshCw className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`} /> Sync
           </button>
-          <button onClick={openAdd} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add User</button>
+          <button onClick={openAdd} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add User</button>
         </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Users" value={sessions.length} icon={Users} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <StatCard label="Total Users" value={sessions.length} icon={Users} bg="bg-blue-500" iconBg="bg-blue-600" />
         <StatCard label="Online Now" value={onlineCount} icon={Wifi} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <StatCard label="Enabled" value={enabledCount} icon={Activity} bg="bg-cyan-500" iconBg="bg-cyan-600" />
-        <StatCard label="Disabled" value={disabledCount} icon={PowerOff} bg="bg-rose-500" iconBg="bg-rose-600" />
+        <StatCard label="Enabled" value={enabledCount} icon={Activity} bg="bg-blue-500" iconBg="bg-blue-600" />
+        <StatCard label="Disabled" value={disabledCount} icon={PowerOff} bg="bg-red-500" iconBg="bg-red-600" />
       </div>
 
       <div className="glass-card p-4 mb-4">
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search username, client, profile, customer ID..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search username, client, profile, customer ID..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
           </div>
           <button onClick={() => setShowPasswords(!showPasswords)} className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50">
             {showPasswords ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />} {showPasswords ? "Hide" : "Show"} Passwords
@@ -267,10 +267,10 @@ export default function ActiveConnections() {
                       <p className="text-xs font-medium text-slate-700">{s.customer_name || <span className="text-slate-300 italic">No client</span>}</p>
                       {s.customer_name && <p className="text-[10px] text-slate-400 flex items-center gap-1"><MapPin className="w-2.5 h-2.5" />{s.latitude ? "Located" : "No location"}</p>}
                     </td>
-                    <td className="px-4 py-3 text-xs font-mono text-indigo-600 font-semibold hidden xl:table-cell">{s.customer_code || "—"}</td>
+                    <td className="px-4 py-3 text-xs font-mono text-blue-600 font-semibold hidden xl:table-cell">{s.customer_code || "—"}</td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex items-center gap-1 text-[11px] font-semibold ${s.disabled ? "text-rose-600" : s.status === "online" ? "text-emerald-600" : "text-slate-400"}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${s.disabled ? "bg-rose-500" : s.status === "online" ? "bg-emerald-500" : "bg-slate-400"}`} />
+                      <span className={`inline-flex items-center gap-1 text-[11px] font-semibold ${s.disabled ? "text-red-600" : s.status === "online" ? "text-emerald-600" : "text-slate-400"}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${s.disabled ? "bg-red-500" : s.status === "online" ? "bg-emerald-500" : "bg-slate-400"}`} />
                         {s.disabled ? "Disabled" : s.status === "online" ? "Online" : "Offline"}
                       </span>
                     </td>
@@ -279,13 +279,13 @@ export default function ActiveConnections() {
                         <button onClick={() => openDetails(s)} disabled={actionLoading} title="Client details" className="w-7 h-7 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-600 flex items-center justify-center">
                           {s.customer_id ? <Pencil className="w-3.5 h-3.5" /> : <UserPlus className="w-3.5 h-3.5" />}
                         </button>
-                        <button onClick={() => openEdit(s)} disabled={actionLoading} title="Edit PPPoE" className="w-7 h-7 rounded-md bg-indigo-50 hover:bg-indigo-100 text-indigo-600 flex items-center justify-center"><Pencil className="w-3.5 h-3.5" /></button>
+                        <button onClick={() => openEdit(s)} disabled={actionLoading} title="Edit PPPoE" className="w-7 h-7 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-600 flex items-center justify-center"><Pencil className="w-3.5 h-3.5" /></button>
                         {s.disabled ? (
                           <button onClick={() => handlePppoeAction("enable", { id: s.secret_id }, "User enabled")} disabled={actionLoading} title="Enable" className="w-7 h-7 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-600 flex items-center justify-center"><Power className="w-3.5 h-3.5" /></button>
                         ) : (
                           <button onClick={() => handlePppoeAction("disable", { id: s.secret_id }, "User disabled")} disabled={actionLoading} title="Disable" className="w-7 h-7 rounded-md bg-amber-50 hover:bg-amber-100 text-amber-600 flex items-center justify-center"><PowerOff className="w-3.5 h-3.5" /></button>
                         )}
-                        <button onClick={() => setDeleteTarget(s)} disabled={actionLoading} title="Delete" className="w-7 h-7 rounded-md bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center"><Trash2 className="w-3.5 h-3.5" /></button>
+                        <button onClick={() => setDeleteTarget(s)} disabled={actionLoading} title="Delete" className="w-7 h-7 rounded-md bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center"><Trash2 className="w-3.5 h-3.5" /></button>
                       </div>
                     </td>
                   </tr>
@@ -314,7 +314,7 @@ export default function ActiveConnections() {
               </Select>
             </div>
             <div><Label className="text-xs">Comment / Customer Name</Label><Input value={form.comment} onChange={e => setForm({ ...form, comment: e.target.value })} placeholder="Optional" /></div>
-            <Button onClick={handleSavePppoe} disabled={actionLoading} className="w-full bg-indigo-600 hover:bg-indigo-700">
+            <Button onClick={handleSavePppoe} disabled={actionLoading} className="w-full bg-blue-600 hover:bg-blue-700">
               {actionLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}{editMode ? "Update User" : "Create User"}
             </Button>
           </div>
@@ -328,7 +328,7 @@ export default function ActiveConnections() {
           <p className="text-sm text-slate-600 mt-2">This will permanently remove <span className="font-semibold text-slate-900">{deleteTarget?.pppoe_username}</span> from the MikroTik router. This cannot be undone.</p>
           <DialogFooter className="mt-4">
             <Button variant="outline" onClick={() => setDeleteTarget(null)}>Cancel</Button>
-            <Button variant="destructive" onClick={confirmDelete} disabled={actionLoading} className="bg-rose-600 hover:bg-rose-700">
+            <Button variant="destructive" onClick={confirmDelete} disabled={actionLoading} className="bg-red-600 hover:bg-red-700">
               {actionLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Trash2 className="w-4 h-4 mr-2" />} Delete
             </Button>
           </DialogFooter>
@@ -340,10 +340,10 @@ export default function ActiveConnections() {
         <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader><DialogTitle>{detailsMode === "add" ? "Add Client Details" : "Edit Client Details"}</DialogTitle></DialogHeader>
           {detailsLoading ? (
-            <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-indigo-500" /></div>
+            <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-blue-500" /></div>
           ) : (
             <div className="space-y-4 mt-2">
-              <div><Label className="text-xs">Customer ID (for payments)</Label><Input value={detailsForm.customer_code} readOnly className="bg-slate-50 font-mono text-indigo-600 font-semibold" /></div>
+              <div><Label className="text-xs">Customer ID (for payments)</Label><Input value={detailsForm.customer_code} readOnly className="bg-slate-50 font-mono text-blue-600 font-semibold" /></div>
               <div><Label className="text-xs">PPPoE Username</Label><Input value={detailsTarget?.pppoe_username || ""} readOnly className="bg-slate-50 font-mono text-xs" /></div>
               <div><Label className="text-xs">Name *</Label><Input value={detailsForm.name} onChange={e => setDetailsForm({ ...detailsForm, name: e.target.value })} /></div>
               <div><Label className="text-xs">Phone</Label><Input value={detailsForm.phone} onChange={e => setDetailsForm({ ...detailsForm, phone: e.target.value })} /></div>

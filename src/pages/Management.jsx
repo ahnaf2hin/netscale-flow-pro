@@ -67,7 +67,7 @@ export default function Management() {
 
   const formatBDT = (a) => `৳${(a || 0).toLocaleString("en-BD")}`;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
@@ -90,20 +90,20 @@ export default function Management() {
       <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-3">Financial Overview</h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard label="Total Collected" value={formatBDT(stats.collected)} icon={DollarSign} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <StatCard label="Outstanding" value={formatBDT(stats.outstanding)} icon={TrendingUp} bg="bg-orange-400" iconBg="bg-orange-500" />
-        <StatCard label="Overdue Bills" value={stats.overdue || 0} icon={CreditCard} bg="bg-rose-500" iconBg="bg-rose-600" />
-        <StatCard label="Total Invoices" value={stats.invoices || 0} icon={CreditCard} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <StatCard label="Outstanding" value={formatBDT(stats.outstanding)} icon={TrendingUp} bg="bg-amber-400" iconBg="bg-amber-500" />
+        <StatCard label="Overdue Bills" value={stats.overdue || 0} icon={CreditCard} bg="bg-red-500" iconBg="bg-red-600" />
+        <StatCard label="Total Invoices" value={stats.invoices || 0} icon={CreditCard} bg="bg-blue-500" iconBg="bg-blue-600" />
       </div>
 
       {/* Network Overview */}
       <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-3">Network Overview</h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Mikrotik Servers" value={stats.routers || 0} icon={Server} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <StatCard label="Mikrotik Servers" value={stats.routers || 0} icon={Server} bg="bg-blue-500" iconBg="bg-blue-600" />
         <StatCard label="Online Servers" value={stats.onlineRouters || 0} icon={Radio} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <StatCard label="OLT Devices" value={stats.olts || 0} icon={HardDrive} bg="bg-teal-500" iconBg="bg-teal-600" />
-        <StatCard label="Total ONUs" value={stats.onus || 0} icon={HardDrive} bg="bg-rose-500" iconBg="bg-rose-600" />
-        <StatCard label="Online ONUs" value={stats.onlineOnus || 0} icon={HardDrive} bg="bg-cyan-500" iconBg="bg-cyan-600" />
-        <StatCard label="PPPoE Sessions" value={stats.pppoe || 0} icon={Wifi} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <StatCard label="OLT Devices" value={stats.olts || 0} icon={HardDrive} bg="bg-emerald-500" iconBg="bg-emerald-600" />
+        <StatCard label="Total ONUs" value={stats.onus || 0} icon={HardDrive} bg="bg-red-500" iconBg="bg-red-600" />
+        <StatCard label="Online ONUs" value={stats.onlineOnus || 0} icon={HardDrive} bg="bg-blue-500" iconBg="bg-blue-600" />
+        <StatCard label="PPPoE Sessions" value={stats.pppoe || 0} icon={Wifi} bg="bg-blue-500" iconBg="bg-blue-600" />
         <StatCard label="Active Sessions" value={stats.onlinePppoe || 0} icon={Wifi} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <StatCard label="Packages" value={stats.packages || 0} icon={CreditCard} bg="bg-violet-500" iconBg="bg-violet-600" />
       </div>
@@ -111,12 +111,12 @@ export default function Management() {
       {/* Team & Partners */}
       <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-3">Team & Partners</h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Clients" value={stats.customers || 0} icon={Users} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <StatCard label="Total Clients" value={stats.customers || 0} icon={Users} bg="bg-blue-500" iconBg="bg-blue-600" />
         <StatCard label="Active Clients" value={stats.activeCustomers || 0} icon={Users} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <StatCard label="Staff Members" value={stats.staff || 0} icon={Users} bg="bg-teal-500" iconBg="bg-teal-600" />
-        <StatCard label="Active Staff" value={stats.activeStaff || 0} icon={Users} bg="bg-cyan-500" iconBg="bg-cyan-600" />
+        <StatCard label="Staff Members" value={stats.staff || 0} icon={Users} bg="bg-emerald-500" iconBg="bg-emerald-600" />
+        <StatCard label="Active Staff" value={stats.activeStaff || 0} icon={Users} bg="bg-blue-500" iconBg="bg-blue-600" />
         <StatCard label="Resellers" value={stats.resellers || 0} icon={Store} bg="bg-amber-500" iconBg="bg-amber-600" />
-        <StatCard label="Open Tickets" value={stats.openTickets || 0} icon={Ticket} bg="bg-rose-500" iconBg="bg-rose-600" />
+        <StatCard label="Open Tickets" value={stats.openTickets || 0} icon={Ticket} bg="bg-red-500" iconBg="bg-red-600" />
         <StatCard label="Total Tickets" value={stats.tickets || 0} icon={Ticket} bg="bg-slate-500" iconBg="bg-slate-600" />
         <StatCard label="Payments" value={stats.payments || 0} icon={CreditCard} bg="bg-emerald-500" iconBg="bg-emerald-600" />
       </div>

@@ -146,7 +146,7 @@ export default function InterfaceMonitorPanel() {
   if (routers.length === 0) {
     return (
       <div className="glass-card p-4 shadow-sm mb-4">
-        <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2 mb-2"><Activity className="w-4 h-4 text-cyan-500" /> Interface Speed Monitor</h2>
+        <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2 mb-2"><Activity className="w-4 h-4 text-blue-500" /> Interface Speed Monitor</h2>
         <p className="text-sm text-slate-400 text-center py-4">No routers registered. Add routers in Mikrotik Monitor first.</p>
       </div>
     );
@@ -157,7 +157,7 @@ export default function InterfaceMonitorPanel() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-3 flex-wrap">
           <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
-            <Activity className="w-4 h-4 text-cyan-500" /> Interface Speed Monitor
+            <Activity className="w-4 h-4 text-blue-500" /> Interface Speed Monitor
           </h2>
           <Select value={selectedRouterId} onValueChange={setSelectedRouterId}>
             <SelectTrigger className="w-[180px] h-8 text-xs">
@@ -211,8 +211,8 @@ export default function InterfaceMonitorPanel() {
               </div>
               <div className="flex gap-3 mb-1.5">
                 <span className="flex items-center gap-1 text-xs">
-                  <ArrowDown className="w-3 h-3 text-indigo-500" />
-                  <span className="font-bold text-indigo-600">{fmtSpeed(vlan.tx_kbps)}</span>
+                  <ArrowDown className="w-3 h-3 text-blue-500" />
+                  <span className="font-bold text-blue-600">{fmtSpeed(vlan.tx_kbps)}</span>
                 </span>
                 <span className="flex items-center gap-1 text-xs">
                   <ArrowUp className="w-3 h-3 text-emerald-500" />

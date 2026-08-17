@@ -128,7 +128,7 @@ export default function MikrotikMonitor() {
     return `${kbps} Kbps`;
   };
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   const onlineSessions = sessions.filter(s => s.status === "online");
   const offlineSessions = sessions.filter(s => s.status === "offline");
@@ -147,7 +147,7 @@ export default function MikrotikMonitor() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-indigo-600 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center">
             <Radio className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -159,7 +159,7 @@ export default function MikrotikMonitor() {
           <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm">
             <RefreshCw className="w-3.5 h-3.5" /> Refresh
           </button>
-          <button onClick={openAddRouter} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm">
+          <button onClick={openAddRouter} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm">
             <Plus className="w-3.5 h-3.5" /> Add Server
           </button>
         </div>
@@ -167,16 +167,16 @@ export default function MikrotikMonitor() {
 
       {/* Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Servers" value={routers.length} icon={Server} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <StatCard label="Total Servers" value={routers.length} icon={Server} bg="bg-blue-500" iconBg="bg-blue-600" />
         <StatCard label="Online Servers" value={onlineRouters.length} icon={Activity} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <StatCard label="Offline Servers" value={routers.length - onlineRouters.length} icon={Server} bg="bg-rose-500" iconBg="bg-rose-600" />
-        <StatCard label="Active Connections" value={onlineSessions.length} icon={Wifi} bg="bg-cyan-500" iconBg="bg-cyan-600" />
+        <StatCard label="Offline Servers" value={routers.length - onlineRouters.length} icon={Server} bg="bg-red-500" iconBg="bg-red-600" />
+        <StatCard label="Active Connections" value={onlineSessions.length} icon={Wifi} bg="bg-blue-500" iconBg="bg-blue-600" />
       </div>
 
       {/* Servers Table */}
       <div className="glass-card overflow-hidden mb-6">
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-          <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2"><Server className="w-4 h-4 text-indigo-500" /> Mikrotik Servers</h2>
+          <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2"><Server className="w-4 h-4 text-blue-500" /> Mikrotik Servers</h2>
         </div>
         {routers.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-slate-400">
@@ -200,8 +200,8 @@ export default function MikrotikMonitor() {
                   <tr key={r.id} className="border-b border-slate-50 hover:bg-slate-50/50">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
-                          <Radio className="w-4 h-4 text-indigo-600" />
+                        <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                          <Radio className="w-4 h-4 text-blue-600" />
                         </div>
                         <span className="text-sm font-medium text-slate-900">{r.name}</span>
                       </div>
@@ -216,7 +216,7 @@ export default function MikrotikMonitor() {
                     <td className="px-4 py-3 text-xs text-slate-500 hidden md:table-cell">{r.location || "—"}</td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex justify-end gap-1">
-                        <button onClick={() => syncNow(r)} disabled={syncingId === r.id} title="Sync now" className="p-1.5 rounded-md hover:bg-indigo-50 text-indigo-500 disabled:opacity-50">
+                        <button onClick={() => syncNow(r)} disabled={syncingId === r.id} title="Sync now" className="p-1.5 rounded-md hover:bg-blue-50 text-blue-500 disabled:opacity-50">
                           <RefreshCw className={`w-3.5 h-3.5 ${syncingId === r.id ? 'animate-spin' : ''}`} />
                         </button>
                         <button onClick={() => openEditRouter(r)} className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500"><Pencil className="w-3.5 h-3.5" /></button>
@@ -235,7 +235,7 @@ export default function MikrotikMonitor() {
       <div className="glass-card overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2"><Wifi className="w-4 h-4 text-cyan-500" /> PPPoE Users</h2>
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2"><Wifi className="w-4 h-4 text-blue-500" /> PPPoE Users</h2>
             <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{sessions.length}</span>
             <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">● {onlineSessions.length} Online</span>
             <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{offlineSessions.length} Offline</span>
@@ -245,7 +245,7 @@ export default function MikrotikMonitor() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search username, IP..."
-              className="h-8 pl-3 pr-3 text-xs border border-slate-200 rounded-lg w-52 focus:outline-none focus:ring-1 focus:ring-indigo-400"
+              className="h-8 pl-3 pr-3 text-xs border border-slate-200 rounded-lg w-52 focus:outline-none focus:ring-1 focus:ring-blue-400"
             />
           </div>
         </div>
@@ -274,7 +274,7 @@ export default function MikrotikMonitor() {
                     <td className="px-4 py-3 text-xs text-slate-400">{i + 1}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center text-[10px] font-bold text-indigo-700">
+                        <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-700">
                           {(s.customer_name || s.pppoe_username || "?")[0].toUpperCase()}
                         </div>
                         <div>
@@ -284,7 +284,7 @@ export default function MikrotikMonitor() {
                       </div>
                     </td>
                     <td className="px-4 py-3 hidden sm:table-cell">
-                      <span className="text-[10px] text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">pppoe</span>
+                      <span className="text-[10px] text-blue-600 bg-blue-50 px-2 py-0.5 rounded">pppoe</span>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex items-center gap-1 text-[11px] font-semibold ${s.status === "online" ? "text-emerald-600" : s.status === "suspended" ? "text-amber-600" : "text-slate-400"}`}>
@@ -343,7 +343,7 @@ export default function MikrotikMonitor() {
               <div><Label className="text-xs">Latitude</Label><Input type="number" step="any" value={routerForm.latitude ?? ""} onChange={e => setRouterForm({ ...routerForm, latitude: e.target.value })} /></div>
               <div><Label className="text-xs">Longitude</Label><Input type="number" step="any" value={routerForm.longitude ?? ""} onChange={e => setRouterForm({ ...routerForm, longitude: e.target.value })} /></div>
             </div>
-            <Button onClick={saveRouter} className="w-full bg-indigo-600 hover:bg-indigo-700">
+            <Button onClick={saveRouter} className="w-full bg-blue-600 hover:bg-blue-700">
               {editingRouter ? "Save Changes" : "Add Server"}
             </Button>
           </div>

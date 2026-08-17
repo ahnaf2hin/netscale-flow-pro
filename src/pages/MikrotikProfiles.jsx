@@ -40,19 +40,19 @@ export default function MikrotikProfiles() {
 
   const active = profiles.filter(p => p.status === "active").length;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
-      <PageHeader icon={Sliders} iconBg="bg-indigo-600" title="PPPoE Profiles" subtitle="Mikrotik PPPoE bandwidth & session profiles">
+      <PageHeader icon={Sliders} iconBg="bg-blue-600" title="PPPoE Profiles" subtitle="Mikrotik PPPoE bandwidth & session profiles">
         <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
-        <button onClick={() => open()} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add Profile</button>
+        <button onClick={() => open()} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add Profile</button>
       </PageHeader>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <ColorStatCard label="Total Profiles" value={profiles.length} icon={Sliders} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <ColorStatCard label="Total Profiles" value={profiles.length} icon={Sliders} bg="bg-blue-500" iconBg="bg-blue-600" />
         <ColorStatCard label="Active" value={active} icon={Sliders} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <ColorStatCard label="IP Pools" value={new Set(profiles.map(p => p.ip_pool).filter(Boolean)).size} icon={Sliders} bg="bg-cyan-500" iconBg="bg-cyan-600" />
+        <ColorStatCard label="IP Pools" value={new Set(profiles.map(p => p.ip_pool).filter(Boolean)).size} icon={Sliders} bg="bg-blue-500" iconBg="bg-blue-600" />
       </div>
 
       <div className="glass-card overflow-hidden">
@@ -101,7 +101,7 @@ export default function MikrotikProfiles() {
             <div><Label className="text-xs">Rate Limit</Label><Input value={form.rate_limit} onChange={e => setForm({ ...form, rate_limit: e.target.value })} placeholder="e.g. 10M/10M" /></div>
             <div><Label className="text-xs">IP Pool</Label><Input value={form.ip_pool} onChange={e => setForm({ ...form, ip_pool: e.target.value })} placeholder="e.g. 10.5.50.0/24" /></div>
             <div><Label className="text-xs">Shared Users</Label><Input type="number" value={form.shared_users} onChange={e => setForm({ ...form, shared_users: e.target.value })} /></div>
-            <Button onClick={save} className="w-full bg-indigo-600 hover:bg-indigo-700">{edit ? "Update" : "Create"} Profile</Button>
+            <Button onClick={save} className="w-full bg-blue-600 hover:bg-blue-700">{edit ? "Update" : "Create"} Profile</Button>
           </div>
         </DialogContent>
       </Dialog>

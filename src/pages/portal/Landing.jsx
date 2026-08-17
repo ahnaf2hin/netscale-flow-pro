@@ -32,7 +32,7 @@ export default function Landing() {
 
       {/* Hero */}
       <header className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-white to-indigo-50" />
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-white to-blue-50" />
         <div className="relative max-w-6xl mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-10 items-center">
           <div>
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full mb-4"><Star className="w-3 h-3" /> #1 Rated ISP in your area</span>

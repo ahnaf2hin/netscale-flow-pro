@@ -41,19 +41,19 @@ export default function AccountingReports() {
   expenses.forEach(t => expByCat.set(t.category || "Other", (expByCat.get(t.category || "Other") || 0) + (t.amount || 0)));
   const pieData = Array.from(expByCat.entries()).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
-      <PageHeader icon={BarChart3} iconBg="bg-indigo-600" title="Financial Reports" subtitle="Profit & loss overview, trends and breakdowns">
+      <PageHeader icon={BarChart3} iconBg="bg-blue-600" title="Financial Reports" subtitle="Profit & loss overview, trends and breakdowns">
         <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
       </PageHeader>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <ColorStatCard label="Total Income" value={formatBDT(totalIncome)} icon={TrendingUp} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <ColorStatCard label="Total Expenses" value={formatBDT(totalExpense)} icon={TrendingDown} bg="bg-rose-500" iconBg="bg-rose-600" />
-        <ColorStatCard label="Net Profit" value={formatBDT(netProfit)} icon={Wallet} bg="bg-indigo-500" iconBg="bg-indigo-600" />
-        <ColorStatCard label="Profit Margin" value={`${profitMargin}%`} icon={DollarSign} bg="bg-teal-500" iconBg="bg-teal-600" />
+        <ColorStatCard label="Total Expenses" value={formatBDT(totalExpense)} icon={TrendingDown} bg="bg-red-500" iconBg="bg-red-600" />
+        <ColorStatCard label="Net Profit" value={formatBDT(netProfit)} icon={Wallet} bg="bg-blue-500" iconBg="bg-blue-600" />
+        <ColorStatCard label="Profit Margin" value={`${profitMargin}%`} icon={DollarSign} bg="bg-emerald-500" iconBg="bg-emerald-600" />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-4 mb-4">

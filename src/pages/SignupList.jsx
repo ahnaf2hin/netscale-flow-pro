@@ -60,13 +60,13 @@ export default function SignupList() {
   const approved = signups.filter(s => s.status === "approved").length;
   const rejected = signups.filter(s => s.status === "rejected").length;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-indigo-600 flex items-center justify-center"><UserPlus className="w-6 h-6 text-white" /></div>
+          <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center"><UserPlus className="w-6 h-6 text-white" /></div>
           <div>
             <h1 className="text-xl font-bold text-slate-900">Signup List</h1>
             <p className="text-xs text-slate-500">New connection requests & approvals</p>
@@ -74,22 +74,22 @@ export default function SignupList() {
         </div>
         <div className="flex gap-2">
           <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
-          <button onClick={() => { setForm({ name: "", phone: "", email: "", address: "", package_id: "", package_name: "", notes: "", status: "pending", request_date: new Date().toISOString().split("T")[0] }); setShowForm(true); }} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm"><UserPlus className="w-3.5 h-3.5" /> New Request</button>
+          <button onClick={() => { setForm({ name: "", phone: "", email: "", address: "", package_id: "", package_name: "", notes: "", status: "pending", request_date: new Date().toISOString().split("T")[0] }); setShowForm(true); }} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm"><UserPlus className="w-3.5 h-3.5" /> New Request</button>
         </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <ColorStatCard label="Total Requests" value={signups.length} icon={UserPlus} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <ColorStatCard label="Total Requests" value={signups.length} icon={UserPlus} bg="bg-blue-500" iconBg="bg-blue-600" />
         <ColorStatCard label="Pending" value={pending} icon={UserPlus} bg="bg-amber-500" iconBg="bg-amber-600" />
         <ColorStatCard label="Approved" value={approved} icon={Check} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <ColorStatCard label="Rejected" value={rejected} icon={X} bg="bg-rose-500" iconBg="bg-rose-600" />
+        <ColorStatCard label="Rejected" value={rejected} icon={X} bg="bg-red-500" iconBg="bg-red-600" />
       </div>
 
       <div className="glass-card p-4 mb-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, phone..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, phone..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-full sm:w-40 h-9 text-sm"><SelectValue /></SelectTrigger>
@@ -165,7 +165,7 @@ export default function SignupList() {
               </Select>
             </div>
             <div><Label className="text-xs">Notes</Label><Input value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} /></div>
-            <Button onClick={saveSignup} className="w-full bg-indigo-600 hover:bg-indigo-700">Add Request</Button>
+            <Button onClick={saveSignup} className="w-full bg-blue-600 hover:bg-blue-700">Add Request</Button>
           </div>
         </DialogContent>
       </Dialog>

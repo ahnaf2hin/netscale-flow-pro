@@ -189,7 +189,7 @@ export default function NetworkMap() {
           <p className="text-sm text-slate-500 mt-1">{officesWithLocation.length} offices · {devicesWithLocation.length} devices · {customersWithLocation.length} customers · {cableRoutes.length} cable routes</p>
         </div>
         {!editMode ? (
-          <Button onClick={enterEdit} size="sm" className="bg-indigo-600 hover:bg-indigo-700">
+          <Button onClick={enterEdit} size="sm" className="bg-blue-600 hover:bg-blue-700">
             <Pencil className="w-4 h-4" /> Edit Map
           </Button>
         ) : (
@@ -271,7 +271,7 @@ export default function NetworkMap() {
 
       {/* Device placement form */}
       {editMode && deviceDraft && (
-        <div className="bg-white border border-indigo-200 rounded-xl p-3 mb-4 shadow-sm">
+        <div className="bg-white border border-blue-200 rounded-xl p-3 mb-4 shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-semibold text-slate-900">
               Place {DEVICE_TYPES.find(d => d.value === deviceDraft.type)?.label} at {deviceDraft.lat.toFixed(5)}, {deviceDraft.lng.toFixed(5)}
@@ -291,7 +291,7 @@ export default function NetworkMap() {
               <Label className="text-[11px] text-slate-600">Ports</Label>
               <Input type="number" value={deviceForm.ports_total} onChange={e => setDeviceForm({ ...deviceForm, ports_total: e.target.value })} placeholder="e.g. 24" className="h-8 text-sm" />
             </div>
-            <Button onClick={saveDevice} disabled={saving} size="sm" className="bg-indigo-600 hover:bg-indigo-700 h-8">
+            <Button onClick={saveDevice} disabled={saving} size="sm" className="bg-blue-600 hover:bg-blue-700 h-8">
               {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />} Place
             </Button>
           </div>
@@ -305,7 +305,7 @@ export default function NetworkMap() {
         <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-blue-500 inline-block" /> Fiber</div>
         <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-purple-500 inline-block" /> UTP</div>
         <div className="flex items-center gap-1.5"><span className="w-6 h-1 rounded-sm inline-block" style={{ background: "repeating-linear-gradient(90deg,#0ea5e9 0 6px,transparent 6px 10px)" }} /> Live cable (animated)</div>
-        <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-indigo-600 inline-block" /> Head Office</div>
+        <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-blue-600 inline-block" /> Head Office</div>
         <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-amber-500 inline-block" /> Sub Office</div>
         {DEVICE_TYPES.map(dt => (
           <div key={dt.value} className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm inline-block" style={{ background: dt.color }} /> {dt.label}</div>

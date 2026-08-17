@@ -58,7 +58,7 @@ export default function MapSettings() {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+    return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
   }
 
   const isGoogle = form.provider === "google";
@@ -139,15 +139,15 @@ export default function MapSettings() {
         </div>
 
         <div className="flex items-center gap-3 pt-2">
-          <Button onClick={handleSave} disabled={saving} className="bg-indigo-600 hover:bg-indigo-700">
+          <Button onClick={handleSave} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Save Settings
           </Button>
-          <Link to="/network-map" className="text-xs text-slate-500 hover:text-indigo-600">View Network Map →</Link>
+          <Link to="/network-map" className="text-xs text-slate-500 hover:text-blue-600">View Network Map →</Link>
         </div>
       </div>
 
       <div className="mt-6">
-        <Link to="/configuration" className="text-xs text-slate-500 hover:text-indigo-600">← Back to Configuration</Link>
+        <Link to="/configuration" className="text-xs text-slate-500 hover:text-blue-600">← Back to Configuration</Link>
       </div>
     </div>
   );

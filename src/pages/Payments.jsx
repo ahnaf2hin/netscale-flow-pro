@@ -33,7 +33,7 @@ export default function Payments() {
   const formatBDT = (a) => `৳${(a || 0).toLocaleString("en-BD")}`;
   const gateways = ["all", "sslcommerz", "bkash", "nagad", "cash", "bank_transfer"];
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
@@ -44,19 +44,19 @@ export default function Payments() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <ColorStatCard label="Total Collected" value={formatBDT(totalCompleted)} icon={Check} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <ColorStatCard label="Pending" value={formatBDT(totalPending)} icon={Clock} bg="bg-amber-500" iconBg="bg-amber-600" />
-        <ColorStatCard label="Failed" value={failedCount} icon={X} bg="bg-rose-500" iconBg="bg-rose-600" />
-        <ColorStatCard label="Total Txns" value={payments.length} icon={CreditCard} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <ColorStatCard label="Failed" value={failedCount} icon={X} bg="bg-red-500" iconBg="bg-red-600" />
+        <ColorStatCard label="Total Txns" value={payments.length} icon={CreditCard} bg="bg-blue-500" iconBg="bg-blue-600" />
       </div>
 
       <div className="glass-card p-4 mb-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search transaction ID, customer..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search transaction ID, customer..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
           </div>
           <div className="flex gap-2 flex-wrap">
             {gateways.map(g => (
-              <button key={g} onClick={() => setGatewayFilter(g)} className={`text-xs px-3 py-2 rounded-lg border capitalize ${gatewayFilter === g ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-600 border-slate-200"}`}>{g === "all" ? "All" : g}</button>
+              <button key={g} onClick={() => setGatewayFilter(g)} className={`text-xs px-3 py-2 rounded-lg border capitalize ${gatewayFilter === g ? "bg-blue-600 text-white border-blue-600" : "bg-white text-slate-600 border-slate-200"}`}>{g === "all" ? "All" : g}</button>
             ))}
           </div>
         </div>

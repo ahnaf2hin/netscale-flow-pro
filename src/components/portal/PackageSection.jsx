@@ -24,7 +24,7 @@ export default function PackageSection({ pkg }) {
         <span className="text-[10px] font-bold uppercase bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full">Active</span>
       </div>
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-11 h-11 rounded-lg bg-indigo-50 flex items-center justify-center"><Zap className="w-5 h-5 text-indigo-600" /></div>
+        <div className="w-11 h-11 rounded-lg bg-blue-50 flex items-center justify-center"><Zap className="w-5 h-5 text-blue-600" /></div>
         <div>
           <p className="font-bold text-slate-900">{pkg.name}</p>
           {pkg.description && <p className="text-xs text-slate-500">{pkg.description}</p>}

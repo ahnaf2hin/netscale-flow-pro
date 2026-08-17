@@ -71,7 +71,7 @@ export default function Packages() {
   const totalCustomers = customers.length;
   const avgPrice = packages.length > 0 ? packages.reduce((s, p) => s + (p.monthly_price || 0), 0) / packages.length : 0;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
@@ -89,14 +89,14 @@ export default function Packages() {
           <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm">
             <RefreshCw className="w-3.5 h-3.5" /> Refresh
           </button>
-          <button onClick={openCreate} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm">
+          <button onClick={openCreate} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm">
             <Plus className="w-3.5 h-3.5" /> Add Package
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Packages" value={packages.length} icon={Package} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <StatCard label="Total Packages" value={packages.length} icon={Package} bg="bg-blue-500" iconBg="bg-blue-600" />
         <StatCard label="Active Plans" value={activeCount} icon={Check} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <StatCard label="Inactive" value={inactiveCount} icon={X} bg="bg-slate-500" iconBg="bg-slate-600" />
         <StatCard label="Avg Price" value={formatBDT(avgPrice)} icon={Package} bg="bg-violet-500" iconBg="bg-violet-600" />
@@ -108,8 +108,8 @@ export default function Packages() {
           return (
             <div key={p.id} className="glass-card p-5 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-3">
-                <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
-                  <Package className="w-5 h-5 text-indigo-600" />
+                <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                  <Package className="w-5 h-5 text-blue-600" />
                 </div>
                 <div className="flex gap-1">
                   <button onClick={() => openEdit(p)} className="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center"><Pencil className="w-3.5 h-3.5" /></button>
@@ -119,9 +119,9 @@ export default function Packages() {
               <h3 className="font-semibold text-slate-900">{p.name}</h3>
               <p className="text-2xl font-bold text-slate-900 mt-1">{formatBDT(p.monthly_price)}<span className="text-sm font-normal text-slate-400">/mo</span></p>
               <div className="mt-3 space-y-1.5 text-sm text-slate-500">
-                <div className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />Speed: <span className="font-semibold text-slate-700">{p.speed_mbps} Mbps</span></div>
+                <div className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-blue-500" />Speed: <span className="font-semibold text-slate-700">{p.speed_mbps} Mbps</span></div>
                 <div className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />Validity: <span className="font-semibold text-slate-700">{p.validity_days || 30} days</span></div>
-                <div className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />Subscribers: <span className="font-semibold text-slate-700">{subscriberCount}</span></div>
+                <div className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-blue-500" />Subscribers: <span className="font-semibold text-slate-700">{subscriberCount}</span></div>
               </div>
               {p.description && <p className="text-xs text-slate-400 mt-3 pt-3 border-t border-slate-100">{p.description}</p>}
               <div className="mt-3">
@@ -149,7 +149,7 @@ export default function Packages() {
             </div>
             <div><Label className="text-xs">Validity (days)</Label><Input type="number" value={pkgForm.validity_days} onChange={e => setPkgForm({ ...pkgForm, validity_days: e.target.value })} /></div>
             <div><Label className="text-xs">Description</Label><Input value={pkgForm.description} onChange={e => setPkgForm({ ...pkgForm, description: e.target.value })} /></div>
-            <Button onClick={savePkg} className="w-full bg-indigo-600 hover:bg-indigo-700">{editPkg ? "Update Package" : "Create Package"}</Button>
+            <Button onClick={savePkg} className="w-full bg-blue-600 hover:bg-blue-700">{editPkg ? "Update Package" : "Create Package"}</Button>
           </div>
         </DialogContent>
       </Dialog>

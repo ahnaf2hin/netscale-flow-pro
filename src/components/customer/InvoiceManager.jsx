@@ -103,7 +103,7 @@ export default function InvoiceManager({ customer, invoices, onUpdated }) {
     <div className="glass-card p-6 mt-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-          <Receipt className="w-4 h-4 text-indigo-500" /> Invoices & Payments
+          <Receipt className="w-4 h-4 text-blue-500" /> Invoices & Payments
         </h2>
         <div className="flex gap-4 text-right">
           <div>
@@ -170,7 +170,7 @@ export default function InvoiceManager({ customer, invoices, onUpdated }) {
                           }}>
                             <CheckCircle2 className="w-3 h-3 mr-1" /> {status === "partial" ? "Add Payment" : "Mark Paid"}
                           </Button>
-                          <Button size="sm" variant="outline" className="h-7 text-xs bg-indigo-50 text-indigo-600 border-indigo-200 hover:bg-indigo-100" disabled={!!loading} onClick={() => handlePayOnline(inv)}>
+                          <Button size="sm" variant="outline" className="h-7 text-xs bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100" disabled={!!loading} onClick={() => handlePayOnline(inv)}>
                             {loading === "stripe-" + inv.id ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <CreditCard className="w-3 h-3 mr-1" />}
                             Pay Online
                           </Button>
@@ -207,8 +207,8 @@ export default function InvoiceManager({ customer, invoices, onUpdated }) {
                 <Label className="text-xs">Payment Amount (৳)</Label>
                 <Input type="number" step="any" value={payAmount} onChange={e => setPayAmount(e.target.value)} placeholder="Enter amount" />
                 <div className="flex gap-2 mt-1.5">
-                  <button onClick={() => setPayAmount(String((markPaidInv.amount || 0) - (markPaidInv.paid_amount || 0)))} className="text-[10px] text-indigo-600 hover:underline">Full</button>
-                  <button onClick={() => setPayAmount(String(Math.round(((markPaidInv.amount || 0) - (markPaidInv.paid_amount || 0)) / 2)))} className="text-[10px] text-indigo-600 hover:underline">Half</button>
+                  <button onClick={() => setPayAmount(String((markPaidInv.amount || 0) - (markPaidInv.paid_amount || 0)))} className="text-[10px] text-blue-600 hover:underline">Full</button>
+                  <button onClick={() => setPayAmount(String(Math.round(((markPaidInv.amount || 0) - (markPaidInv.paid_amount || 0)) / 2)))} className="text-[10px] text-blue-600 hover:underline">Half</button>
                 </div>
               </div>
               <div>

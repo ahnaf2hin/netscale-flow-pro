@@ -108,7 +108,7 @@ export default function BulkImport() {
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
-      <PageHeader icon={UploadCloud} iconBg="bg-indigo-600" title="Bulk Import Customers" subtitle="Upload a spreadsheet to import existing customer data in one go">
+      <PageHeader icon={UploadCloud} iconBg="bg-blue-600" title="Bulk Import Customers" subtitle="Upload a spreadsheet to import existing customer data in one go">
         <button onClick={downloadTemplate} className="flex items-center gap-2 text-xs text-slate-600 hover:text-slate-800 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><Download className="w-3.5 h-3.5" /> Download Template</button>
       </PageHeader>
 
@@ -116,14 +116,14 @@ export default function BulkImport() {
         {/* Step 1: Upload */}
         <div className="glass-card p-6">
           <div className="flex items-center gap-2 mb-4">
-            <span className="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+            <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">1</span>
             <h2 className="text-sm font-semibold text-slate-800">Select Spreadsheet File</h2>
           </div>
           <div
             onClick={() => fileInputRef.current?.click()}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) { setFile(f); setFileName(f.name); setStage("idle"); } }}
-            className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/30 transition-colors"
+            className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50/30 transition-colors"
           >
             <input ref={fileInputRef} type="file" accept=".csv,.xlsx,.xls,.json" onChange={onFileChosen} className="hidden" />
             {fileName ? (
@@ -141,7 +141,7 @@ export default function BulkImport() {
             )}
           </div>
           {file && stage === "idle" && (
-            <Button onClick={parseFile} className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700">
+            <Button onClick={parseFile} className="w-full mt-4 bg-blue-600 hover:bg-blue-700">
               <ArrowRight className="w-4 h-4 mr-2" /> Parse & Preview
             </Button>
           )}
@@ -152,12 +152,12 @@ export default function BulkImport() {
 
         {/* Parse errors */}
         {stage === "error" && (
-          <div className="bg-white rounded-xl border border-rose-200 shadow-sm p-6">
-            <div className="flex items-center gap-2 mb-3 text-rose-700"><AlertTriangle className="w-5 h-5" /><h2 className="text-sm font-semibold">Parsing Issues</h2></div>
+          <div className="bg-white rounded-xl border border-red-200 shadow-sm p-6">
+            <div className="flex items-center gap-2 mb-3 text-red-700"><AlertTriangle className="w-5 h-5" /><h2 className="text-sm font-semibold">Parsing Issues</h2></div>
             <ul className="space-y-1.5 text-xs text-slate-600 max-h-60 overflow-y-auto">
               {errors.map((e, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="text-rose-500 mt-0.5">•</span>
+                  <span className="text-red-500 mt-0.5">•</span>
                   <span>{typeof e === "string" ? e : `Row ${e.row}: ${e.reason}`}</span>
                 </li>
               ))}
@@ -171,7 +171,7 @@ export default function BulkImport() {
           <div className="glass-card p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">2</span>
+                <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">2</span>
                 <h2 className="text-sm font-semibold text-slate-800">Review Parsed Data</h2>
               </div>
               <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">{rows.length} valid rows</span>
@@ -217,7 +217,7 @@ export default function BulkImport() {
 
             <div className="flex gap-3 mt-5">
               <Button onClick={reset} variant="outline" className="flex-1">Cancel</Button>
-              <Button onClick={doImport} disabled={importing || rows.length === 0} className="flex-1 bg-indigo-600 hover:bg-indigo-700">
+              <Button onClick={doImport} disabled={importing || rows.length === 0} className="flex-1 bg-blue-600 hover:bg-blue-700">
                 {importing ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Importing…</> : <><CheckCircle className="w-4 h-4 mr-2" /> Import {rows.length} Customers</>}
               </Button>
             </div>
@@ -232,7 +232,7 @@ export default function BulkImport() {
             <p className="text-sm text-slate-500 mt-1">{result.success} of {result.total} customers were successfully added to your database.</p>
             <div className="flex gap-3 mt-6 max-w-xs mx-auto">
               <Button onClick={reset} variant="outline" className="flex-1">Import More</Button>
-              <Button onClick={() => window.location.href = "/customers"} className="flex-1 bg-indigo-600 hover:bg-indigo-700">View Customers</Button>
+              <Button onClick={() => window.location.href = "/customers"} className="flex-1 bg-blue-600 hover:bg-blue-700">View Customers</Button>
             </div>
           </div>
         )}

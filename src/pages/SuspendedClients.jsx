@@ -50,16 +50,16 @@ export default function SuspendedClients() {
 
   const filtered = customers.filter(c => !search || c.name?.toLowerCase().includes(search.toLowerCase()) || c.phone?.includes(search));
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
-      <PageHeader icon={UserX} iconBg="bg-rose-600" title="Suspended Clients" subtitle="Clients with suspended service — reactivate with one click">
+      <PageHeader icon={UserX} iconBg="bg-red-600" title="Suspended Clients" subtitle="Clients with suspended service — reactivate with one click">
         <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
       </PageHeader>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <ColorStatCard label="Suspended" value={customers.length} icon={UserX} bg="bg-rose-500" iconBg="bg-rose-600" />
+        <ColorStatCard label="Suspended" value={customers.length} icon={UserX} bg="bg-red-500" iconBg="bg-red-600" />
         <ColorStatCard label="With Package" value={customers.filter(c => c.package_id).length} icon={UserX} bg="bg-amber-500" iconBg="bg-amber-600" />
         <ColorStatCard label="No Package" value={customers.filter(c => !c.package_id).length} icon={UserX} bg="bg-slate-500" iconBg="bg-slate-600" />
       </div>
@@ -67,7 +67,7 @@ export default function SuspendedClients() {
       <div className="glass-card p-4 mb-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, phone..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, phone..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
         </div>
       </div>
 
@@ -91,7 +91,7 @@ export default function SuspendedClients() {
                   <tr key={c.id} className="border-b border-slate-50 hover:bg-slate-50/50">
                     <td className="px-4 py-3">
                       <p className="text-sm font-medium text-slate-900">{c.name}</p>
-                      <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">SUSPENDED</span>
+                      <span className="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded">SUSPENDED</span>
                     </td>
                     <td className="px-4 py-3 hidden sm:table-cell"><div className="flex items-center gap-1.5 text-xs text-slate-600"><Phone className="w-3 h-3" />{c.phone}</div></td>
                     <td className="px-4 py-3 text-xs text-slate-600 hidden md:table-cell">{pkgName(c.package_id)}</td>

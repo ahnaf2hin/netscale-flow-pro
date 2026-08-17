@@ -28,10 +28,10 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-slate-50 to-emerald-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-slate-50 to-blue-50 dark:from-zinc-950 dark:via-zinc-950 dark:to-blue-950/40 p-4">
       <div className="w-full max-w-sm animate-in fade-in slide-in-from-bottom-2 duration-500">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 shadow-lg shadow-emerald-900/20 flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-105">
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg shadow-blue-900/20 flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-105">
             <Wifi className="w-7 h-7 text-white" />
           </div>
           <h1 className="text-xl font-bold text-slate-900">ISP Manager</h1>
@@ -49,7 +49,7 @@ export default function Login() {
               <Label className="text-xs">Password</Label>
               <Input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
             </div>
-            <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 hover:shadow-emerald-500/30" disabled={loading}>
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 hover:shadow-blue-500/30" disabled={loading}>
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
             </Button>
           </form>
@@ -59,8 +59,8 @@ export default function Login() {
           </div>
 
           <div className="mt-4 text-center text-sm text-slate-500 space-y-1">
-            <Link to="/forgot-password" className="text-emerald-600 hover:underline block transition-colors">Forgot password?</Link>
-            <p>Don't have an account? <Link to="/register" className="text-emerald-600 hover:underline transition-colors">Register</Link></p>
+            <Link to="/forgot-password" className="text-blue-600 hover:underline block transition-colors">Forgot password?</Link>
+            <p>Don't have an account? <Link to="/register" className="text-blue-600 hover:underline transition-colors">Register</Link></p>
           </div>
         </div>
       </div>

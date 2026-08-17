@@ -21,7 +21,7 @@ export default function UpgradeSection({ packages, currentPackageId, upgradingId
             return (
               <div key={p.id} className={`rounded-xl border p-4 ${isCurrent ? "border-emerald-300 bg-emerald-50/40" : "border-slate-200"}`}>
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center"><Zap className="w-4 h-4 text-indigo-600" /></div>
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center"><Zap className="w-4 h-4 text-blue-600" /></div>
                   <div>
                     <p className="font-bold text-slate-900 text-sm">{p.name}</p>
                     <p className="text-[10px] text-slate-400">{p.speed_mbps} Mbps</p>

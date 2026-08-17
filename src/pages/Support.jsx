@@ -70,16 +70,16 @@ export default function Support() {
   const resolvedCount = tickets.filter(t => t.status === "resolved").length;
   const urgentCount = tickets.filter(t => t.priority === "urgent" && t.status !== "resolved" && t.status !== "closed").length;
 
-  const priorityColor = (p) => p === "urgent" ? "bg-red-100 text-red-700" : p === "high" ? "bg-orange-100 text-orange-700" : p === "medium" ? "bg-amber-100 text-amber-700" : "bg-slate-100 text-slate-600";
+  const priorityColor = (p) => p === "urgent" ? "bg-red-100 text-red-700" : p === "high" ? "bg-amber-100 text-amber-700" : p === "medium" ? "bg-amber-100 text-amber-700" : "bg-slate-100 text-slate-600";
   const statusColor = (s) => s === "open" ? "bg-blue-100 text-blue-700" : s === "in_progress" ? "bg-amber-100 text-amber-700" : s === "resolved" ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500";
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-rose-600 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-red-600 flex items-center justify-center">
             <Ticket className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -91,14 +91,14 @@ export default function Support() {
           <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm">
             <RefreshCw className="w-3.5 h-3.5" /> Refresh
           </button>
-          <button onClick={openCreate} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm">
+          <button onClick={openCreate} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm">
             <Plus className="w-3.5 h-3.5" /> New Ticket
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Open Tickets" value={openCount} icon={Ticket} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <StatCard label="Open Tickets" value={openCount} icon={Ticket} bg="bg-blue-500" iconBg="bg-blue-600" />
         <StatCard label="In Progress" value={inProgressCount} icon={Clock} bg="bg-amber-500" iconBg="bg-amber-600" />
         <StatCard label="Resolved" value={resolvedCount} icon={Check} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <StatCard label="Urgent" value={urgentCount} icon={AlertTriangle} bg="bg-red-500" iconBg="bg-red-600" />
@@ -108,7 +108,7 @@ export default function Support() {
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search subject, customer..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search subject, customer..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-full sm:w-40 h-9 text-sm"><SelectValue /></SelectTrigger>
@@ -153,12 +153,12 @@ export default function Support() {
                     </td>
                     <td className="px-4 py-3 text-xs text-slate-600 hidden sm:table-cell">{t.customer_name || "—"}</td>
                     <td className="px-4 py-3 hidden md:table-cell">
-                      <span className="text-[10px] text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded capitalize">{t.category || "—"}</span>
+                      <span className="text-[10px] text-blue-600 bg-blue-50 px-2 py-0.5 rounded capitalize">{t.category || "—"}</span>
                     </td>
                     <td className="px-4 py-3"><span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${priorityColor(t.priority)}`}>{t.priority}</span></td>
                     <td className="px-4 py-3"><span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${statusColor(t.status)}`}>{t.status?.replace("_", " ")}</span></td>
                     <td className="px-4 py-3 text-right">
-                      <button onClick={() => openEdit(t)} className="text-xs text-indigo-600 hover:underline">Manage</button>
+                      <button onClick={() => openEdit(t)} className="text-xs text-blue-600 hover:underline">Manage</button>
                     </td>
                   </tr>
                 ))}
@@ -229,7 +229,7 @@ export default function Support() {
               <div><Label className="text-xs">Assigned To</Label><Input value={form.assigned_to} onChange={e => setForm({ ...form, assigned_to: e.target.value })} /></div>
             </div>
             <div><Label className="text-xs">Resolution</Label><Textarea value={form.resolution} onChange={e => setForm({ ...form, resolution: e.target.value })} rows={2} /></div>
-            <Button onClick={saveTicket} className="w-full bg-indigo-600 hover:bg-indigo-700">{editTicket ? "Update Ticket" : "Create Ticket"}</Button>
+            <Button onClick={saveTicket} className="w-full bg-blue-600 hover:bg-blue-700">{editTicket ? "Update Ticket" : "Create Ticket"}</Button>
           </div>
         </DialogContent>
       </Dialog>

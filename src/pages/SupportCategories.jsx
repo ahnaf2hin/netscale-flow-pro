@@ -12,11 +12,11 @@ import ColorStatCard from "@/components/dashboard/ColorStatCard";
 import { useToast } from "@/components/ui/use-toast";
 
 const COLORS = [
-  { value: "indigo", bg: "bg-indigo-100 text-indigo-700" },
+  { value: "indigo", bg: "bg-blue-100 text-blue-700" },
   { value: "emerald", bg: "bg-emerald-100 text-emerald-700" },
   { value: "amber", bg: "bg-amber-100 text-amber-700" },
-  { value: "rose", bg: "bg-rose-100 text-rose-700" },
-  { value: "cyan", bg: "bg-cyan-100 text-cyan-700" },
+  { value: "rose", bg: "bg-red-100 text-red-700" },
+  { value: "cyan", bg: "bg-blue-100 text-blue-700" },
   { value: "violet", bg: "bg-violet-100 text-violet-700" },
 ];
 
@@ -58,17 +58,17 @@ export default function SupportCategories() {
   const active = categories.filter(c => c.status === "active").length;
   const colorBg = (val) => COLORS.find(c => c.value === val)?.bg || "bg-slate-100 text-slate-700";
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
-      <PageHeader icon={FolderKanban} iconBg="bg-indigo-600" title="Support Categories" subtitle="Organize support tickets by category">
+      <PageHeader icon={FolderKanban} iconBg="bg-blue-600" title="Support Categories" subtitle="Organize support tickets by category">
         <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
-        <button onClick={() => open()} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add Category</button>
+        <button onClick={() => open()} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add Category</button>
       </PageHeader>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <ColorStatCard label="Total Categories" value={categories.length} icon={FolderKanban} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <ColorStatCard label="Total Categories" value={categories.length} icon={FolderKanban} bg="bg-blue-500" iconBg="bg-blue-600" />
         <ColorStatCard label="Active" value={active} icon={FolderKanban} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <ColorStatCard label="Total Tickets" value={tickets.length} icon={FolderKanban} bg="bg-amber-500" iconBg="bg-amber-600" />
       </div>
@@ -106,7 +106,7 @@ export default function SupportCategories() {
                 <SelectContent>{COLORS.map(c => <SelectItem key={c.value} value={c.value}>{c.value}</SelectItem>)}</SelectContent>
               </Select>
             </div>
-            <Button onClick={save} className="w-full bg-indigo-600 hover:bg-indigo-700">{edit ? "Update" : "Create"} Category</Button>
+            <Button onClick={save} className="w-full bg-blue-600 hover:bg-blue-700">{edit ? "Update" : "Create"} Category</Button>
           </div>
         </DialogContent>
       </Dialog>

@@ -242,14 +242,14 @@ export default function Customers() {
   const onlineCount = customers.filter(c => c.pppoe_username && sessionMap[c.pppoe_username]?.status === "online").length;
   const offlineCount = customers.length - onlineCount;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-indigo-600 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center">
             <Users className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -261,7 +261,7 @@ export default function Customers() {
           <button onClick={() => setShowImport(true)} className="flex items-center gap-2 text-xs text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg px-3 py-2 shadow-sm">
             <Download className="w-3.5 h-3.5" /> Import PPPoE
           </button>
-          <button onClick={openCreate} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm">
+          <button onClick={openCreate} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm">
             <Plus className="w-3.5 h-3.5" /> Add New Client
           </button>
         </div>
@@ -272,17 +272,17 @@ export default function Customers() {
         <StatCard label="Active Clients" value={activeCount} icon={UserCheck} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <StatCard label="Inactive" value={inactiveCount} icon={UserCheck} bg="bg-slate-600" iconBg="bg-slate-700" />
         <StatCard label="Online Clients" value={onlineCount} icon={Wifi} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <StatCard label="Offline Clients" value={offlineCount} icon={Wifi} bg="bg-rose-500" iconBg="bg-rose-600" />
+        <StatCard label="Offline Clients" value={offlineCount} icon={Wifi} bg="bg-red-500" iconBg="bg-red-600" />
       </div>
 
       {/* Filter Region */}
       <div className="glass-card mb-4">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
-            <FilterIcon className="w-4 h-4 text-indigo-500" />
+            <FilterIcon className="w-4 h-4 text-blue-500" />
             <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Filter Clients</p>
           </div>
-          <button onClick={() => setShowFilters(!showFilters)} className="text-xs font-medium text-indigo-600 hover:text-indigo-700">
+          <button onClick={() => setShowFilters(!showFilters)} className="text-xs font-medium text-blue-600 hover:text-blue-700">
             {showFilters ? "Hide" : "Show"}
           </button>
         </div>
@@ -318,7 +318,7 @@ export default function Customers() {
               <thead>
                 <tr className="bg-slate-50/90 backdrop-blur-sm text-slate-500 border-b border-slate-200">
                   <th className="w-10 px-4 py-3.5">
-                    <input type="checkbox" checked={allFilteredSelected} onChange={toggleSelectAll} className="w-4 h-4 rounded border-slate-400 text-indigo-500 cursor-pointer" />
+                    <input type="checkbox" checked={allFilteredSelected} onChange={toggleSelectAll} className="w-4 h-4 rounded border-slate-400 text-blue-500 cursor-pointer" />
                   </th>
                   {[
                     { label: "Client ID", key: "customer_code" },
@@ -332,7 +332,7 @@ export default function Customers() {
                     { label: "Billing Date", key: "connection_date" },
                     { label: "Status", key: "status" },
                   ].map(col => (
-                    <th key={col.key} className="text-left text-[11px] font-semibold uppercase tracking-wide px-4 py-3.5 cursor-pointer select-none hover:text-indigo-300 transition-colors" onClick={() => handleSort(col.key)}>
+                    <th key={col.key} className="text-left text-[11px] font-semibold uppercase tracking-wide px-4 py-3.5 cursor-pointer select-none hover:text-blue-300 transition-colors" onClick={() => handleSort(col.key)}>
                       <span className="inline-flex items-center gap-1">{col.label}<SortIcon k={col.key} /></span>
                     </th>
                   ))}
@@ -345,12 +345,12 @@ export default function Customers() {
                    const pkg = getPkg(c.package_id);
                    const isOnline = sess?.status === "online";
                    return (
-                     <tr key={c.id} className={`border-b border-slate-100 hover:bg-indigo-50/30 transition-colors ${selectedIds.has(c.id) ? "bg-indigo-50/50" : ""} ${i % 2 === 0 ? "" : "bg-slate-50/30"}`}>
+                     <tr key={c.id} className={`border-b border-slate-100 hover:bg-blue-50/30 transition-colors ${selectedIds.has(c.id) ? "bg-blue-50/50" : ""} ${i % 2 === 0 ? "" : "bg-slate-50/30"}`}>
                        <td className="px-4 py-3.5">
-                         <input type="checkbox" checked={selectedIds.has(c.id)} onChange={() => toggleSelect(c.id)} className="w-4 h-4 rounded border-slate-300 text-indigo-600 cursor-pointer" />
+                         <input type="checkbox" checked={selectedIds.has(c.id)} onChange={() => toggleSelect(c.id)} className="w-4 h-4 rounded border-slate-300 text-blue-600 cursor-pointer" />
                        </td>
                        <td className="px-4 py-3.5">
-                         <span className="text-[13px] font-mono font-semibold text-indigo-600">{c.customer_code || "—"}</span>
+                         <span className="text-[13px] font-mono font-semibold text-blue-600">{c.customer_code || "—"}</span>
                        </td>
                        <td className="px-4 py-3.5">
                          <p className="text-[13px] font-mono text-slate-700">{c.pppoe_username || "—"}</p>
@@ -359,7 +359,7 @@ export default function Customers() {
                        <td className="px-4 py-3.5"><p className="text-sm font-semibold text-slate-900">{c.name}</p></td>
                        <td className="px-4 py-3.5"><div className="flex items-center gap-1.5 text-[13px] text-slate-700"><Phone className="w-3.5 h-3.5 text-slate-400" />{c.phone || "—"}</div></td>
                        <td className="px-4 py-3.5">{c.zone ? <span className="inline-block text-[11px] font-medium px-2 py-0.5 rounded-full bg-violet-50 text-violet-700 border border-violet-100">{c.zone}</span> : <span className="text-slate-300">—</span>}</td>
-                       <td className="px-4 py-3.5">{sess?.router_name ? <span className="inline-block text-[11px] font-medium px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-100">{sess.router_name}</span> : <span className="text-slate-300">—</span>}</td>
+                       <td className="px-4 py-3.5">{sess?.router_name ? <span className="inline-block text-[11px] font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">{sess.router_name}</span> : <span className="text-slate-300">—</span>}</td>
                        <td className="px-4 py-3.5 text-[13px] text-slate-700">{pkg ? `${pkg.name} · ${pkg.speed_mbps} Mbps` : "—"}</td>
                        <td className="px-4 py-3.5 text-[13px] font-semibold text-slate-900">{pkg?.monthly_price ? `৳${pkg.monthly_price}` : "—"}</td>
                        <td className="px-4 py-3.5 text-[13px] text-slate-600">{c.connection_date ? moment(c.connection_date).format("D MMM YYYY") : "—"}</td>
@@ -372,10 +372,10 @@ export default function Customers() {
                        <td className="px-4 py-3.5">
                          <div className="flex items-center justify-center gap-1">
                            <Link to={`/customers/${c.id}`}>
-                             <button className="w-7 h-7 rounded-md bg-indigo-50 hover:bg-indigo-100 text-indigo-600 flex items-center justify-center"><Eye className="w-3.5 h-3.5" /></button>
+                             <button className="w-7 h-7 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-600 flex items-center justify-center"><Eye className="w-3.5 h-3.5" /></button>
                            </Link>
                            <button onClick={() => openEdit(c)} className="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center"><Pencil className="w-3.5 h-3.5" /></button>
-                           <button onClick={() => setDeleteTarget(c)} className="w-7 h-7 rounded-md bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center"><Trash2 className="w-3.5 h-3.5" /></button>
+                           <button onClick={() => setDeleteTarget(c)} className="w-7 h-7 rounded-md bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center"><Trash2 className="w-3.5 h-3.5" /></button>
                            <Link to="/sms"><button className="w-7 h-7 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-600 flex items-center justify-center"><MessageCircle className="w-3.5 h-3.5" /></button></Link>
                          </div>
                        </td>
@@ -410,7 +410,7 @@ export default function Customers() {
           <p className="text-sm text-slate-600 mt-2">This will permanently remove <span className="font-semibold text-slate-900">{deleteTarget?.name}</span>. This cannot be undone.</p>
           <DialogFooter className="mt-4">
             <Button variant="outline" onClick={() => setDeleteTarget(null)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleDelete} className="bg-rose-600 hover:bg-rose-700"><Trash2 className="w-4 h-4 mr-2" /> Delete</Button>
+            <Button variant="destructive" onClick={handleDelete} className="bg-red-600 hover:bg-red-700"><Trash2 className="w-4 h-4 mr-2" /> Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -420,7 +420,7 @@ export default function Customers() {
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader><DialogTitle>{editCustomer ? "Edit Client" : "Add New Client"}</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
-            <div><Label className="text-xs">Customer ID (for payments)</Label><Input value={form.customer_code} readOnly className="bg-slate-50 font-mono text-indigo-600 font-semibold" /></div>
+            <div><Label className="text-xs">Customer ID (for payments)</Label><Input value={form.customer_code} readOnly className="bg-slate-50 font-mono text-blue-600 font-semibold" /></div>
             <div className="grid grid-cols-2 gap-4">
               <div><Label className="text-xs">Name *</Label><Input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} /></div>
               <div><Label className="text-xs">Phone *</Label><Input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} /></div>
@@ -486,7 +486,7 @@ export default function Customers() {
               <div><Label className="text-xs">PPPoE Password</Label><Input value={form.pppoe_password} onChange={e => setForm({ ...form, pppoe_password: e.target.value })} /></div>
             </div>
             <div><Label className="text-xs">Notes</Label><Input value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} /></div>
-            <Button onClick={handleSave} className="w-full bg-indigo-600 hover:bg-indigo-700">{editCustomer ? "Update Client" : "Create Client"}</Button>
+            <Button onClick={handleSave} className="w-full bg-blue-600 hover:bg-blue-700">{editCustomer ? "Update Client" : "Create Client"}</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -504,7 +504,7 @@ export default function Customers() {
                 <SelectContent>{routers.map(r => <SelectItem key={r.id} value={r.id}>{r.name || r.host}</SelectItem>)}</SelectContent>
               </Select>
             </div>
-            <Button onClick={handleImportPppoe} disabled={importing} className="w-full bg-indigo-600 hover:bg-indigo-700">
+            <Button onClick={handleImportPppoe} disabled={importing} className="w-full bg-blue-600 hover:bg-blue-700">
               {importing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Download className="w-4 h-4 mr-2" />}
               Import Users
             </Button>

@@ -52,7 +52,7 @@ export default function Zones() {
     <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-indigo-500 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-blue-500 flex items-center justify-center">
             <MapPin className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -60,7 +60,7 @@ export default function Zones() {
             <p className="text-xs text-slate-500">Manage service areas for customer assignment</p>
           </div>
         </div>
-        <Button onClick={openAdd} className="bg-indigo-600 hover:bg-indigo-700"><Plus className="w-4 h-4 mr-1" /> Add Zone</Button>
+        <Button onClick={openAdd} className="bg-blue-600 hover:bg-blue-700"><Plus className="w-4 h-4 mr-1" /> Add Zone</Button>
       </div>
 
       {zones.length === 0 ? (
@@ -107,7 +107,7 @@ export default function Zones() {
                 </Select>
               </div>
             </div>
-            <Button onClick={save} className="w-full bg-indigo-600 hover:bg-indigo-700">{editId ? "Update" : "Create"} Zone</Button>
+            <Button onClick={save} className="w-full bg-blue-600 hover:bg-blue-700">{editId ? "Update" : "Create"} Zone</Button>
           </div>
         </DialogContent>
       </Dialog>

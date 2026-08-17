@@ -97,17 +97,17 @@ export default function Reports() {
   payments.forEach(p => { const m = p.gateway || "cash"; methodMap.set(m, (methodMap.get(m) || 0) + (p.amount || 0)); });
   const methodData = Array.from(methodMap.entries()).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   const EmptyChart = ({ height = 200 }) => <div className="flex items-center justify-center text-slate-400 text-sm" style={{ height }}>No data for this period</div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
-      <PageHeader icon={BarChart3} iconBg="bg-indigo-600" title="Business Reports" subtitle="Day-wise, monthly & yearly performance across customers, finance, and collections">
+      <PageHeader icon={BarChart3} iconBg="bg-blue-600" title="Business Reports" subtitle="Day-wise, monthly & yearly performance across customers, finance, and collections">
         <div className="flex items-center gap-2">
           <div className="flex bg-white border border-slate-200 rounded-lg overflow-hidden">
             {["daily", "monthly", "yearly"].map(p => (
-              <button key={p} onClick={() => setPeriod(p)} className={`text-xs px-3 py-2 capitalize ${period === p ? "bg-indigo-600 text-white" : "text-slate-600 hover:bg-slate-50"}`}>{p}</button>
+              <button key={p} onClick={() => setPeriod(p)} className={`text-xs px-3 py-2 capitalize ${period === p ? "bg-blue-600 text-white" : "text-slate-600 hover:bg-slate-50"}`}>{p}</button>
             ))}
           </div>
           <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
@@ -116,10 +116,10 @@ export default function Reports() {
 
       {/* Summary cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-        <ColorStatCard label="New Customers" value={totalNewCustomers} icon={Users} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <ColorStatCard label="New Customers" value={totalNewCustomers} icon={Users} bg="bg-blue-500" iconBg="bg-blue-600" />
         <ColorStatCard label="Total Income" value={formatBDT(totalIncome)} icon={TrendingUp} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <ColorStatCard label="Total Expenses" value={formatBDT(totalExpense)} icon={TrendingDown} bg="bg-rose-500" iconBg="bg-rose-600" />
-        <ColorStatCard label="Net Profit" value={formatBDT(totalProfit)} icon={Wallet} bg="bg-teal-500" iconBg="bg-teal-600" />
+        <ColorStatCard label="Total Expenses" value={formatBDT(totalExpense)} icon={TrendingDown} bg="bg-red-500" iconBg="bg-red-600" />
+        <ColorStatCard label="Net Profit" value={formatBDT(totalProfit)} icon={Wallet} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <ColorStatCard label="Cash Collected" value={formatBDT(totalCash)} icon={DollarSign} bg="bg-amber-500" iconBg="bg-amber-600" />
       </div>
 

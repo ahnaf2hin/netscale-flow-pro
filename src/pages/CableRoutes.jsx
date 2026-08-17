@@ -39,19 +39,19 @@ export default function CableRoutes() {
   const totalLength = routes.reduce((s, r) => s + (r.length_meters || 0), 0);
   const byType = (type) => routes.filter(r => r.cable_type === type).length;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
-      <PageHeader icon={Cable} iconBg="bg-cyan-600" title="Cable Routes" subtitle="Fiber, UTP & drop cable route inventory">
+      <PageHeader icon={Cable} iconBg="bg-blue-600" title="Cable Routes" subtitle="Fiber, UTP & drop cable route inventory">
         <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
-        <button onClick={() => { setForm({ name: "", start_lat: "", start_lng: "", end_lat: "", end_lng: "", cable_type: "fiber", length_meters: "", notes: "" }); setShowForm(true); }} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add Route</button>
+        <button onClick={() => { setForm({ name: "", start_lat: "", start_lng: "", end_lat: "", end_lng: "", cable_type: "fiber", length_meters: "", notes: "" }); setShowForm(true); }} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add Route</button>
       </PageHeader>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <ColorStatCard label="Total Routes" value={routes.length} icon={Cable} bg="bg-indigo-500" iconBg="bg-indigo-600" />
-        <ColorStatCard label="Total Length" value={`${(totalLength / 1000).toFixed(2)} km`} icon={Cable} bg="bg-cyan-500" iconBg="bg-cyan-600" />
-        <ColorStatCard label="Fiber" value={byType("fiber")} icon={Cable} bg="bg-teal-500" iconBg="bg-teal-600" />
+        <ColorStatCard label="Total Routes" value={routes.length} icon={Cable} bg="bg-blue-500" iconBg="bg-blue-600" />
+        <ColorStatCard label="Total Length" value={`${(totalLength / 1000).toFixed(2)} km`} icon={Cable} bg="bg-blue-500" iconBg="bg-blue-600" />
+        <ColorStatCard label="Fiber" value={byType("fiber")} icon={Cable} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <ColorStatCard label="Drop Cable" value={byType("drop_cable")} icon={Cable} bg="bg-amber-500" iconBg="bg-amber-600" />
       </div>
 
@@ -75,7 +75,7 @@ export default function CableRoutes() {
                 {routes.map(r => (
                   <tr key={r.id} className="border-b border-slate-50 hover:bg-slate-50/50">
                     <td className="px-4 py-3 text-sm font-medium text-slate-900">{r.name || "—"}</td>
-                    <td className="px-4 py-3"><span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-cyan-100 text-cyan-700">{r.cable_type}</span></td>
+                    <td className="px-4 py-3"><span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-blue-100 text-blue-700">{r.cable_type}</span></td>
                     <td className="px-4 py-3 text-xs text-slate-600 hidden sm:table-cell">{r.length_meters ? `${r.length_meters} m` : "—"}</td>
                     <td className="px-4 py-3 text-[10px] font-mono text-slate-500 hidden md:table-cell">{r.start_lat?.toFixed(4)}, {r.start_lng?.toFixed(4)}</td>
                     <td className="px-4 py-3 text-[10px] font-mono text-slate-500 hidden md:table-cell">{r.end_lat?.toFixed(4)}, {r.end_lng?.toFixed(4)}</td>
@@ -117,7 +117,7 @@ export default function CableRoutes() {
               <div><Label className="text-xs">Length (m)</Label><Input type="number" value={form.length_meters} onChange={e => setForm({ ...form, length_meters: e.target.value })} /></div>
             </div>
             <div><Label className="text-xs">Notes</Label><Textarea value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} rows={2} /></div>
-            <Button onClick={save} className="w-full bg-indigo-600 hover:bg-indigo-700">Add Route</Button>
+            <Button onClick={save} className="w-full bg-blue-600 hover:bg-blue-700">Add Route</Button>
           </div>
         </DialogContent>
       </Dialog>

@@ -23,18 +23,18 @@ export default function Configuration() {
     finally { setLoading(false); }
   };
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   const modules = [
     { label: "Service Packages", desc: "Manage internet plans & pricing", path: "/packages", icon: Package, bg: "bg-violet-500" },
-    { label: "Mikrotik Servers", desc: "Router connection settings", path: "/mikrotik", icon: Radio, bg: "bg-indigo-500" },
-    { label: "OLT Devices", desc: "Optical line terminals", path: "/olt", icon: HardDrive, bg: "bg-teal-500" },
-    { label: "Offices", desc: "Head office & sub offices on map", path: "/offices", icon: Building2, bg: "bg-indigo-500" },
+    { label: "Mikrotik Servers", desc: "Router connection settings", path: "/mikrotik", icon: Radio, bg: "bg-blue-500" },
+    { label: "OLT Devices", desc: "Optical line terminals", path: "/olt", icon: HardDrive, bg: "bg-emerald-500" },
+    { label: "Offices", desc: "Head office & sub offices on map", path: "/offices", icon: Building2, bg: "bg-blue-500" },
     { label: "Zones", desc: "Service areas for customer assignment", path: "/zones", icon: Layers, bg: "bg-violet-500" },
-    { label: "Map Settings", desc: "Google Maps API key & provider", path: "/map-settings", icon: MapPin, bg: "bg-cyan-600" },
-    { label: "Network Map", desc: "Cable routes & coverage areas", path: "/network-map", icon: Map, bg: "bg-cyan-500" },
+    { label: "Map Settings", desc: "Google Maps API key & provider", path: "/map-settings", icon: MapPin, bg: "bg-blue-600" },
+    { label: "Network Map", desc: "Cable routes & coverage areas", path: "/network-map", icon: Map, bg: "bg-blue-500" },
     { label: "Reseller Settings", desc: "MAC reseller management", path: "/resellers", icon: Store, bg: "bg-amber-500" },
-    { label: "Collector API Key", desc: "Collector agent authentication", path: "/collector", icon: KeyRound, bg: "bg-rose-500" },
+    { label: "Collector API Key", desc: "Collector agent authentication", path: "/collector", icon: KeyRound, bg: "bg-red-500" },
     { label: "Payment Gateways", desc: "Configure online payment credentials", path: "/payment-gateways", icon: CreditCard, bg: "bg-emerald-500" },
     { label: "SMS Providers", desc: "Configure bulk SMS gateway credentials", path: "/sms-providers", icon: MessageSquare, bg: "bg-sky-500" },
   ];
@@ -64,7 +64,7 @@ export default function Configuration() {
               <div className={`w-11 h-11 rounded-xl ${m.bg} flex items-center justify-center mb-3`}>
                 <Icon className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-sm font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">{m.label}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">{m.label}</h3>
               <p className="text-xs text-slate-500 mt-1">{m.desc}</p>
             </Link>
           );

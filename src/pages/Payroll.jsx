@@ -45,13 +45,13 @@ export default function Payroll() {
 
   const formatBDT = (a) => `৳${(a || 0).toLocaleString("en-BD")}`;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-teal-600 flex items-center justify-center"><Wallet className="w-6 h-6 text-white" /></div>
+          <div className="w-11 h-11 rounded-xl bg-emerald-600 flex items-center justify-center"><Wallet className="w-6 h-6 text-white" /></div>
           <div>
             <h1 className="text-xl font-bold text-slate-900">Payroll Management</h1>
             <p className="text-xs text-slate-500">Staff salaries & payroll tracking</p>
@@ -61,16 +61,16 @@ export default function Payroll() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <ColorStatCard label="Total Payroll" value={formatBDT(totalPayroll)} icon={DollarSign} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <ColorStatCard label="Total Payroll" value={formatBDT(totalPayroll)} icon={DollarSign} bg="bg-blue-500" iconBg="bg-blue-600" />
         <ColorStatCard label="Active Staff" value={activeCount} icon={Users} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <ColorStatCard label="Avg Salary" value={formatBDT(avgSalary)} icon={Wallet} bg="bg-teal-500" iconBg="bg-teal-600" />
+        <ColorStatCard label="Avg Salary" value={formatBDT(avgSalary)} icon={Wallet} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <ColorStatCard label="Total Staff" value={staff.length} icon={Users} bg="bg-slate-500" iconBg="bg-slate-600" />
       </div>
 
       <div className="glass-card p-4 mb-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search staff, role..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search staff, role..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
         </div>
       </div>
 
@@ -94,14 +94,14 @@ export default function Payroll() {
                   <tr key={s.id} className="border-b border-slate-50 hover:bg-slate-50/50">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-[10px] font-bold text-indigo-700">{(s.name || "?")[0].toUpperCase()}</div>
+                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-700">{(s.name || "?")[0].toUpperCase()}</div>
                         <span className="text-sm font-medium text-slate-900">{s.name}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3"><span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-indigo-100 text-indigo-700">{s.role}</span></td>
+                    <td className="px-4 py-3"><span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-blue-100 text-blue-700">{s.role}</span></td>
                     <td className="px-4 py-3 hidden sm:table-cell"><span className={`inline-flex items-center gap-1 text-[11px] font-semibold ${s.status === "active" ? "text-emerald-600" : "text-slate-400"}`}><span className={`w-1.5 h-1.5 rounded-full ${s.status === "active" ? "bg-emerald-500" : "bg-slate-400"}`} />{s.status === "active" ? "Active" : "Inactive"}</span></td>
                     <td className="px-4 py-3 text-sm font-semibold text-slate-700">{formatBDT(s.salary)}</td>
-                    <td className="px-4 py-3 text-right"><button onClick={() => openEdit(s)} className="text-xs text-indigo-600 hover:underline">Edit Salary</button></td>
+                    <td className="px-4 py-3 text-right"><button onClick={() => openEdit(s)} className="text-xs text-blue-600 hover:underline">Edit Salary</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -115,7 +115,7 @@ export default function Payroll() {
           <DialogHeader><DialogTitle>Edit Salary — {editStaff?.name}</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
             <div><Label className="text-xs">Monthly Salary (৳)</Label><Input type="number" value={form.salary} onChange={e => setForm({ ...form, salary: e.target.value })} /></div>
-            <Button onClick={savePayroll} className="w-full bg-indigo-600 hover:bg-indigo-700">Update Salary</Button>
+            <Button onClick={savePayroll} className="w-full bg-blue-600 hover:bg-blue-700">Update Salary</Button>
           </div>
         </DialogContent>
       </Dialog>

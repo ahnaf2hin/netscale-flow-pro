@@ -116,14 +116,14 @@ export default function OltOnu() {
   const losOnus = onus.filter(o => o.status === "los");
   const onlineOlts = olts.filter(o => o.status === "online");
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-teal-600 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-emerald-600 flex items-center justify-center">
             <HardDrive className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -135,7 +135,7 @@ export default function OltOnu() {
           <button onClick={loadData} title="Reload from database — live SNMP polling runs continuously via your collector agent" className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm">
             <RefreshCw className="w-3.5 h-3.5" /> Refresh
           </button>
-          <button onClick={() => setShowOltForm(true)} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm">
+          <button onClick={() => setShowOltForm(true)} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm">
             <Plus className="w-3.5 h-3.5" /> Add Server
           </button>
         </div>
@@ -153,10 +153,10 @@ export default function OltOnu() {
 
       {/* Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Servers" value={olts.length} icon={HardDrive} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <StatCard label="Total Servers" value={olts.length} icon={HardDrive} bg="bg-blue-500" iconBg="bg-blue-600" />
         <StatCard label="Online Servers" value={onlineOlts.length} icon={HardDrive} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <StatCard label="Total ONUs" value={onus.length} icon={Signal} bg="bg-rose-500" iconBg="bg-rose-600" />
-        <StatCard label="Online ONUs" value={onlineOnus.length} icon={Signal} bg="bg-cyan-500" iconBg="bg-cyan-600" />
+        <StatCard label="Total ONUs" value={onus.length} icon={Signal} bg="bg-red-500" iconBg="bg-red-600" />
+        <StatCard label="Online ONUs" value={onlineOnus.length} icon={Signal} bg="bg-blue-500" iconBg="bg-blue-600" />
       </div>
 
       <Tabs defaultValue="olts">
@@ -189,7 +189,7 @@ export default function OltOnu() {
                       <tr key={o.id} className="border-b border-slate-50 hover:bg-slate-50/50">
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center"><HardDrive className="w-4 h-4 text-teal-600" /></div>
+                            <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center"><HardDrive className="w-4 h-4 text-emerald-600" /></div>
                             <div>
                               <p className="text-sm font-medium text-slate-900">{o.name}</p>
                               <p className="text-[10px] text-slate-400">{o.vendor}</p>
@@ -219,7 +219,7 @@ export default function OltOnu() {
           <div className="glass-card overflow-hidden">
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
               <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
-                <Signal className="w-4 h-4 text-cyan-500" /> ONUs List
+                <Signal className="w-4 h-4 text-blue-500" /> ONUs List
                 <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{onus.length}</span>
               </h2>
               <div className="flex gap-2 text-[11px]">
@@ -249,7 +249,7 @@ export default function OltOnu() {
                       <tr key={o.id} onClick={() => openHistory(o)} className={`border-b border-slate-50 hover:bg-slate-50/50 cursor-pointer ${i % 2 === 0 ? "" : "bg-slate-50/30"}`}>
                         <td className="px-4 py-3 text-xs font-mono text-slate-500">{i + 1}/{onus.length}</td>
                         <td className="px-4 py-3 text-sm font-medium text-slate-900">{o.customer_name || "—"}</td>
-                        <td className="px-4 py-3 text-xs font-mono text-indigo-600 hidden sm:table-cell">{o.serial_number}</td>
+                        <td className="px-4 py-3 text-xs font-mono text-blue-600 hidden sm:table-cell">{o.serial_number}</td>
                         <td className="px-4 py-3">
                           <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full ${o.status === "online" ? "bg-emerald-100 text-emerald-700" : o.status === "los" ? "bg-red-100 text-red-700" : "bg-slate-100 text-slate-600"}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${o.status === "online" ? "bg-emerald-500" : o.status === "los" ? "bg-red-500" : "bg-slate-400"}`} />
@@ -313,7 +313,7 @@ export default function OltOnu() {
               <div><Label className="text-xs">Location</Label><Input value={oltForm.location} onChange={e => setOltForm({ ...oltForm, location: e.target.value })} /></div>
               <div><Label className="text-xs">Low-Signal Alert Threshold (dBm)</Label><Input type="number" value={oltForm.low_signal_threshold_dbm} onChange={e => setOltForm({ ...oltForm, low_signal_threshold_dbm: e.target.value })} /></div>
             </div>
-            <Button onClick={saveOlt} className="w-full bg-indigo-600 hover:bg-indigo-700">Add OLT</Button>
+            <Button onClick={saveOlt} className="w-full bg-blue-600 hover:bg-blue-700">Add OLT</Button>
           </div>
         </DialogContent>
       </Dialog>

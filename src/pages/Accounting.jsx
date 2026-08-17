@@ -69,7 +69,7 @@ export default function Accounting() {
   });
   const chartData = Array.from(byMonth.values()).sort((a, b) => a.month.localeCompare(b.month)).slice(-6);
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
@@ -83,15 +83,15 @@ export default function Accounting() {
         </div>
         <div className="flex gap-2">
           <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
-          <button onClick={() => { setForm({ type: "income", category: "", description: "", amount: "", date: new Date().toISOString().split("T")[0], payment_method: "cash", reference: "" }); setShowForm(true); }} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add Transaction</button>
+          <button onClick={() => { setForm({ type: "income", category: "", description: "", amount: "", date: new Date().toISOString().split("T")[0], payment_method: "cash", reference: "" }); setShowForm(true); }} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add Transaction</button>
         </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <ColorStatCard label="Total Income" value={formatBDT(totalIncome)} icon={TrendingUp} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <ColorStatCard label="Total Expense" value={formatBDT(totalExpense)} icon={TrendingDown} bg="bg-rose-500" iconBg="bg-rose-600" />
-        <ColorStatCard label="Net Profit" value={formatBDT(netProfit)} icon={DollarSign} bg="bg-indigo-500" iconBg="bg-indigo-600" />
-        <ColorStatCard label="Transactions" value={transactions.length} icon={Calculator} bg="bg-teal-500" iconBg="bg-teal-600" />
+        <ColorStatCard label="Total Expense" value={formatBDT(totalExpense)} icon={TrendingDown} bg="bg-red-500" iconBg="bg-red-600" />
+        <ColorStatCard label="Net Profit" value={formatBDT(netProfit)} icon={DollarSign} bg="bg-blue-500" iconBg="bg-blue-600" />
+        <ColorStatCard label="Transactions" value={transactions.length} icon={Calculator} bg="bg-emerald-500" iconBg="bg-emerald-600" />
       </div>
 
       {chartData.length > 0 && (
@@ -118,11 +118,11 @@ export default function Accounting() {
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search description, category..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search description, category..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
           </div>
           <div className="flex gap-2">
             {["all", "income", "expense"].map(tp => (
-              <button key={tp} onClick={() => setTypeFilter(tp)} className={`text-xs px-3 py-2 rounded-lg border capitalize ${typeFilter === tp ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-600 border-slate-200"}`}>{tp}</button>
+              <button key={tp} onClick={() => setTypeFilter(tp)} className={`text-xs px-3 py-2 rounded-lg border capitalize ${typeFilter === tp ? "bg-blue-600 text-white border-blue-600" : "bg-white text-slate-600 border-slate-200"}`}>{tp}</button>
             ))}
           </div>
         </div>
@@ -152,8 +152,8 @@ export default function Accounting() {
                     <td className="px-4 py-3 text-sm font-medium text-slate-900">{t.description || "—"}</td>
                     <td className="px-4 py-3 text-xs text-slate-600 hidden sm:table-cell">{t.category || "—"}</td>
                     <td className="px-4 py-3 text-xs text-slate-500 hidden md:table-cell capitalize">{t.payment_method}</td>
-                    <td className="px-4 py-3"><span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${t.type === "income" ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}>{t.type}</span></td>
-                    <td className={`px-4 py-3 text-sm font-semibold ${t.type === "income" ? "text-emerald-600" : "text-rose-600"}`}>{t.type === "income" ? "+" : "−"}{formatBDT(t.amount)}</td>
+                    <td className="px-4 py-3"><span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${t.type === "income" ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}>{t.type}</span></td>
+                    <td className={`px-4 py-3 text-sm font-semibold ${t.type === "income" ? "text-emerald-600" : "text-red-600"}`}>{t.type === "income" ? "+" : "−"}{formatBDT(t.amount)}</td>
                     <td className="px-4 py-3 text-right"><button onClick={() => deleteTransaction(t)} className="w-7 h-7 rounded-md bg-red-50 hover:bg-red-100 text-red-500 flex items-center justify-center ml-auto"><Trash2 className="w-3.5 h-3.5" /></button></td>
                   </tr>
                 ))}
@@ -169,7 +169,7 @@ export default function Accounting() {
           <div className="space-y-4 mt-4">
             <div className="flex gap-2">
               <button onClick={() => setForm({ ...form, type: "income" })} className={`flex-1 text-xs py-2 rounded-lg border ${form.type === "income" ? "bg-emerald-600 text-white border-emerald-600" : "bg-white text-slate-600 border-slate-200"}`}>Income</button>
-              <button onClick={() => setForm({ ...form, type: "expense" })} className={`flex-1 text-xs py-2 rounded-lg border ${form.type === "expense" ? "bg-rose-600 text-white border-rose-600" : "bg-white text-slate-600 border-slate-200"}`}>Expense</button>
+              <button onClick={() => setForm({ ...form, type: "expense" })} className={`flex-1 text-xs py-2 rounded-lg border ${form.type === "expense" ? "bg-red-600 text-white border-red-600" : "bg-white text-slate-600 border-slate-200"}`}>Expense</button>
             </div>
             <div><Label className="text-xs">Description</Label><Input value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} /></div>
             <div className="grid grid-cols-2 gap-4">
@@ -192,7 +192,7 @@ export default function Accounting() {
               </div>
             </div>
             <div><Label className="text-xs">Reference</Label><Input value={form.reference} onChange={e => setForm({ ...form, reference: e.target.value })} /></div>
-            <Button onClick={saveTransaction} className="w-full bg-indigo-600 hover:bg-indigo-700">Record Transaction</Button>
+            <Button onClick={saveTransaction} className="w-full bg-blue-600 hover:bg-blue-700">Record Transaction</Button>
           </div>
         </DialogContent>
       </Dialog>

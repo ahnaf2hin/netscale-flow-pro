@@ -64,14 +64,14 @@ export default function StaffDashboard() {
   });
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+    return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
   }
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-indigo-600 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center">
             <ClipboardList className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -86,8 +86,8 @@ export default function StaffDashboard() {
 
       {/* Staff profile banner */}
       <div className="glass-card p-4 mb-6 flex items-center gap-4">
-        <div className="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0">
-          <UserCircle className="w-7 h-7 text-indigo-600" />
+        <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+          <UserCircle className="w-7 h-7 text-blue-600" />
         </div>
         <div className="flex-1 min-w-0">
           <h2 className="text-sm font-semibold text-slate-900 truncate">{staffProfile?.name || me?.full_name || "Staff Member"}</h2>
@@ -104,9 +104,9 @@ export default function StaffDashboard() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-        <ColorStatCard label="Total Tasks" value={reports.length} icon={ClipboardList} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <ColorStatCard label="Total Tasks" value={reports.length} icon={ClipboardList} bg="bg-blue-500" iconBg="bg-blue-600" />
         <ColorStatCard label="Pending" value={pending} icon={Clock} bg="bg-amber-500" iconBg="bg-amber-600" />
-        <ColorStatCard label="In Progress" value={inProgress} icon={Briefcase} bg="bg-cyan-500" iconBg="bg-cyan-600" />
+        <ColorStatCard label="In Progress" value={inProgress} icon={Briefcase} bg="bg-blue-500" iconBg="bg-blue-600" />
         <ColorStatCard label="Completed" value={completed} icon={Check} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <ColorStatCard label="Total Hours" value={totalHours} icon={CalendarClock} bg="bg-violet-500" iconBg="bg-violet-600" />
       </div>
@@ -115,12 +115,12 @@ export default function StaffDashboard() {
       <div className="glass-card p-3 mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search your tasks..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search your tasks..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
         </div>
         <div className="flex gap-1 bg-slate-100 rounded-lg p-1">
           {STATUS_TABS.map(t => (
             <button key={t.value} onClick={() => setStatusFilter(t.value)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${statusFilter === t.value ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${statusFilter === t.value ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
               {t.label}
             </button>
           ))}
@@ -132,8 +132,8 @@ export default function StaffDashboard() {
         {filtered.map(r => (
           <div key={r.id} className="glass-card p-4 hover:shadow-sm transition-shadow">
             <div className="flex items-start justify-between mb-2">
-              <span className="text-[10px] text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">{CATEGORY_LABELS[r.category] || r.category || "Other"}</span>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${r.status === "completed" ? "bg-emerald-100 text-emerald-700" : r.status === "in_progress" ? "bg-cyan-100 text-cyan-700" : "bg-amber-100 text-amber-700"}`}>
+              <span className="text-[10px] text-blue-600 bg-blue-50 px-2 py-0.5 rounded">{CATEGORY_LABELS[r.category] || r.category || "Other"}</span>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${r.status === "completed" ? "bg-emerald-100 text-emerald-700" : r.status === "in_progress" ? "bg-blue-100 text-blue-700" : "bg-amber-100 text-amber-700"}`}>
                 {r.status?.replace("_", " ")}
               </span>
             </div>

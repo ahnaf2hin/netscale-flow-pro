@@ -28,7 +28,7 @@ export default function PortalLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-indigo-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-blue-50 p-4">
       <div className="w-full max-w-sm">
         <Link to="/portal" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 mb-6"><ArrowLeft className="w-4 h-4" /> Back to home</Link>
         <div className="text-center mb-8">

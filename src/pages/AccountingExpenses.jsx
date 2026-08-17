@@ -42,19 +42,19 @@ export default function AccountingExpenses() {
   const formatBDT = (a) => `৳${(a || 0).toLocaleString("en-BD")}`;
   const chartData = Array.from(byCat.entries()).map(([name, amount]) => ({ name, amount })).sort((a, b) => b.amount - a.amount).slice(0, 6);
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
-      <PageHeader icon={TrendingDown} iconBg="bg-rose-600" title="Expenses" subtitle="All expense transactions & cost tracking">
+      <PageHeader icon={TrendingDown} iconBg="bg-red-600" title="Expenses" subtitle="All expense transactions & cost tracking">
         <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
-        <button onClick={() => { setForm({ category: "", description: "", amount: "", date: new Date().toISOString().split("T")[0], payment_method: "cash", reference: "" }); setShowForm(true); }} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add Expense</button>
+        <button onClick={() => { setForm({ category: "", description: "", amount: "", date: new Date().toISOString().split("T")[0], payment_method: "cash", reference: "" }); setShowForm(true); }} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> Add Expense</button>
       </PageHeader>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <ColorStatCard label="Total Expenses" value={formatBDT(total)} icon={TrendingDown} bg="bg-rose-500" iconBg="bg-rose-600" />
+        <ColorStatCard label="Total Expenses" value={formatBDT(total)} icon={TrendingDown} bg="bg-red-500" iconBg="bg-red-600" />
         <ColorStatCard label="This Month" value={formatBDT(thisMonth)} icon={DollarSign} bg="bg-amber-500" iconBg="bg-amber-600" />
-        <ColorStatCard label="Transactions" value={transactions.length} icon={TrendingDown} bg="bg-teal-500" iconBg="bg-teal-600" />
+        <ColorStatCard label="Transactions" value={transactions.length} icon={TrendingDown} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <ColorStatCard label="Top Category" value={topCat ? topCat[0] : "—"} icon={TrendingDown} bg="bg-violet-500" iconBg="bg-violet-600" />
       </div>
 
@@ -76,7 +76,7 @@ export default function AccountingExpenses() {
       <div className="glass-card p-4 mb-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search expense records..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search expense records..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
         </div>
       </div>
 
@@ -101,7 +101,7 @@ export default function AccountingExpenses() {
                     <td className="px-4 py-3 text-xs text-slate-500">{t.date}</td>
                     <td className="px-4 py-3 text-sm font-medium text-slate-900">{t.description || "—"}</td>
                     <td className="px-4 py-3 text-xs text-slate-600 hidden sm:table-cell">{t.category || "—"}</td>
-                    <td className="px-4 py-3 text-sm font-semibold text-rose-600">−{formatBDT(t.amount)}</td>
+                    <td className="px-4 py-3 text-sm font-semibold text-red-600">−{formatBDT(t.amount)}</td>
                     <td className="px-4 py-3 text-right"><button onClick={() => del(t)} className="w-7 h-7 rounded-md bg-red-50 hover:bg-red-100 text-red-500 flex items-center justify-center ml-auto"><Trash2 className="w-3.5 h-3.5" /></button></td>
                   </tr>
                 ))}
@@ -133,7 +133,7 @@ export default function AccountingExpenses() {
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={save} className="w-full bg-indigo-600 hover:bg-indigo-700">Record Expense</Button>
+            <Button onClick={save} className="w-full bg-blue-600 hover:bg-blue-700">Record Expense</Button>
           </div>
         </DialogContent>
       </Dialog>

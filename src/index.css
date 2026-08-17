@@ -10,7 +10,7 @@
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 243 75% 59%;
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
@@ -22,7 +22,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 243 75% 59%;
+    --ring: 221 83% 53%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -44,38 +44,38 @@
   }
 
   .dark {
-    --background: 0 0% 3.9%;
+    --background: 240 6% 7%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
+    --card: 240 5.9% 10%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
+    --popover: 240 5.9% 10%;
     --popover-foreground: 0 0% 98%;
-    --primary: 243 75% 68%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 243 75% 68%;
-    --chart-1: 220 70% 50%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 217 91% 60%;
+    --chart-1: 217 91% 60%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 
@@ -120,6 +120,104 @@
   border: 1px solid rgb(255 255 255 / 0.08);
   box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.06);
 }
+.dark .glass-card,
+.dark .glass {
+  box-shadow:
+    0 1px 2px 0 rgb(0 0 0 / 0.2),
+    0 8px 24px -8px rgb(0 0 0 / 0.4),
+    inset 0 1px 0 0 rgb(255 255 255 / 0.06);
+}
+
+/* ============================================================
+   Dark mode — centralized re-skin of every hardcoded neutral/status
+   Tailwind color class used across the app's pages.
+   Individual pages hardcode Tailwind slate/emerald/red/amber classes
+   directly (bg-white, text-slate-900, bg-emerald-50, ...) rather than
+   the semantic --background/--foreground tokens above, so toggling the
+   `dark` class alone wouldn't change their appearance. Overriding those
+   exact utility classes here — scoped under `.dark` — re-skins every
+   page at once without editing 60+ page files individually, and stays
+   correct automatically as new pages reuse the same common classes.
+   ============================================================ */
+.dark {
+  color-scheme: dark;
+}
+
+/* Neutral surfaces */
+.dark .bg-white { background-color: #18181b; }
+.dark .bg-white\/90 { background-color: rgb(24 24 27 / 0.9); }
+.dark .bg-white\/80 { background-color: rgb(24 24 27 / 0.8); }
+.dark .bg-white\/20 { background-color: rgb(255 255 255 / 0.08); }
+.dark .hover\:bg-white:hover { background-color: #27272a; }
+
+.dark .bg-slate-50 { background-color: #18181b; }
+.dark .bg-slate-50\/50 { background-color: rgb(39 39 42 / 0.5); }
+.dark .bg-slate-50\/30 { background-color: rgb(39 39 42 / 0.3); }
+.dark .bg-slate-50\/90 { background-color: rgb(24 24 27 / 0.9); }
+.dark .bg-slate-100 { background-color: #27272a; }
+.dark .bg-slate-200 { background-color: #3f3f46; }
+.dark .bg-slate-300 { background-color: #52525b; }
+.dark .bg-slate-400 { background-color: #52525b; }
+.dark .bg-slate-500 { background-color: #71717a; }
+.dark .bg-slate-600 { background-color: #52525b; }
+.dark .bg-slate-700 { background-color: #3f3f46; }
+.dark .bg-slate-900 { background-color: #09090b; }
+.dark .hover\:bg-slate-50:hover { background-color: #27272a; }
+.dark .hover\:bg-slate-50\/50:hover { background-color: rgb(39 39 42 / 0.5); }
+.dark .hover\:bg-slate-100:hover { background-color: #27272a; }
+.dark .hover\:bg-slate-200:hover { background-color: #3f3f46; }
+.dark .hover\:bg-slate-800:hover { background-color: #3f3f46; }
+
+/* Gradient stops are handled per-instance with explicit "dark:" classes instead of a blanket
+   override here — they share CSS custom properties (--tw-gradient-from and --tw-gradient-to)
+   with Tailwind's own dark-mode utilities at equal specificity, so a global override here
+   would race with and sometimes clobber an explicit dark-mode gradient class on a page. */
+
+/* Neutral text */
+.dark .text-slate-900 { color: #fafafa; }
+.dark .text-slate-800 { color: #f4f4f5; }
+.dark .text-slate-700 { color: #e4e4e7; }
+.dark .text-slate-600 { color: #d4d4d8; }
+.dark .text-slate-500 { color: #a1a1aa; }
+.dark .text-slate-400 { color: #71717a; }
+.dark .text-slate-300 { color: #52525b; }
+.dark .text-slate-200 { color: #3f3f46; }
+.dark .hover\:text-slate-600:hover { color: #d4d4d8; }
+.dark .hover\:text-slate-700:hover { color: #e4e4e7; }
+.dark .hover\:text-slate-800:hover { color: #f4f4f5; }
+.dark .hover\:text-slate-900:hover { color: #fafafa; }
+
+/* Neutral borders */
+.dark .border-slate-50 { border-color: #27272a; }
+.dark .border-slate-100 { border-color: #27272a; }
+.dark .border-slate-200 { border-color: #3f3f46; }
+.dark .border-slate-300 { border-color: #52525b; }
+.dark .border-slate-400 { border-color: #71717a; }
+.dark .border-slate-700 { border-color: #3f3f46; }
+.dark .hover\:border-slate-300:hover { border-color: #52525b; }
+.dark .ring-slate-500 { --tw-ring-color: #71717a; }
+
+/* Status badges — light pill (bg-X-50/100 + text-X-600/700) becomes a translucent
+   tinted chip on dark backgrounds instead of a pale, hard-to-read blob. */
+.dark .bg-emerald-50 { background-color: rgb(16 185 129 / 0.15); }
+.dark .bg-emerald-100 { background-color: rgb(16 185 129 / 0.22); }
+.dark .text-emerald-600 { color: #34d399; }
+.dark .text-emerald-700 { color: #34d399; }
+
+.dark .bg-red-50 { background-color: rgb(239 68 68 / 0.15); }
+.dark .bg-red-100 { background-color: rgb(239 68 68 / 0.22); }
+.dark .text-red-600 { color: #f87171; }
+.dark .text-red-700 { color: #f87171; }
+
+.dark .bg-amber-50 { background-color: rgb(245 158 11 / 0.15); }
+.dark .bg-amber-100 { background-color: rgb(245 158 11 / 0.22); }
+.dark .text-amber-600 { color: #fbbf24; }
+.dark .text-amber-700 { color: #fbbf24; }
+
+.dark .bg-blue-50 { background-color: rgb(37 99 235 / 0.15); }
+.dark .bg-blue-100 { background-color: rgb(37 99 235 / 0.22); }
+.dark .text-blue-600 { color: #60a5fa; }
+.dark .text-blue-700 { color: #60a5fa; }
 
 /* Live cable animation (Leaflet SVG path) */
 .leaflet-container .live-cable {

@@ -151,7 +151,7 @@ export default function SmsProviders() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-slate-50">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
       </div>
     );
   }
@@ -172,7 +172,7 @@ export default function SmsProviders() {
           <button onClick={loadProviders} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm">
             <RefreshCw className="w-3.5 h-3.5" /> Refresh
           </button>
-          <Button onClick={openAdd} size="sm" className="bg-indigo-600 hover:bg-indigo-700">
+          <Button onClick={openAdd} size="sm" className="bg-blue-600 hover:bg-blue-700">
             <Plus className="w-4 h-4" /> Add Provider
           </Button>
         </div>
@@ -183,7 +183,7 @@ export default function SmsProviders() {
           <MessageSquare className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <h3 className="text-sm font-semibold text-slate-900">No SMS providers configured</h3>
           <p className="text-xs text-slate-500 mt-1 mb-4">Add your bulk SMS gateway credentials to send notifications and reminders.</p>
-          <Button onClick={openAdd} size="sm" className="bg-indigo-600 hover:bg-indigo-700">
+          <Button onClick={openAdd} size="sm" className="bg-blue-600 hover:bg-blue-700">
             <Plus className="w-4 h-4" /> Add Provider
           </Button>
         </div>
@@ -195,8 +195,8 @@ export default function SmsProviders() {
               <div key={p.id} className="glass-card p-5 flex flex-col">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
-                      <MessageSquare className="w-5 h-5 text-indigo-600" />
+                    <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                      <MessageSquare className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
                       <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-1.5">
@@ -230,7 +230,7 @@ export default function SmsProviders() {
                     )}
                   </div>
                   <div className="flex items-center gap-1">
-                    <button onClick={() => openEdit(p)} className="p-1.5 rounded-md text-slate-400 hover:text-indigo-600 hover:bg-indigo-50"><Pencil className="w-3.5 h-3.5" /></button>
+                    <button onClick={() => openEdit(p)} className="p-1.5 rounded-md text-slate-400 hover:text-blue-600 hover:bg-blue-50"><Pencil className="w-3.5 h-3.5" /></button>
                     <button onClick={() => handleDelete(p)} className="p-1.5 rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50"><Trash2 className="w-3.5 h-3.5" /></button>
                   </div>
                 </div>
@@ -241,7 +241,7 @@ export default function SmsProviders() {
       )}
 
       <div className="mt-6">
-        <Link to="/configuration" className="text-xs text-slate-500 hover:text-indigo-600">← Back to Configuration</Link>
+        <Link to="/configuration" className="text-xs text-slate-500 hover:text-blue-600">← Back to Configuration</Link>
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -311,7 +311,7 @@ export default function SmsProviders() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-indigo-600 hover:bg-indigo-700">
+            <Button onClick={handleSave} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
               {saving && <Loader2 className="w-4 h-4 animate-spin" />} Save Provider
             </Button>
           </DialogFooter>

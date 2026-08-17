@@ -48,7 +48,7 @@ export default function WorkReport() {
   const inProgress = reports.filter(r => r.status === "in_progress").length;
   const completed = reports.filter(r => r.status === "completed").length;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
@@ -62,21 +62,21 @@ export default function WorkReport() {
         </div>
         <div className="flex gap-2">
           <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm"><RefreshCw className="w-3.5 h-3.5" /> Refresh</button>
-          <button onClick={() => { setForm({ staff_id: "", staff_name: "", title: "", description: "", report_date: new Date().toISOString().split("T")[0], hours: "1", status: "pending", category: "other" }); setShowForm(true); }} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> New Report</button>
+          <button onClick={() => { setForm({ staff_id: "", staff_name: "", title: "", description: "", report_date: new Date().toISOString().split("T")[0], hours: "1", status: "pending", category: "other" }); setShowForm(true); }} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm"><Plus className="w-3.5 h-3.5" /> New Report</button>
         </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <ColorStatCard label="Total Reports" value={reports.length} icon={ClipboardList} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <ColorStatCard label="Total Reports" value={reports.length} icon={ClipboardList} bg="bg-blue-500" iconBg="bg-blue-600" />
         <ColorStatCard label="Pending" value={pending} icon={Clock} bg="bg-amber-500" iconBg="bg-amber-600" />
-        <ColorStatCard label="In Progress" value={inProgress} icon={Briefcase} bg="bg-cyan-500" iconBg="bg-cyan-600" />
+        <ColorStatCard label="In Progress" value={inProgress} icon={Briefcase} bg="bg-blue-500" iconBg="bg-blue-600" />
         <ColorStatCard label="Completed" value={completed} icon={Check} bg="bg-emerald-500" iconBg="bg-emerald-600" />
       </div>
 
       <div className="glass-card p-4 mb-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search title, staff..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search title, staff..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
         </div>
       </div>
 
@@ -84,8 +84,8 @@ export default function WorkReport() {
         {filtered.map(r => (
           <div key={r.id} className="glass-card p-4 hover:shadow-sm transition-shadow">
             <div className="flex items-start justify-between mb-2">
-              <span className="text-[10px] text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded capitalize">{r.category}</span>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${r.status === "completed" ? "bg-emerald-100 text-emerald-700" : r.status === "in_progress" ? "bg-cyan-100 text-cyan-700" : "bg-amber-100 text-amber-700"}`}>{r.status?.replace("_", " ")}</span>
+              <span className="text-[10px] text-blue-600 bg-blue-50 px-2 py-0.5 rounded capitalize">{r.category}</span>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${r.status === "completed" ? "bg-emerald-100 text-emerald-700" : r.status === "in_progress" ? "bg-blue-100 text-blue-700" : "bg-amber-100 text-amber-700"}`}>{r.status?.replace("_", " ")}</span>
             </div>
             <h3 className="text-sm font-semibold text-slate-900">{r.title}</h3>
             <p className="text-xs text-slate-500 mt-1 line-clamp-2">{r.description}</p>
@@ -139,7 +139,7 @@ export default function WorkReport() {
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={saveReport} className="w-full bg-indigo-600 hover:bg-indigo-700">Add Report</Button>
+            <Button onClick={saveReport} className="w-full bg-blue-600 hover:bg-blue-700">Add Report</Button>
           </div>
         </DialogContent>
       </Dialog>

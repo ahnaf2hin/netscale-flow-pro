@@ -21,9 +21,9 @@ const StatCard = ({ label, value, icon: Icon, bg, iconBg }) => (
 );
 
 const roleColors = {
-  admin: "bg-indigo-100 text-indigo-700",
+  admin: "bg-blue-100 text-blue-700",
   manager: "bg-violet-100 text-violet-700",
-  technician: "bg-cyan-100 text-cyan-700",
+  technician: "bg-blue-100 text-blue-700",
   support: "bg-amber-100 text-amber-700",
   billing: "bg-emerald-100 text-emerald-700",
 };
@@ -77,13 +77,13 @@ export default function Staff() {
   const adminCount = staff.filter(s => s.role === "admin").length;
   const technicianCount = staff.filter(s => s.role === "technician").length;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-teal-600 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-emerald-600 flex items-center justify-center">
             <Users className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -95,23 +95,23 @@ export default function Staff() {
           <button onClick={loadData} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm">
             <RefreshCw className="w-3.5 h-3.5" /> Refresh
           </button>
-          <button onClick={openCreate} className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-3 py-2 shadow-sm">
+          <button onClick={openCreate} className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 shadow-sm">
             <Plus className="w-3.5 h-3.5" /> Add Staff
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Staff" value={staff.length} icon={Users} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <StatCard label="Total Staff" value={staff.length} icon={Users} bg="bg-blue-500" iconBg="bg-blue-600" />
         <StatCard label="Active" value={activeCount} icon={UserCheck} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <StatCard label="Inactive" value={inactiveCount} icon={UserX} bg="bg-slate-500" iconBg="bg-slate-600" />
-        <StatCard label="Technicians" value={technicianCount} icon={Briefcase} bg="bg-cyan-500" iconBg="bg-cyan-600" />
+        <StatCard label="Technicians" value={technicianCount} icon={Briefcase} bg="bg-blue-500" iconBg="bg-blue-600" />
       </div>
 
       <div className="glass-card p-4 mb-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, email, role..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, email, role..." className="w-full h-9 pl-9 pr-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400" />
         </div>
       </div>
 
@@ -140,7 +140,7 @@ export default function Staff() {
                   <tr key={s.id} className="border-b border-slate-50 hover:bg-slate-50/50">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-[10px] font-bold text-indigo-700">{(s.name || "?")[0].toUpperCase()}</div>
+                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-700">{(s.name || "?")[0].toUpperCase()}</div>
                         <div>
                           <p className="text-sm font-medium text-slate-900">{s.name}</p>
                           <p className="text-[10px] text-slate-400">{s.email}</p>
@@ -211,7 +211,7 @@ export default function Staff() {
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={saveStaff} className="w-full bg-indigo-600 hover:bg-indigo-700">{editStaff ? "Update Staff" : "Add Staff"}</Button>
+            <Button onClick={saveStaff} className="w-full bg-blue-600 hover:bg-blue-700">{editStaff ? "Update Staff" : "Add Staff"}</Button>
           </div>
         </DialogContent>
       </Dialog>

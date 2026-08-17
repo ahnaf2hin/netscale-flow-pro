@@ -53,7 +53,7 @@ export default function RouterInfoPanel() {
     <div className="mb-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
-          <Server className="w-4 h-4 text-indigo-500" /> Mikrotik Router Info
+          <Server className="w-4 h-4 text-blue-500" /> Mikrotik Router Info
         </h2>
         <button
           onClick={fetchSystemInfo}

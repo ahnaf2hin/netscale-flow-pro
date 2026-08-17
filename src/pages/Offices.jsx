@@ -104,7 +104,7 @@ export default function Offices() {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+    return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
   }
 
   return (
@@ -123,7 +123,7 @@ export default function Offices() {
           <button onClick={loadOffices} className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-3 py-2 bg-white shadow-sm">
             <RefreshCw className="w-3.5 h-3.5" /> Refresh
           </button>
-          <Button onClick={openAdd} size="sm" className="bg-indigo-600 hover:bg-indigo-700">
+          <Button onClick={openAdd} size="sm" className="bg-blue-600 hover:bg-blue-700">
             <Plus className="w-4 h-4" /> Add Office
           </Button>
         </div>
@@ -134,7 +134,7 @@ export default function Offices() {
           <Building2 className="w-10 h-10 text-slate-300 mx-auto mb-3" />
           <h3 className="text-sm font-semibold text-slate-900">No offices added yet</h3>
           <p className="text-xs text-slate-500 mt-1 mb-4">Add your head office first — the network map will center on it automatically.</p>
-          <Button onClick={openAdd} size="sm" className="bg-indigo-600 hover:bg-indigo-700">
+          <Button onClick={openAdd} size="sm" className="bg-blue-600 hover:bg-blue-700">
             <Plus className="w-4 h-4" /> Add Office
           </Button>
         </div>
@@ -144,8 +144,8 @@ export default function Offices() {
             <div key={o.id} className="glass-card p-5">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${o.type === "head_office" ? "bg-indigo-50" : "bg-amber-50"}`}>
-                    <Building2 className={`w-5 h-5 ${o.type === "head_office" ? "text-indigo-600" : "text-amber-600"}`} />
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${o.type === "head_office" ? "bg-blue-50" : "bg-amber-50"}`}>
+                    <Building2 className={`w-5 h-5 ${o.type === "head_office" ? "text-blue-600" : "text-amber-600"}`} />
                   </div>
                   <div>
                     <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-1.5">
@@ -169,7 +169,7 @@ export default function Offices() {
               </div>
 
               <div className="flex items-center justify-end gap-1 border-t border-slate-100 pt-3">
-                <button onClick={() => openEdit(o)} className="p-1.5 rounded-md text-slate-400 hover:text-indigo-600 hover:bg-indigo-50"><Pencil className="w-3.5 h-3.5" /></button>
+                <button onClick={() => openEdit(o)} className="p-1.5 rounded-md text-slate-400 hover:text-blue-600 hover:bg-blue-50"><Pencil className="w-3.5 h-3.5" /></button>
                 <button onClick={() => handleDelete(o)} className="p-1.5 rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50"><Trash2 className="w-3.5 h-3.5" /></button>
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function Offices() {
       )}
 
       <div className="mt-6">
-        <Link to="/configuration" className="text-xs text-slate-500 hover:text-indigo-600">← Back to Configuration</Link>
+        <Link to="/configuration" className="text-xs text-slate-500 hover:text-blue-600">← Back to Configuration</Link>
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -239,7 +239,7 @@ export default function Offices() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-indigo-600 hover:bg-indigo-700">
+            <Button onClick={handleSave} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
               {saving && <Loader2 className="w-4 h-4 animate-spin" />} Save Office
             </Button>
           </DialogFooter>

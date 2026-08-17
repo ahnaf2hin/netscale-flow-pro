@@ -127,14 +127,14 @@ export default function Billing() {
   const overdueCount = invoices.filter(i => i.status === "overdue").length;
   const unpaidCount = invoices.filter(i => i.status === "unpaid").length;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-orange-500 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-amber-500 flex items-center justify-center">
             <CreditCard className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -156,7 +156,7 @@ export default function Billing() {
             <button
               onClick={handleGenerateMonthly}
               disabled={genLoading}
-              className="flex items-center gap-2 text-xs text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 rounded-lg px-3 py-2 shadow-sm"
+              className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60 rounded-lg px-3 py-2 shadow-sm"
             >
               {genLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
               {genLoading ? "Generating..." : "Generate & Send Monthly Invoices"}
@@ -167,10 +167,10 @@ export default function Billing() {
 
       {/* Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Clients" value={invoices.length} icon={Users} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <StatCard label="Total Clients" value={invoices.length} icon={Users} bg="bg-blue-500" iconBg="bg-blue-600" />
         <StatCard label="Collected" value={formatBDT(totalCollected)} icon={CheckCircle} bg="bg-emerald-500" iconBg="bg-emerald-600" />
-        <StatCard label="Outstanding" value={formatBDT(totalOutstanding)} icon={AlertTriangle} bg="bg-orange-400" iconBg="bg-orange-500" />
-        <StatCard label="Overdue Bills" value={overdueCount} icon={X} bg="bg-rose-500" iconBg="bg-rose-600" />
+        <StatCard label="Outstanding" value={formatBDT(totalOutstanding)} icon={AlertTriangle} bg="bg-amber-400" iconBg="bg-amber-500" />
+        <StatCard label="Overdue Bills" value={overdueCount} icon={X} bg="bg-red-500" iconBg="bg-red-600" />
       </div>
 
       <Tabs defaultValue="invoices">
@@ -212,7 +212,7 @@ export default function Billing() {
                   <thead>
                     <tr className="border-b border-slate-100 bg-slate-50/50">
                       <th className="w-10 px-4 py-3">
-                        <input type="checkbox" checked={allFilteredSelected} onChange={toggleSelectAll} className="w-4 h-4 rounded border-slate-300 text-indigo-600 cursor-pointer" />
+                        <input type="checkbox" checked={allFilteredSelected} onChange={toggleSelectAll} className="w-4 h-4 rounded border-slate-300 text-blue-600 cursor-pointer" />
                       </th>
                       <th className="text-left text-[11px] font-semibold text-slate-500 uppercase px-4 py-3">Client</th>
                       <th className="text-left text-[11px] font-semibold text-slate-500 uppercase px-4 py-3 hidden sm:table-cell">Month</th>
@@ -223,9 +223,9 @@ export default function Billing() {
                   </thead>
                   <tbody>
                     {filteredInvoices.map((inv) => (
-                      <tr key={inv.id} className={`border-b border-slate-50 hover:bg-slate-50/50 ${selectedIds.has(inv.id) ? "bg-indigo-50/40" : ""}`}>
+                      <tr key={inv.id} className={`border-b border-slate-50 hover:bg-slate-50/50 ${selectedIds.has(inv.id) ? "bg-blue-50/40" : ""}`}>
                         <td className="px-4 py-3">
-                          <input type="checkbox" checked={selectedIds.has(inv.id)} onChange={() => toggleSelect(inv.id)} className="w-4 h-4 rounded border-slate-300 text-indigo-600 cursor-pointer" />
+                          <input type="checkbox" checked={selectedIds.has(inv.id)} onChange={() => toggleSelect(inv.id)} className="w-4 h-4 rounded border-slate-300 text-blue-600 cursor-pointer" />
                         </td>
                         <td className="px-4 py-3 text-sm font-medium text-slate-900">{inv.customer_name || "—"}</td>
                         <td className="px-4 py-3 text-xs text-slate-500 hidden sm:table-cell">{inv.billing_month || "—"}</td>
@@ -260,13 +260,13 @@ export default function Billing() {
         {/* PACKAGES */}
         <TabsContent value="packages" className="mt-4">
           <div className="flex justify-end mb-4">
-            <Button onClick={openCreatePkg} className="bg-indigo-600 hover:bg-indigo-700"><Plus className="w-4 h-4 mr-2" /> Add Package</Button>
+            <Button onClick={openCreatePkg} className="bg-blue-600 hover:bg-blue-700"><Plus className="w-4 h-4 mr-2" /> Add Package</Button>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {packages.map((p) => (
               <div key={p.id} className="glass-card p-5 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center"><Package className="w-5 h-5 text-indigo-600" /></div>
+                  <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center"><Package className="w-5 h-5 text-blue-600" /></div>
                   <Button variant="ghost" size="sm" className="text-xs h-7" onClick={() => openEditPkg(p)}>Edit</Button>
                 </div>
                 <h3 className="font-semibold text-slate-900">{p.name}</h3>
@@ -326,7 +326,7 @@ export default function Billing() {
             </div>
             <div><Label className="text-xs">Validity (days)</Label><Input type="number" value={pkgForm.validity_days} onChange={e => setPkgForm({ ...pkgForm, validity_days: e.target.value })} /></div>
             <div><Label className="text-xs">Description</Label><Input value={pkgForm.description} onChange={e => setPkgForm({ ...pkgForm, description: e.target.value })} /></div>
-            <Button onClick={savePkg} className="w-full bg-indigo-600 hover:bg-indigo-700">{editPkg ? "Update" : "Create"} Package</Button>
+            <Button onClick={savePkg} className="w-full bg-blue-600 hover:bg-blue-700">{editPkg ? "Update" : "Create"} Package</Button>
           </div>
         </DialogContent>
       </Dialog>

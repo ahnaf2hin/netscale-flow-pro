@@ -18,7 +18,7 @@ export default function CustomerFullDetails({ customer, pkg }) {
   return (
     <div className="glass-card p-6 mt-6">
       <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
-        <CreditCard className="w-4 h-4 text-indigo-500" /> Full Customer Details
+        <CreditCard className="w-4 h-4 text-blue-500" /> Full Customer Details
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {details.map((d) => (

@@ -39,7 +39,7 @@ export default function ResellerCommissions() {
   const avgRate = resellers.length ? resellers.reduce((s, r) => s + (r.commission_rate || 0), 0) / resellers.length : 0;
   const formatBDT = (a) => `৳${(a || 0).toLocaleString("en-BD", { maximumFractionDigits: 0 })}`;
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="flex items-center justify-center h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
   return (
     <div className="p-4 lg:p-6 min-h-screen">
@@ -48,10 +48,10 @@ export default function ResellerCommissions() {
       </PageHeader>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <ColorStatCard label="Total Resellers" value={resellers.length} icon={Handshake} bg="bg-indigo-500" iconBg="bg-indigo-600" />
+        <ColorStatCard label="Total Resellers" value={resellers.length} icon={Handshake} bg="bg-blue-500" iconBg="bg-blue-600" />
         <ColorStatCard label="Total Customers" value={totalCustomers} icon={Users} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <ColorStatCard label="Avg Commission" value={`${avgRate.toFixed(1)}%`} icon={TrendingUp} bg="bg-amber-500" iconBg="bg-amber-600" />
-        <ColorStatCard label="Est. Payout" value={formatBDT(totalCommission)} icon={DollarSign} bg="bg-teal-500" iconBg="bg-teal-600" />
+        <ColorStatCard label="Est. Payout" value={formatBDT(totalCommission)} icon={DollarSign} bg="bg-emerald-500" iconBg="bg-emerald-600" />
       </div>
 
       <div className="glass-card overflow-hidden">
@@ -80,7 +80,7 @@ export default function ResellerCommissions() {
                     <td className="px-4 py-3 text-xs font-semibold text-slate-700">{formatBDT(r.balance)}</td>
                     <td className="px-4 py-3"><span className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">{(r.commission_rate || 0).toFixed(1)}%</span></td>
                     <td className="px-4 py-3 text-xs font-semibold text-emerald-600">{formatBDT((r.balance || 0) * (r.commission_rate || 0) / 100)}</td>
-                    <td className="px-4 py-3 text-right"><button onClick={() => open(r)} className="text-xs text-indigo-600 hover:underline">Set Rate</button></td>
+                    <td className="px-4 py-3 text-right"><button onClick={() => open(r)} className="text-xs text-blue-600 hover:underline">Set Rate</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -94,7 +94,7 @@ export default function ResellerCommissions() {
           <DialogHeader><DialogTitle>Set Commission Rate</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
             <div><Label className="text-xs">Commission Rate (%)</Label><Input type="number" step="any" value={form.commission_rate} onChange={e => setForm({ ...form, commission_rate: e.target.value })} /></div>
-            <Button onClick={save} className="w-full bg-indigo-600 hover:bg-indigo-700">Update Rate</Button>
+            <Button onClick={save} className="w-full bg-blue-600 hover:bg-blue-700">Update Rate</Button>
           </div>
         </DialogContent>
       </Dialog>

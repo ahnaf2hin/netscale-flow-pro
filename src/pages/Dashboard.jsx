@@ -85,7 +85,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-slate-50">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
       </div>
     );
   }
@@ -95,7 +95,7 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-indigo-600 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center">
             <TrendingUp className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -110,16 +110,16 @@ export default function Dashboard() {
 
       {/* Primary stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <StatCard label="Total Clients" value={stats?.totalCustomers || 0} icon={Users} bg="bg-indigo-500" iconBg="bg-indigo-600" href="/customers" />
+        <StatCard label="Total Clients" value={stats?.totalCustomers || 0} icon={Users} bg="bg-blue-500" iconBg="bg-blue-600" href="/customers" />
         <StatCard label="Active Clients" value={stats?.activeCustomers || 0} icon={UserCheck} bg="bg-emerald-500" iconBg="bg-emerald-600" />
         <StatCard label="Inactive" value={stats?.inactiveCustomers || 0} icon={UserX} bg="bg-slate-500" iconBg="bg-slate-600" />
-        <StatCard label="Suspended" value={stats?.suspendedCustomers || 0} icon={UserX} bg="bg-rose-500" iconBg="bg-rose-600" />
+        <StatCard label="Suspended" value={stats?.suspendedCustomers || 0} icon={UserX} bg="bg-red-500" iconBg="bg-red-600" />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <StatCard label="Active PPPoE" value={stats?.activeSessions || 0} icon={Wifi} bg="bg-cyan-500" iconBg="bg-cyan-600" />
-        <StatCard label="Total Collected" value={formatBDT(stats?.collected)} icon={CreditCard} bg="bg-teal-500" iconBg="bg-teal-600" />
-        <StatCard label="Outstanding" value={formatBDT(stats?.outstanding)} icon={AlertTriangle} bg="bg-orange-400" iconBg="bg-orange-500" />
+        <StatCard label="Active PPPoE" value={stats?.activeSessions || 0} icon={Wifi} bg="bg-blue-500" iconBg="bg-blue-600" />
+        <StatCard label="Total Collected" value={formatBDT(stats?.collected)} icon={CreditCard} bg="bg-emerald-500" iconBg="bg-emerald-600" />
+        <StatCard label="Outstanding" value={formatBDT(stats?.outstanding)} icon={AlertTriangle} bg="bg-amber-400" iconBg="bg-amber-500" />
         <StatCard label="Overdue Bills" value={stats?.overdueCount || 0} icon={AlertTriangle} bg="bg-red-500" iconBg="bg-red-600" />
       </div>
 
@@ -136,7 +136,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold text-slate-800">Client Growth (Last 30 Days)</h2>
             <div className="flex gap-3 text-[11px]">
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-indigo-500" />Download</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-blue-500" />Download</span>
               <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500" />Upload</span>
             </div>
           </div>
@@ -169,8 +169,8 @@ export default function Dashboard() {
         {/* Recent Customers */}
         <div className="glass-card overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-            <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2"><Users className="w-4 h-4 text-indigo-500" /> New Client Signups</h2>
-            <Link to="/customers" className="text-xs text-indigo-600 hover:underline">View All</Link>
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2"><Users className="w-4 h-4 text-blue-500" /> New Client Signups</h2>
+            <Link to="/customers" className="text-xs text-blue-600 hover:underline">View All</Link>
           </div>
           <table className="w-full">
             <thead>
@@ -190,7 +190,7 @@ export default function Dashboard() {
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${c.status === "active" ? "bg-emerald-100 text-emerald-700" : c.status === "suspended" ? "bg-red-100 text-red-700" : "bg-slate-100 text-slate-600"}`}>{c.status}</span>
                   </td>
                   <td className="px-4 py-2.5 text-right">
-                    <Link to={`/customers/${c.id}`} className="text-xs text-indigo-600 hover:underline">View</Link>
+                    <Link to={`/customers/${c.id}`} className="text-xs text-blue-600 hover:underline">View</Link>
                   </td>
                 </tr>
               ))}
@@ -205,8 +205,8 @@ export default function Dashboard() {
       {/* Recent Invoices */}
       <div className="glass-card overflow-hidden">
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-          <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2"><CreditCard className="w-4 h-4 text-teal-500" /> Recent Invoices</h2>
-          <Link to="/billing" className="text-xs text-indigo-600 hover:underline">View All</Link>
+          <h2 className="text-sm font-semibold text-slate-800 flex items-center gap-2"><CreditCard className="w-4 h-4 text-emerald-500" /> Recent Invoices</h2>
+          <Link to="/billing" className="text-xs text-blue-600 hover:underline">View All</Link>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
