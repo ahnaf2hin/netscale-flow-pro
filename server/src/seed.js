@@ -13,7 +13,7 @@ async function main() {
   const adminPassword = process.env.SEED_ADMIN_PASSWORD || "Admin@12345";
 
   await prisma.user.create({
-    data: { email: adminEmail, password_hash: await hashPassword(adminPassword), full_name: "Admin", role: "admin" },
+    data: { email: adminEmail, password_hash: await hashPassword(adminPassword), full_name: "Admin", role: "super_admin" },
   });
 
   const packages = await prisma.$transaction([
@@ -30,7 +30,7 @@ async function main() {
   await prisma.zone.create({ data: { name: "Banani", description: "Banani service area" } });
 
   const customerEmail = "customer@netscale.local";
-  await prisma.user.create({ data: { email: customerEmail, password_hash: await hashPassword("Customer@123"), full_name: "Rahim Uddin", role: "user" } });
+  await prisma.user.create({ data: { email: customerEmail, password_hash: await hashPassword("Customer@123"), full_name: "Rahim Uddin", role: "customer" } });
 
   await prisma.customer.create({
     data: {

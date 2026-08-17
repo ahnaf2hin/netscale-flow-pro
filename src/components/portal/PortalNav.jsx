@@ -14,7 +14,7 @@ export default function PortalNav({ customerName, email }) {
           <div className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center"><Wifi className="w-5 h-5 text-white" /></div>
           <div className="hidden sm:block">
             <p className="font-bold text-slate-900 text-sm leading-tight">Customer Portal</p>
-            <p className="text-[10px] text-slate-400">KG Soft Internet</p>
+            <p className="text-[10px] text-slate-400">NetScale Flow Pro</p>
           </div>
         </Link>
         <div className="flex items-center gap-3">

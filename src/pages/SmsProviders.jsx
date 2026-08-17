@@ -289,7 +289,7 @@ export default function SmsProviders() {
 
             <div className="space-y-1.5">
               <Label className="text-xs">Sender ID / Mask</Label>
-              <Input value={form.sender_id} onChange={e => setForm({ ...form, sender_id: e.target.value })} placeholder="e.g. KGSOFT" />
+              <Input value={form.sender_id} onChange={e => setForm({ ...form, sender_id: e.target.value })} placeholder="e.g. NETSCALE" />
             </div>
 
             <div className="flex items-center gap-6 pt-1">

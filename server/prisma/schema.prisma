@@ -12,18 +12,25 @@ datasource db {
 // ---------------------------------------------------------------------------
 
 model User {
-  id                String    @id @default(cuid())
-  email             String    @unique
-  password_hash     String?
-  google_id         String?   @unique
-  full_name         String?
-  role              String    @default("user") // "admin" | "user"
-  otp_code          String?
-  otp_expires       DateTime?
-  reset_token       String?
-  reset_token_expires DateTime?
-  created_date      DateTime  @default(now())
-  updated_date      DateTime  @updatedAt
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  password_hash         String?
+  google_id             String?   @unique
+  full_name             String?
+  role                  String    @default("customer") // "super_admin" | "staff" | "reseller" | "customer"
+  // Granular per-user feature access, e.g. {"customers": true, "billing": false, ...}.
+  // super_admin ignores this (always full access). Seeded from a per-role default template
+  // when the account is created, then editable per-user from the admin Users page.
+  permissions           Json?
+  staff_id              String?   // links a staff-role login to its Staff record
+  reseller_id           String?   // links a reseller-role login to its Reseller record
+  must_change_password  Boolean   @default(false) // forces a password reset on next login (admin-created accounts)
+  otp_code              String?
+  otp_expires           DateTime?
+  reset_token           String?
+  reset_token_expires   DateTime?
+  created_date          DateTime  @default(now())
+  updated_date          DateTime  @updatedAt
 }
 
 model AppSetting {
@@ -463,6 +470,7 @@ model Reseller {
   total_customers   Int      @default(0)
   status            String   @default("active") // active | inactive | blocked
   join_date         String?
+  user_id           String?  // links a reseller-role login to this record
   created_date      DateTime @default(now())
   updated_date      DateTime @updatedAt
 }

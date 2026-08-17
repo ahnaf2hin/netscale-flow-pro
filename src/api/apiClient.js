@@ -73,16 +73,8 @@ export const netscaleApi = {
       setToken(data.access_token);
       return data;
     },
-    async register({ email, password, full_name }) {
-      return request("/api/auth/register", { method: "POST", body: { email, password, full_name } });
-    },
-    async verifyOtp({ email, otpCode }) {
-      const data = await request("/api/auth/verify-otp", { method: "POST", body: { email, otpCode } });
-      if (data.access_token) setToken(data.access_token);
-      return data;
-    },
-    async resendOtp(email) {
-      return request("/api/auth/resend-otp", { method: "POST", body: { email } });
+    async changePassword(newPassword) {
+      return request("/api/auth/change-password", { method: "POST", body: { newPassword } });
     },
     async resetPasswordRequest(email) {
       return request("/api/auth/forgot-password", { method: "POST", body: { email } });
@@ -106,6 +98,15 @@ export const netscaleApi = {
       setToken(data.access_token);
       return data;
     },
+  },
+
+  adminUsers: {
+    features: () => request("/api/admin/users/features"),
+    list: () => request("/api/admin/users"),
+    create: (data) => request("/api/admin/users", { method: "POST", body: data }),
+    update: (id, data) => request(`/api/admin/users/${id}`, { method: "PATCH", body: data }),
+    resetPassword: (id) => request(`/api/admin/users/${id}/reset-password`, { method: "POST" }),
+    delete: (id) => request(`/api/admin/users/${id}`, { method: "DELETE" }),
   },
 
   entities: new Proxy(

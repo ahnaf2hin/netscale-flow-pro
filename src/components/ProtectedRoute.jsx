@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -9,8 +9,16 @@ const DefaultFallback = () => (
   </div>
 );
 
-export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthenticatedElement }) {
-  const { isAuthenticated, isLoadingAuth, authChecked, authError, checkUserAuth } = useAuth();
+// Where each role lands after login / when it tries to visit a route it's not allowed on.
+export function homeForRole(role) {
+  if (role === 'reseller') return '/reseller';
+  if (role === 'customer') return '/portal/dashboard';
+  return '/'; // super_admin, staff
+}
+
+export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthenticatedElement, allowedRoles }) {
+  const { user, isAuthenticated, isLoadingAuth, authChecked, authError, checkUserAuth } = useAuth();
+  const location = useLocation();
 
   useEffect(() => {
     if (!authChecked && !isLoadingAuth) {
@@ -31,6 +39,14 @@ export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthe
 
   if (!isAuthenticated) {
     return unauthenticatedElement;
+  }
+
+  if (user?.must_change_password && location.pathname !== '/change-password') {
+    return <Navigate to="/change-password" replace />;
+  }
+
+  if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+    return <Navigate to={homeForRole(user.role)} replace />;
   }
 
   return <Outlet />;

@@ -611,6 +611,67 @@ router.post(
   })
 );
 
+// Live usage for the customer portal's "Usage" tab — current PPPoE session throughput
+// (already collected by the on-prem Mikrotik collector) and, if this customer's ONU has
+// been linked (OLT Management -> ONUs List -> assign customer), their optical signal.
+router.post(
+  "/getPortalUsage",
+  wrap(async (req, res) => {
+    const customer = await prisma.customer.findFirst({ where: { email: req.user.email } });
+    if (!customer) return res.status(404).json({ error: "no_customer", message: "No customer account is linked to your email." });
+    const session = customer.pppoe_username
+      ? await prisma.pPPoESession.findFirst({ where: { pppoe_username: customer.pppoe_username }, orderBy: { last_synced: "desc" } })
+      : null;
+    const onu = await prisma.oNU.findFirst({ where: { customer_id: customer.id }, orderBy: { last_synced: "desc" } });
+    res.json({ session, onu });
+  })
+);
+
+router.post(
+  "/getPortalTickets",
+  wrap(async (req, res) => {
+    const customer = await prisma.customer.findFirst({ where: { email: req.user.email } });
+    if (!customer) return res.status(404).json({ error: "no_customer", message: "No customer account is linked to your email." });
+    const tickets = await prisma.supportTicket.findMany({ where: { customer_id: customer.id }, orderBy: { created_date: "desc" } });
+    res.json(tickets);
+  })
+);
+
+router.post(
+  "/createPortalTicket",
+  wrap(async (req, res) => {
+    const { subject, description, category, priority } = req.body || {};
+    if (!subject) return res.status(400).json({ error: "Subject is required" });
+    const customer = await prisma.customer.findFirst({ where: { email: req.user.email } });
+    if (!customer) return res.status(404).json({ error: "no_customer", message: "No customer account is linked to your email." });
+    const ticket = await prisma.supportTicket.create({
+      data: {
+        customer_id: customer.id, customer_name: customer.name, subject,
+        description: description || "", category: category || "connectivity",
+        priority: priority || "medium", status: "open",
+      },
+    });
+    res.json(ticket);
+  })
+);
+
+// Reseller portal — their own commission/balance profile plus their attributed customers
+// and those customers' invoices, in one call (the generic /api/entities/* API already
+// row-scopes a reseller to their own customers, but a reseller has no permission to read
+// the Reseller entity directly since that's the admin-management feature).
+router.post(
+  "/getResellerData",
+  wrap(async (req, res) => {
+    if (req.user.role !== "reseller") return res.status(403).json({ error: "Reseller accounts only" });
+    const reseller = await prisma.reseller.findUnique({ where: { id: req.user.reseller_id || "" } });
+    if (!reseller) return res.status(404).json({ error: "no_reseller", message: "No reseller profile is linked to this account." });
+    const customers = await prisma.customer.findMany({ where: { reseller_id: reseller.id }, orderBy: { created_date: "desc" } });
+    const customerIds = customers.map((c) => c.id);
+    const invoices = customerIds.length ? await prisma.invoice.findMany({ where: { customer_id: { in: customerIds } } }) : [];
+    res.json({ reseller, customers, invoices });
+  })
+);
+
 router.post(
   "/createCheckout",
   wrap(async (req, res) => {

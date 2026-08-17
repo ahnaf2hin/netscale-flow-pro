@@ -8,9 +8,6 @@ import { sendEmail } from "../lib/email.js";
 const router = Router();
 const googleClient = process.env.GOOGLE_CLIENT_ID ? new OAuth2Client(process.env.GOOGLE_CLIENT_ID) : null;
 
-function randomOtp() {
-  return String(Math.floor(100000 + Math.random() * 900000));
-}
 function randomToken() {
   return crypto.randomBytes(32).toString("hex");
 }
@@ -28,9 +25,16 @@ router.post("/login", async (req, res) => {
     return res.status(401).json({ error: "Invalid email or password" });
   }
   const token = signToken(user);
-  res.json({ access_token: token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role } });
+  res.json({
+    access_token: token,
+    must_change_password: user.must_change_password,
+    user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, must_change_password: user.must_change_password },
+  });
 });
 
+// Google Sign-In only logs in an EXISTING account — accounts are invite-only (created by a
+// super admin from the Users page), so a Google login with no matching email is rejected
+// rather than auto-creating one.
 router.post("/google", async (req, res) => {
   const { credential } = req.body || {};
   if (!credential) return res.status(400).json({ error: "Missing Google credential" });
@@ -47,59 +51,30 @@ router.post("/google", async (req, res) => {
 
   let user = await prisma.user.findUnique({ where: { email: payload.email } });
   if (!user) {
-    user = await prisma.user.create({
-      data: { email: payload.email, full_name: payload.name || "", google_id: payload.sub },
-    });
-  } else if (!user.google_id) {
+    return res.status(403).json({ error: "No account found for this email. Ask your administrator to create one for you." });
+  }
+  if (!user.google_id) {
     user = await prisma.user.update({ where: { id: user.id }, data: { google_id: payload.sub } });
   }
 
   const token = signToken(user);
-  res.json({ access_token: token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role } });
-});
-
-router.post("/register", async (req, res) => {
-  const { email, password, full_name } = req.body || {};
-  if (!email || !password) return res.status(400).json({ error: "Email and password required" });
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) return res.status(409).json({ error: "An account with this email already exists" });
-
-  const otp_code = randomOtp();
-  const otp_expires = new Date(Date.now() + 10 * 60 * 1000);
-  const user = await prisma.user.create({
-    data: { email, password_hash: await hashPassword(password), full_name: full_name || "", otp_code, otp_expires },
+  res.json({
+    access_token: token,
+    must_change_password: user.must_change_password,
+    user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, must_change_password: user.must_change_password },
   });
+});
 
-  const sent = await sendEmail({
-    to: email,
-    subject: "Verify your NetScale account",
-    body: `Your verification code is ${otp_code}. It expires in 10 minutes.`,
+// Forces the temporary/one-time password set by an admin to be replaced before the account
+// can be used normally. Frontend redirects here whenever must_change_password is true.
+router.post("/change-password", requireAuth, async (req, res) => {
+  const { newPassword } = req.body || {};
+  if (!newPassword || newPassword.length < 8) return res.status(400).json({ error: "New password must be at least 8 characters" });
+  await prisma.user.update({
+    where: { id: req.user.id },
+    data: { password_hash: await hashPassword(newPassword), must_change_password: false },
   });
-
-  res.json({ success: true, ...(sent ? {} : { dev_otp: otp_code }) });
-});
-
-router.post("/verify-otp", async (req, res) => {
-  const { email, otpCode } = req.body || {};
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !user.otp_code) return res.status(400).json({ error: "No pending verification for this email" });
-  if (user.otp_expires && user.otp_expires < new Date()) return res.status(400).json({ error: "Code expired, please resend" });
-  if (user.otp_code !== otpCode) return res.status(400).json({ error: "Invalid code" });
-
-  await prisma.user.update({ where: { id: user.id }, data: { otp_code: null, otp_expires: null } });
-  const token = signToken(user);
-  res.json({ access_token: token });
-});
-
-router.post("/resend-otp", async (req, res) => {
-  const email = typeof req.body === "string" ? req.body : req.body?.email;
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return res.json({ success: true }); // anti-enumeration
-  const otp_code = randomOtp();
-  const otp_expires = new Date(Date.now() + 10 * 60 * 1000);
-  await prisma.user.update({ where: { id: user.id }, data: { otp_code, otp_expires } });
-  const sent = await sendEmail({ to: email, subject: "Your new verification code", body: `Your verification code is ${otp_code}.` });
-  res.json({ success: true, ...(sent ? {} : { dev_otp: otp_code }) });
+  res.json({ success: true });
 });
 
 router.post("/forgot-password", async (req, res) => {

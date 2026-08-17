@@ -4,15 +4,20 @@ import {
   LayoutDashboard, Settings, UserPlus, Users, CreditCard, Wifi, Server,
   HardDrive, Globe, Store, UserCircle, Headset, ClipboardList, MessageSquare,
   Calculator, BarChart3, Menu, X, LogOut, ChevronRight, ChevronDown, UploadCloud, ClipboardCheck,
-  Sun, Moon,
+  Sun, Moon, UserCog,
 } from "lucide-react";
 import { netscaleApi } from "@/api/apiClient";
 import { useTheme } from "@/lib/ThemeContext";
+import { useAuth } from "@/lib/AuthContext";
 
+// `feature` gates this item behind the matching key in the logged-in user's `permissions`
+// (see server/src/lib/auth.js — same key names, kept in sync). Items with no `feature` are
+// always visible to any admin-app role (super_admin/staff). super_admin always sees
+// everything regardless of the `permissions` blob.
 const menuStructure = [
   { label: "Dashboard", path: "/", icon: LayoutDashboard },
   { label: "My Work", path: "/staff-dashboard", icon: ClipboardCheck },
-  { label: "Configuration", path: "/configuration", icon: Settings, children: [
+  { label: "Configuration", path: "/configuration", icon: Settings, feature: "configuration", children: [
     { label: "System Settings", path: "/configuration" },
     { label: "Packages", path: "/packages" },
     { label: "Offices", path: "/offices" },
@@ -22,60 +27,74 @@ const menuStructure = [
     { label: "Payment Gateways", path: "/payment-gateways" },
     { label: "SMS Providers", path: "/sms-providers" },
   ]},
-  { label: "Bulk Import", path: "/bulk-import", icon: UploadCloud },
-  { label: "Signup List", path: "/signups", icon: UserPlus },
-  { label: "Clients", path: "/customers", icon: Users, children: [
+  { label: "Bulk Import", path: "/bulk-import", icon: UploadCloud, feature: "customers" },
+  { label: "Signup List", path: "/signups", icon: UserPlus, feature: "customers" },
+  { label: "Clients", path: "/customers", icon: Users, feature: "customers", children: [
     { label: "Client List", path: "/customers" },
     { label: "Left Clients", path: "/customers/suspended" },
   ]},
-  { label: "Billing", path: "/billing", icon: CreditCard, children: [
+  { label: "Billing", path: "/billing", icon: CreditCard, feature: "billing", children: [
     { label: "Invoices", path: "/billing" },
     { label: "Payments", path: "/payments" },
     { label: "Packages", path: "/packages" },
   ]},
-  { label: "Hotspot", path: "/hotspot", icon: Wifi, children: [
+  { label: "Hotspot", path: "/hotspot", icon: Wifi, feature: "hotspot", children: [
     { label: "Hotspot Users", path: "/hotspot" },
     { label: "Profiles", path: "/hotspot-profiles" },
     { label: "Vouchers", path: "/hotspot-vouchers" },
   ]},
-  { label: "Mikrotik", path: "/mikrotik", icon: Server, children: [
+  { label: "Mikrotik", path: "/mikrotik", icon: Server, feature: "mikrotik", children: [
     { label: "Servers", path: "/mikrotik" },
     { label: "PPPoE Users", path: "/connections" },
     { label: "Profiles", path: "/mikrotik-profiles" },
   ]},
-  { label: "OLT Management", path: "/olt", icon: HardDrive },
-  { label: "Network", path: "/network-map", icon: Globe, children: [
+  { label: "OLT Management", path: "/olt", icon: HardDrive, feature: "olt" },
+  { label: "Network", path: "/network-map", icon: Globe, feature: "network", children: [
     { label: "Network Map", path: "/network-map" },
     { label: "Cable Routes", path: "/cable-routes" },
   ]},
-  { label: "MAC Reseller", path: "/resellers", icon: Store, children: [
+  { label: "MAC Reseller", path: "/resellers", icon: Store, feature: "resellers", children: [
     { label: "Resellers", path: "/resellers" },
     { label: "Commissions", path: "/reseller-commissions" },
   ]},
-  { label: "HR & Payroll", path: "/staff", icon: UserCircle, children: [
+  { label: "HR & Payroll", path: "/staff", icon: UserCircle, feature: "staff", children: [
     { label: "Staff Members", path: "/staff" },
     { label: "Payroll", path: "/payroll" },
     { label: "Work Reports", path: "/work-report" },
   ]},
-  { label: "Support & Ticketing", path: "/support", icon: Headset, children: [
+  { label: "Support & Ticketing", path: "/support", icon: Headset, feature: "support", children: [
     { label: "Support Tickets", path: "/support" },
     { label: "Categories", path: "/support-categories" },
   ]},
-  { label: "Work Report", path: "/work-report", icon: ClipboardList },
-  { label: "SMS Service", path: "/sms", icon: MessageSquare },
-  { label: "Accounting", path: "/accounting", icon: Calculator, children: [
+  { label: "Work Report", path: "/work-report", icon: ClipboardList, feature: "staff" },
+  { label: "SMS Service", path: "/sms", icon: MessageSquare, feature: "sms" },
+  { label: "Accounting", path: "/accounting", icon: Calculator, feature: "accounting", children: [
     { label: "Income", path: "/accounting/income" },
     { label: "Expenses", path: "/accounting/expenses" },
     { label: "Reports", path: "/accounting/reports" },
   ]},
-  { label: "Reports", path: "/reports", icon: BarChart3 },
+  { label: "Reports", path: "/reports", icon: BarChart3, feature: "reports" },
+  { label: "Users & Roles", path: "/users", icon: UserCog, superAdminOnly: true },
 ];
+
+function canSee(item, user) {
+  if (!user) return false;
+  if (user.role === "super_admin") return true;
+  if (item.superAdminOnly) return false;
+  if (!item.feature) return true; // Dashboard, My Work — no permission gate
+  return !!user.permissions?.[item.feature];
+}
 
 // Defined outside Sidebar so it keeps a stable component identity across re-renders —
 // previously this was declared inside Sidebar()'s body, so every route change (Sidebar
 // re-renders on useLocation()) created a *new* NavContent function/component type, which
 // made React unmount+remount the whole nav DOM and reset its scroll position to the top.
-function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand, isActive, isParentActive, handleLogout, theme, toggleTheme }) {
+function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand, isActive, isParentActive, handleLogout, theme, toggleTheme, user }) {
+  // Keep each item's original index (menuStructure position) as its stable identity even
+  // after filtering, since `expanded` state and toggleExpand() are keyed by that index.
+  const visibleMenu = menuStructure
+    .map((item, idx) => ({ item, idx }))
+    .filter(({ item }) => canSee(item, user));
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -93,7 +112,7 @@ function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto overflow-x-hidden">
-        {menuStructure.map((item, idx) => {
+        {visibleMenu.map(({ item, idx }) => {
           const Icon = item.icon;
           const active = isActive(item.path);
           const parentActive = item.children ? isParentActive(item.children) : false;
@@ -182,6 +201,7 @@ export default function Sidebar() {
   });
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { user } = useAuth();
 
   const handleLogout = () => { netscaleApi.auth.logout("/login"); };
 
@@ -196,7 +216,7 @@ export default function Sidebar() {
     setExpanded(prev => ({ ...prev, [idx]: !prev[idx] }));
   };
 
-  const navProps = { collapsed, expanded, location, setMobileOpen, toggleExpand, isActive, isParentActive, handleLogout, theme, toggleTheme };
+  const navProps = { collapsed, expanded, location, setMobileOpen, toggleExpand, isActive, isParentActive, handleLogout, theme, toggleTheme, user };
 
   return (
     <>

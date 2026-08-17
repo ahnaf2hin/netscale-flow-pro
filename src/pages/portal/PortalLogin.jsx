@@ -57,7 +57,7 @@ export default function PortalLogin() {
           </div>
           <div className="mt-4 text-center text-sm text-slate-500 space-y-1">
             <Link to="/forgot-password" className="text-emerald-600 hover:underline block">Forgot password?</Link>
-            <p>New customer? <Link to="/register" className="text-emerald-600 hover:underline">Create an account</Link></p>
+            <p className="text-xs text-slate-400">New here? Your ISP will set up your account and share your login.</p>
           </div>
         </div>
         <p className="text-center text-xs text-slate-400 mt-6">Staff? <Link to="/login" className="underline">Admin login</Link></p>

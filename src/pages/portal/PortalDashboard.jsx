@@ -7,6 +7,8 @@ import ProfileSection from "@/components/portal/ProfileSection";
 import PackageSection from "@/components/portal/PackageSection";
 import BillsSection from "@/components/portal/BillsSection";
 import UpgradeSection from "@/components/portal/UpgradeSection";
+import UsageSection from "@/components/portal/UsageSection";
+import TicketsSection from "@/components/portal/TicketsSection";
 
 export default function PortalDashboard() {
   const [data, setData] = useState(null);
@@ -150,12 +152,17 @@ export default function PortalDashboard() {
           <PackageSection pkg={currentPackage} />
         </div>
 
+        <div className="grid lg:grid-cols-2 gap-5">
+          <UsageSection />
+          <TicketsSection />
+        </div>
+
         <BillsSection invoices={invoices} payingId={payingId} onPay={handlePay} />
 
         <UpgradeSection packages={packages} currentPackageId={customer.package_id} upgradingId={upgradingId} onUpgrade={handleUpgrade} />
 
         <footer className="text-center text-xs text-slate-400 pt-4 pb-8">
-          <div className="flex items-center justify-center gap-1.5"><Wifi className="w-3.5 h-3.5 text-emerald-500" /> KG Soft Internet — Customer Portal</div>
+          <div className="flex items-center justify-center gap-1.5"><Wifi className="w-3.5 h-3.5 text-emerald-500" /> NetScale Flow Pro — Customer Portal</div>
         </footer>
       </div>
     </>

@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
       setUser(currentUser);
       setIsAuthenticated(true);
       setAuthError(null);
+      return currentUser;
     } catch (error) {
       setIsAuthenticated(false);
       if (error.response?.status === 401 || error.response?.status === 403) {

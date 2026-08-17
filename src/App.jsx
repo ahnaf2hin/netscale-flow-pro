@@ -11,9 +11,9 @@ import ScrollToTop from './components/ScrollToTop';
 
 // Auth pages
 import Login from '@/pages/Login';
-import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
+import ChangePassword from '@/pages/ChangePassword';
 
 // App pages
 import AppLayout from '@/components/layout/AppLayout';
@@ -57,12 +57,17 @@ import StaffDashboard from '@/pages/StaffDashboard';
 import Offices from '@/pages/Offices';
 import MapSettings from '@/pages/MapSettings';
 import Zones from '@/pages/Zones';
+import Users from '@/pages/Users';
 
 // Customer portal
 import Landing from '@/pages/portal/Landing';
 import PortalLogin from '@/pages/portal/PortalLogin';
 import PortalLayout from '@/pages/portal/PortalLayout';
 import PortalDashboard from '@/pages/portal/PortalDashboard';
+
+// Reseller portal
+import ResellerLayout from '@/pages/reseller/ResellerLayout';
+import ResellerDashboard from '@/pages/reseller/ResellerDashboard';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -87,22 +92,34 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+
+      {/* Forced first-login password change — reachable by any authenticated role */}
+      <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+        <Route path="/change-password" element={<ChangePassword />} />
+      </Route>
 
       {/* Customer Portal (public) */}
       <Route path="/portal" element={<Landing />} />
       <Route path="/portal/login" element={<PortalLogin />} />
 
-      {/* Customer Portal (authenticated) */}
-      <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/portal/login" replace />} />}>
+      {/* Customer Portal (authenticated, customer role only) */}
+      <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/portal/login" replace />} allowedRoles={["customer"]} />}>
         <Route element={<PortalLayout />}>
           <Route path="/portal/dashboard" element={<PortalDashboard />} />
         </Route>
       </Route>
 
-      <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+      {/* Reseller Portal (authenticated, reseller role only) */}
+      <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} allowedRoles={["reseller"]} />}>
+        <Route element={<ResellerLayout />}>
+          <Route path="/reseller" element={<ResellerDashboard />} />
+        </Route>
+      </Route>
+
+      {/* Admin app (super_admin + staff — individual pages further gated by permission in Sidebar/pages) */}
+      <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} allowedRoles={["super_admin", "staff"]} />}>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/customers" element={<Customers />} />
@@ -144,6 +161,11 @@ const AuthenticatedApp = () => {
           <Route path="/offices" element={<Offices />} />
           <Route path="/map-settings" element={<MapSettings />} />
           <Route path="/zones" element={<Zones />} />
+
+          {/* Super admin only */}
+          <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} allowedRoles={["super_admin"]} />}>
+            <Route path="/users" element={<Users />} />
+          </Route>
         </Route>
       </Route>
 

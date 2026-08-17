@@ -52,8 +52,39 @@ export function requireAuth(req, res, next) {
 
 export function requireAdmin(req, res, next) {
   if (!req.user) return res.status(401).json({ error: "Unauthorized" });
-  if (req.user.role !== "admin") return res.status(403).json({ error: "Admin access required" });
+  if (req.user.role !== "super_admin") return res.status(403).json({ error: "Super admin access required" });
   next();
+}
+
+// Feature keys used both for backend permission checks and to filter the sidebar nav
+// client-side. super_admin always passes regardless of the `permissions` JSON blob.
+export const ALL_FEATURES = [
+  "customers", "billing", "hotspot", "mikrotik", "olt", "network",
+  "resellers", "staff", "support", "sms", "accounting", "reports", "configuration",
+];
+
+// Applied to a user's `permissions` column when an admin creates the account with this
+// role and doesn't customize it — after creation, each flag is editable per-user.
+export function defaultPermissionsForRole(role) {
+  if (role === "staff") return Object.fromEntries(ALL_FEATURES.map((f) => [f, true]));
+  if (role === "reseller") return { customers: true, billing: true, support: true };
+  return {}; // customer (and any unrecognized role) starts with no generic-API access
+}
+
+export function hasPermission(user, feature) {
+  if (!user) return false;
+  if (user.role === "super_admin") return true;
+  if (user.role === "customer") return false; // customers only use the dedicated portal endpoints
+  const perms = user.permissions || {};
+  return perms[feature] === true;
+}
+
+export function requirePermission(feature) {
+  return (req, res, next) => {
+    if (!req.user) return res.status(401).json({ error: "Unauthorized" });
+    if (!hasPermission(req.user, feature)) return res.status(403).json({ error: "You don't have access to this feature" });
+    next();
+  };
 }
 
 export function requireCollectorKey(req, res, next) {

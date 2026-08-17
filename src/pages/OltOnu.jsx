@@ -62,6 +62,8 @@ export default function OltOnu() {
   const [historyOnu, setHistoryOnu] = useState(null);
   const [history, setHistory] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [customers, setCustomers] = useState([]);
+  const [assigningCustomer, setAssigningCustomer] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
@@ -77,14 +79,32 @@ export default function OltOnu() {
     finally { setHistoryLoading(false); }
   };
 
+  const assignCustomer = async (customerId) => {
+    if (!historyOnu) return;
+    setAssigningCustomer(true);
+    try {
+      const customer = customers.find((c) => c.id === customerId);
+      const updated = await netscaleApi.entities.ONU.update(historyOnu.id, {
+        customer_id: customerId || "",
+        customer_name: customer?.name || "",
+      });
+      setHistoryOnu(updated);
+      setOnus((prev) => prev.map((o) => (o.id === updated.id ? updated : o)));
+      toast({ title: customerId ? "Customer linked" : "Customer unlinked" });
+    } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
+    finally { setAssigningCustomer(false); }
+  };
+
   const loadData = async () => {
     try {
-      const [o, n] = await Promise.all([
+      const [o, n, c] = await Promise.all([
         netscaleApi.entities.OLTDevice.list("-created_date", 50),
         netscaleApi.entities.ONU.list("-last_synced", 500),
+        netscaleApi.entities.Customer.list("-created_date", 500),
       ]);
       setOlts(o);
       setOnus(n);
+      setCustomers(c);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
   };
@@ -328,6 +348,19 @@ export default function OltOnu() {
                 <div className="bg-slate-50 rounded-lg p-3"><p className="text-slate-400">Serial</p><p className="font-mono text-slate-800 mt-0.5">{historyOnu.serial_number}</p></div>
                 <div className="bg-slate-50 rounded-lg p-3"><p className="text-slate-400">Current Rx Power</p><p className={`font-semibold mt-0.5 ${signalColor(historyOnu.rx_power_dbm)}`}>{historyOnu.rx_power_dbm != null ? `${historyOnu.rx_power_dbm} dBm` : "N/A"}</p></div>
               </div>
+
+              <div>
+                <Label className="text-xs">Linked Customer</Label>
+                <p className="text-[11px] text-slate-400 mb-1">Linking a customer here is what makes their signal show up on their customer portal.</p>
+                <Select value={historyOnu.customer_id || "none"} onValueChange={(v) => assignCustomer(v === "none" ? "" : v)} disabled={assigningCustomer}>
+                  <SelectTrigger><SelectValue placeholder="Not linked to a customer" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Not linked</SelectItem>
+                    {customers.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+
               {historyLoading ? (
                 <div className="flex justify-center py-6"><Loader2 className="w-5 h-5 animate-spin text-slate-400" /></div>
               ) : (

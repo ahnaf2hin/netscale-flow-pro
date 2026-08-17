@@ -31,9 +31,12 @@ export default function StaffDashboard() {
     try {
       const user = await netscaleApi.auth.me();
       setMe(user);
-      // Find the staff record matching this user (by email, fallback to name)
+      // Find the staff record matching this user — prefer the real user.staff_id link (set
+      // when an admin creates the account from the Users page); fall back to matching by
+      // email/name for older accounts created before that link existed.
       const allStaff = await netscaleApi.entities.Staff.list("-created_date", 200);
-      const match = allStaff.find(s => (s.email && user.email && s.email.toLowerCase() === user.email.toLowerCase()))
+      const match = (user.staff_id && allStaff.find(s => s.id === user.staff_id))
+        || allStaff.find(s => (s.email && user.email && s.email.toLowerCase() === user.email.toLowerCase()))
         || allStaff.find(s => s.name && user.full_name && s.name.toLowerCase() === user.full_name.toLowerCase());
       setStaffProfile(match || null);
 

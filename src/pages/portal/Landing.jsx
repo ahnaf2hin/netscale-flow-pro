@@ -21,7 +21,7 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center"><Wifi className="w-5 h-5 text-white" /></div>
-            <span className="font-bold text-slate-900">KG Soft Internet</span>
+            <span className="font-bold text-slate-900">NetScale Flow Pro</span>
           </div>
           <div className="flex items-center gap-3">
             <Link to="/login" className="text-sm text-slate-500 hover:text-slate-800 hidden sm:inline">Staff Login</Link>
@@ -117,7 +117,7 @@ export default function Landing() {
       {/* Footer */}
       <footer className="border-t border-slate-100">
         <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-400">
-          <div className="flex items-center gap-2"><Wifi className="w-4 h-4 text-emerald-600" /> <span>KG Soft Internet</span></div>
+          <div className="flex items-center gap-2"><Wifi className="w-4 h-4 text-emerald-600" /> <span>NetScale Flow Pro</span></div>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1"><Phone className="w-3.5 h-3.5" /> 1300 000 000</span>
             <Link to="/portal/login" className="hover:text-slate-600">Login</Link>

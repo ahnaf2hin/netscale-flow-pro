@@ -10,6 +10,7 @@ import functionsRoutes from "./routes/functions.js";
 import collectorRoutes from "./routes/collector.js";
 import publicPayRoutes from "./routes/publicPay.js";
 import integrationsRoutes from "./routes/integrations.js";
+import adminUsersRoutes from "./routes/adminUsers.js";
 
 const app = express();
 const PORT = Number(process.env.PORT || 8787);
@@ -30,6 +31,7 @@ app.use("/api/functions", functionsRoutes);
 app.use("/api/collector", collectorRoutes);
 app.use("/api/public", publicPayRoutes);
 app.use("/api/integrations", integrationsRoutes);
+app.use("/api/admin/users", adminUsersRoutes);
 
 app.use((err, _req, res, _next) => {
   console.error(err);

@@ -60,7 +60,7 @@ export default function Login() {
 
           <div className="mt-4 text-center text-sm text-slate-500 space-y-1">
             <Link to="/forgot-password" className="text-blue-600 hover:underline block transition-colors">Forgot password?</Link>
-            <p>Don't have an account? <Link to="/register" className="text-blue-600 hover:underline transition-colors">Register</Link></p>
+            <p className="text-xs text-slate-400">Accounts are created by an administrator — contact yours if you need access.</p>
           </div>
         </div>
       </div>
