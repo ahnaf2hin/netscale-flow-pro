@@ -30,6 +30,15 @@ export default function SuspendedClients() {
   const reactivate = async (c) => {
     setReactivating(c.id);
     try {
+      if (c.pppoe_username) {
+        const sessions = await netscaleApi.entities.PPPoESession.filter({ pppoe_username: c.pppoe_username }, "-last_synced", 1);
+        const router_id = sessions[0]?.router_id;
+        if (router_id) {
+          await netscaleApi.entities.CommandQueue.create({ customer_id: c.id, command_type: "reconnect", router_id, pppoe_username: c.pppoe_username, status: "pending" });
+        } else {
+          toast({ title: "Note", description: "No known router for this PPPoE user — reconnect command not queued. It will still show as active here.", variant: "destructive" });
+        }
+      }
       await netscaleApi.entities.Customer.update(c.id, { status: "active" });
       toast({ title: `${c.name} reactivated` });
       loadData();

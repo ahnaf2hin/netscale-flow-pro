@@ -75,13 +75,34 @@ router.post("/sync-mikrotik", async (req, res) => {
   }
 });
 
+// Returns OLT devices + their SNMP polling config to the on-prem collector agent.
+router.get("/olts", async (_req, res) => {
+  const olts = await prisma.oLTDevice.findMany({ take: 500 });
+  res.json({
+    olts: olts.map((o) => ({
+      id: o.id, name: o.name, ip_address: o.ip_address,
+      snmp_community: o.snmp_community || "public", snmp_port: o.snmp_port || 161,
+      oid_profile: o.oid_profile || "huawei_ma5600",
+      custom_status_oid: o.custom_status_oid, custom_serial_oid: o.custom_serial_oid,
+      custom_rx_power_oid: o.custom_rx_power_oid, custom_tx_power_oid: o.custom_tx_power_oid,
+      custom_power_divisor: o.custom_power_divisor || 100,
+      low_signal_threshold_dbm: o.low_signal_threshold_dbm ?? -27,
+    })),
+  });
+});
+
 // Ingests SNMP-polled ONU optical telemetry pushed by the collector.
 router.post("/sync-olt", async (req, res) => {
   try {
-    const { olt_id, olt_name, onus } = req.body || {};
+    const { olt_id, olt_name, reachable, onus } = req.body || {};
     if (!olt_id || !Array.isArray(onus)) return res.status(400).json({ error: "Missing olt_id or onus array" });
     const now = new Date().toISOString();
     const results = [];
+
+    await prisma.oLTDevice
+      .update({ where: { id: olt_id }, data: { status: reachable === false ? "offline" : "online", updated_date: new Date() } })
+      .catch(() => {});
+
     for (const onu of onus) {
       const { serial_number, pon_port, customer_id, customer_name, rx_power_dbm, tx_power_dbm, status } = onu;
       if (!serial_number) continue;
@@ -89,6 +110,10 @@ router.post("/sync-olt", async (req, res) => {
       const data = { olt_id, olt_name: olt_name || "", pon_port: pon_port || "", serial_number, customer_id: customer_id || "", customer_name: customer_name || "", rx_power_dbm: rx_power_dbm ?? null, tx_power_dbm: tx_power_dbm ?? null, status: status || "offline", last_synced: now };
       if (existing.length > 0) { await prisma.oNU.update({ where: { id: existing[0].id }, data }); results.push({ serial_number, action: "updated" }); }
       else { await prisma.oNU.create({ data }); results.push({ serial_number, action: "created" }); }
+
+      await prisma.onuOpticalLog.create({
+        data: { olt_id, serial_number, rx_power_dbm: rx_power_dbm ?? null, tx_power_dbm: tx_power_dbm ?? null, status: status || "offline" },
+      });
     }
     res.json({ success: true, synced: results.length, results });
   } catch (err) {

@@ -26,10 +26,13 @@ const COLLECTOR_API_KEY = 'dev-collector-key-change-me'; // must match server/.e
 
 const POLL_INTERVAL = 1; // seconds between syncs
 const SYSTEM_INFO_EVERY = 30; // query system resource every N ticks
+const OLT_POLL_INTERVAL = 60; // seconds between OLT/ONU optical polls (signal power changes slowly)
 // ----------------------------
 
 const SYNC_URL = `${APP_BASE}/api/collector/sync-mikrotik`;
 const ROUTERS_URL = `${APP_BASE}/api/collector/routers`;
+const OLTS_URL = `${APP_BASE}/api/collector/olts`;
+const SYNC_OLT_URL = `${APP_BASE}/api/collector/sync-olt`;
 
 // ---------- SNMP OIDs ----------
 const OID_ifDescr = '1.3.6.1.2.1.2.2.1.2';
@@ -290,6 +293,151 @@ async function executeCommands(router, commands) {
   }
 }
 
+// ============================================================
+//  OLT / ONU Optical Monitoring (GPON/EPON, SNMP)
+//  Polls each configured OLT for its ONUs' online/offline state and Rx/Tx
+//  optical power (dBm), and pushes results to /api/collector/sync-olt.
+//
+//  OID profiles are data-driven (set per-OLT in the app's OLT Management
+//  page) so this isn't locked to one vendor. A "huawei_ma5600" preset is
+//  built in; for any other vendor/model, set oid_profile="custom" on the
+//  OLT and fill in its custom_status_oid / custom_serial_oid /
+//  custom_rx_power_oid / custom_tx_power_oid fields (find them via your
+//  vendor's MIB docs or `snmpwalk -v2c -c <community> <ip> <base-oid>`).
+//
+//  Matching rows across the 4 SNMP tables doesn't require decoding each
+//  vendor's frame/slot/port/onu-id index-packing scheme — every table is
+//  indexed by the same composite key, so we just join on the OID *suffix*
+//  after each column's base OID (same technique as the ifIndex matching
+//  used for PPPoE/VLAN interfaces above).
+// ============================================================
+
+const OID_PROFILES = {
+  huawei_ma5600: {
+    // hwGponDeviceMIB (private enterprise 2011.6.128). Verify against your exact
+    // MA5600T/MA5800 firmware via snmpwalk before relying on this in production —
+    // switch oid_profile to "custom" on the OLT if these don't match your hardware.
+    statusOid: '1.3.6.1.4.1.2011.6.128.1.1.2.46.1.15',  // hwGponDeviceOntRunState (1 = online)
+    serialOid: '1.3.6.1.4.1.2011.6.128.1.1.2.46.1.3',   // hwGponDeviceOntSn
+    rxPowerOid: '1.3.6.1.4.1.2011.6.128.1.1.2.51.1.4',  // hwGponDeviceOntOpticalDdmRxPower
+    txPowerOid: '1.3.6.1.4.1.2011.6.128.1.1.2.51.1.6',  // hwGponDeviceOntOpticalDdmTxPower
+    onlineValue: 1,
+  },
+};
+
+function profileFor(olt) {
+  if (olt.oid_profile === 'custom') {
+    return {
+      statusOid: olt.custom_status_oid,
+      serialOid: olt.custom_serial_oid,
+      rxPowerOid: olt.custom_rx_power_oid,
+      txPowerOid: olt.custom_tx_power_oid,
+      onlineValue: 1,
+    };
+  }
+  return OID_PROFILES[olt.oid_profile] || OID_PROFILES.huawei_ma5600;
+}
+
+const oltSnmpPool = new Map();
+function getOltSnmpSession(olt) {
+  if (oltSnmpPool.has(olt.id)) return oltSnmpPool.get(olt.id);
+  const session = snmp.createSession(olt.ip_address, olt.snmp_community || 'public', {
+    port: olt.snmp_port || 161,
+    timeout: 4000,
+    retries: 1,
+  });
+  oltSnmpPool.set(olt.id, session);
+  return session;
+}
+
+// Re-key a walk's varbinds by the OID suffix after `base` — used as an opaque join key
+// across the status/serial/rxPower/txPower tables (see header comment above).
+function bySuffix(varbinds, base) {
+  const map = {};
+  for (const vb of varbinds) {
+    const suffix = vb.oid.startsWith(base + '.') ? vb.oid.slice(base.length + 1) : vb.oid;
+    map[suffix] = vb.value;
+  }
+  return map;
+}
+
+async function pullOltData(olt) {
+  const profile = profileFor(olt);
+  if (!profile.statusOid || !profile.serialOid || !profile.rxPowerOid || !profile.txPowerOid) {
+    throw new Error('Incomplete OID profile — set oid_profile or the custom_*_oid fields on this OLT');
+  }
+  const session = getOltSnmpSession(olt);
+  const [statusVb, serialVb, rxVb, txVb] = await Promise.all([
+    walk(session, profile.statusOid),
+    walk(session, profile.serialOid),
+    walk(session, profile.rxPowerOid),
+    walk(session, profile.txPowerOid),
+  ]);
+
+  const statuses = bySuffix(statusVb, profile.statusOid);
+  const serials = bySuffix(serialVb, profile.serialOid);
+  const rx = bySuffix(rxVb, profile.rxPowerOid);
+  const tx = bySuffix(txVb, profile.txPowerOid);
+
+  const divisor = olt.custom_power_divisor || 100; // raw SNMP int -> dBm (0.01 dBm steps is the common convention)
+  const threshold = olt.low_signal_threshold_dbm ?? -27;
+
+  const onus = [];
+  for (const [suffix, serialRaw] of Object.entries(serials)) {
+    const serial_number = serialRaw?.toString().trim();
+    if (!serial_number) continue;
+    const rawStatus = statuses[suffix];
+    const online = rawStatus !== undefined && Number(rawStatus) === (profile.onlineValue ?? 1);
+    const rx_power_dbm = rx[suffix] !== undefined ? Math.round((Number(rx[suffix]) / divisor) * 100) / 100 : null;
+    const tx_power_dbm = tx[suffix] !== undefined ? Math.round((Number(tx[suffix]) / divisor) * 100) / 100 : null;
+
+    // Loss-of-signal isn't a separate OID in this join — approximate it as "online per the
+    // device, but no usable Rx light" so a fiber cut/dirty connector still surfaces as a fault
+    // instead of silently reading as a healthy link.
+    let status = 'offline';
+    if (online) status = (rx_power_dbm === null || rx_power_dbm < threshold) ? 'los' : 'online';
+
+    onus.push({ pon_port: suffix, serial_number, rx_power_dbm, tx_power_dbm, status });
+  }
+  return onus;
+}
+
+async function fetchOlts() {
+  const res = await fetch(OLTS_URL, { method: 'GET', headers: { 'x-api-key': COLLECTOR_API_KEY } });
+  if (!res.ok) throw new Error(`Failed to fetch OLTs: ${res.status}`);
+  const data = await res.json();
+  return data.olts || [];
+}
+
+async function syncOlt(olt) {
+  let onus = [];
+  let reachable = true;
+  try {
+    onus = await pullOltData(olt);
+  } catch (err) {
+    reachable = false;
+    console.error(`  ✗ OLT SNMP failed for ${olt.name}: ${err.message}`);
+  }
+  try {
+    await fetch(SYNC_OLT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ olt_id: olt.id, olt_name: olt.name, reachable, onus, api_key: COLLECTOR_API_KEY }),
+    });
+  } catch (err) {
+    console.error(`  ✗ OLT sync error for ${olt.name}: ${err.message}`);
+  }
+}
+
+async function oltTick() {
+  try {
+    const olts = await fetchOlts();
+    for (const olt of olts) await syncOlt(olt);
+  } catch (err) {
+    console.error(`OLT tick failed: ${err.message}`);
+  }
+}
+
 // ---------- Main loop ----------
 async function tick() {
   try {
@@ -303,7 +451,9 @@ async function tick() {
 }
 
 console.log('Mikrotik SNMP Collector starting...');
-console.log(`App: ${APP_BASE}  |  SNMP polling every ${POLL_INTERVAL}s`);
+console.log(`App: ${APP_BASE}  |  SNMP polling every ${POLL_INTERVAL}s  |  OLT polling every ${OLT_POLL_INTERVAL}s`);
 console.log('Ensure SNMP is enabled on each router: /snmp set enabled=yes');
 tick();
 setInterval(tick, POLL_INTERVAL * 1000);
+oltTick();
+setInterval(oltTick, OLT_POLL_INTERVAL * 1000);

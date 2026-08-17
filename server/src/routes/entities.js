@@ -21,6 +21,7 @@ const ENTITY_MODELS = {
   VlanTraffic: "vlanTraffic",
   OLTDevice: "oLTDevice",
   ONU: "oNU",
+  OnuOpticalLog: "onuOpticalLog",
   NetworkDevice: "networkDevice",
   CableRoute: "cableRoute",
   Office: "office",

@@ -202,7 +202,18 @@ export default function Customers() {
     setBulkActionLoading(true);
     try {
       await netscaleApi.entities.Customer.bulkUpdate(toSuspend.map(c => ({ id: c.id, status: "suspended" })));
-      await Promise.all(toSuspend.map(c => c.pppoe_username ? netscaleApi.entities.CommandQueue.create({ customer_id: c.id, command_type: "suspend", pppoe_username: c.pppoe_username, status: "pending" }).catch(() => {}) : null));
+      // A suspend command only reaches a router if it's tagged with that router's id (the collector
+      // only pulls pending commands scoped to the router it's currently syncing) — look up each
+      // customer's current router from their PPPoE session before queuing the command.
+      const usernames = toSuspend.filter(c => c.pppoe_username).map(c => c.pppoe_username);
+      const sessions = usernames.length
+        ? await netscaleApi.entities.PPPoESession.filter({ pppoe_username: { in: usernames } }, "-last_synced", 1000)
+        : [];
+      const routerByUsername = {};
+      for (const s of sessions) if (!routerByUsername[s.pppoe_username]) routerByUsername[s.pppoe_username] = s.router_id;
+      await Promise.all(toSuspend.map(c => (c.pppoe_username && routerByUsername[c.pppoe_username])
+        ? netscaleApi.entities.CommandQueue.create({ customer_id: c.id, command_type: "suspend", router_id: routerByUsername[c.pppoe_username], pppoe_username: c.pppoe_username, status: "pending" }).catch(() => {})
+        : null));
       toast({ title: `${toSuspend.length} customer(s) suspended` });
       clearSelection();
       loadData();

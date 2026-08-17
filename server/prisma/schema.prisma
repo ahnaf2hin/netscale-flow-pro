@@ -304,18 +304,28 @@ model VlanTraffic {
 // ---------------------------------------------------------------------------
 
 model OLTDevice {
-  id               String   @id @default(cuid())
-  name             String
-  vendor           String?
-  ip_address       String
-  snmp_community   String   @default("public")
-  location         String?
-  latitude         Float?
-  longitude        Float?
-  status           String   @default("online") // online | offline
-  total_pon_ports  Int?
-  created_date     DateTime @default(now())
-  updated_date     DateTime @updatedAt
+  id                        String   @id @default(cuid())
+  name                      String
+  vendor                    String?
+  ip_address                String
+  snmp_community            String   @default("public")
+  snmp_port                 Int      @default(161)
+  // OID profile selects a built-in SNMP OID template for the collector's poller, or "custom"
+  // to use the custom_*_oid fields below (any GPON/EPON vendor with a known private MIB).
+  oid_profile               String   @default("huawei_ma5600") // huawei_ma5600 | custom
+  custom_status_oid         String?
+  custom_serial_oid         String?
+  custom_rx_power_oid       String?
+  custom_tx_power_oid       String?
+  custom_power_divisor      Float    @default(100) // raw SNMP value / divisor = dBm (0.01 dBm steps is the common convention)
+  low_signal_threshold_dbm  Float    @default(-27)
+  location                  String?
+  latitude                  Float?
+  longitude                 Float?
+  status                    String   @default("online") // online | offline
+  total_pon_ports           Int?
+  created_date              DateTime @default(now())
+  updated_date              DateTime @updatedAt
 }
 
 model ONU {
@@ -335,6 +345,20 @@ model ONU {
   @@index([olt_id])
   @@index([customer_id])
   @@index([serial_number])
+}
+
+// Time-series signal history — one row appended per ONU per collector sync, so the UI
+// can chart Rx/Tx power trends and catch slow fiber-degradation before a full outage.
+model OnuOpticalLog {
+  id            String   @id @default(cuid())
+  olt_id        String
+  serial_number String
+  rx_power_dbm  Float?
+  tx_power_dbm  Float?
+  status        String?
+  created_date  DateTime @default(now())
+
+  @@index([olt_id, serial_number, created_date])
 }
 
 model NetworkDevice {
