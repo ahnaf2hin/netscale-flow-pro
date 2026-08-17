@@ -79,20 +79,20 @@ function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-zinc-800">
+      <div className={`flex items-center gap-3 py-5 border-b border-zinc-200 dark:border-zinc-800 ${collapsed ? "justify-center px-2" : "px-4"}`}>
         <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg shadow-blue-900/40 flex items-center justify-center flex-shrink-0">
           <Wifi className="w-5 h-5 text-white" />
         </div>
         {!collapsed && (
           <div className="overflow-hidden">
-            <h1 className="text-sm font-bold text-white tracking-wide">NetScale Flow Pro</h1>
-            <p className="text-[10px] text-zinc-400 uppercase tracking-widest">ISP Management</p>
+            <h1 className="text-sm font-bold text-zinc-900 dark:text-white tracking-wide">NetScale Flow Pro</h1>
+            <p className="text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">ISP Management</p>
           </div>
         )}
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto overflow-x-hidden">
         {menuStructure.map((item, idx) => {
           const Icon = item.icon;
           const active = isActive(item.path);
@@ -103,27 +103,28 @@ function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand
               <div className="flex items-center">
                 <Link
                   to={item.path}
+                  title={collapsed ? item.label : undefined}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ease-out group flex-1 ${
+                  className={`flex items-center gap-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ease-out group flex-1 ${collapsed ? "justify-center px-0" : "px-3"} ${
                     active || parentActive
                       ? "bg-blue-600 text-white shadow-md shadow-blue-900/30"
-                      : "text-zinc-400 hover:text-white hover:bg-zinc-800/80 hover:translate-x-0.5"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-900/5 dark:hover:bg-zinc-800/80 hover:translate-x-0.5"
                   }`}
                 >
-                  <Icon className={`w-[18px] h-[18px] flex-shrink-0 transition-transform duration-200 group-hover:scale-110 ${active || parentActive ? "text-white" : "text-zinc-500 group-hover:text-white"}`} />
+                  <Icon className={`w-[18px] h-[18px] flex-shrink-0 transition-transform duration-200 group-hover:scale-110 ${active || parentActive ? "text-white" : "text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white"}`} />
                   {!collapsed && <span>{item.label}</span>}
                 </Link>
                 {item.children && !collapsed && (
                   <button
                     onClick={(e) => { e.preventDefault(); toggleExpand(idx); }}
-                    className={`p-1.5 rounded-md transition-colors ${active || parentActive ? "text-white hover:bg-blue-500" : "text-zinc-500 hover:text-white hover:bg-zinc-800"}`}
+                    className={`p-1.5 rounded-md transition-colors ${active || parentActive ? "text-white hover:bg-blue-500" : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-900/5 dark:hover:bg-zinc-800"}`}
                   >
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isOpen ? "rotate-180" : ""}`} />
                   </button>
                 )}
               </div>
               {item.children && !collapsed && isOpen && (
-                <div className="ml-6 mt-1 space-y-1 border-l border-zinc-800 pl-3">
+                <div className="ml-6 mt-1 space-y-1 border-l border-zinc-200 dark:border-zinc-800 pl-3">
                   {item.children.map((child, ci) => (
                     <Link
                       key={ci}
@@ -131,11 +132,11 @@ function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand
                       onClick={() => setMobileOpen(false)}
                       className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs transition-colors ${
                         isActive(child.path)
-                          ? "text-white bg-blue-600/30"
-                          : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                          ? "text-blue-700 dark:text-white bg-blue-600/10 dark:bg-blue-600/30"
+                          : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-900/5 dark:hover:bg-zinc-800"
                       }`}
                     >
-                      <span className={`w-1 h-1 rounded-full ${isActive(child.path) ? "bg-blue-400" : "bg-zinc-600"}`} />
+                      <span className={`w-1 h-1 rounded-full ${isActive(child.path) ? "bg-blue-500 dark:bg-blue-400" : "bg-zinc-300 dark:bg-zinc-600"}`} />
                       {child.label}
                     </Link>
                   ))}
@@ -147,10 +148,11 @@ function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand
       </nav>
 
       {/* Footer */}
-      <div className="px-3 py-4 border-t border-zinc-800 space-y-1">
+      <div className="px-3 py-4 border-t border-zinc-200 dark:border-zinc-800 space-y-1">
         <button
           onClick={toggleTheme}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all w-full"
+          title={collapsed ? (theme === "dark" ? "Light Mode" : "Dark Mode") : undefined}
+          className={`flex items-center gap-3 py-2.5 rounded-lg text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-900/5 dark:hover:bg-zinc-800 transition-all w-full ${collapsed ? "justify-center px-0" : "px-3"}`}
         >
           {theme === "dark"
             ? <Sun className="w-[18px] h-[18px] flex-shrink-0 transition-transform duration-300 rotate-0" />
@@ -159,7 +161,8 @@ function NavContent({ collapsed, expanded, location, setMobileOpen, toggleExpand
         </button>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:text-red-400 hover:bg-zinc-800 transition-all w-full"
+          title={collapsed ? "Logout" : undefined}
+          className={`flex items-center gap-3 py-2.5 rounded-lg text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-zinc-900/5 dark:hover:bg-zinc-800 transition-all w-full ${collapsed ? "justify-center px-0" : "px-3"}`}
         >
           <LogOut className="w-[18px] h-[18px] flex-shrink-0" />
           {!collapsed && <span>Logout</span>}
@@ -201,7 +204,7 @@ export default function Sidebar() {
       <button
         onClick={() => setMobileOpen((o) => !o)}
         aria-label={mobileOpen ? "Close menu" : "Open menu"}
-        className="lg:hidden fixed top-4 left-4 z-[60] w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg border border-white/10 bg-zinc-900/60 backdrop-blur-xl backdrop-saturate-150 transition-all duration-200 hover:bg-zinc-800/70 hover:scale-105 active:scale-95"
+        className="glass lg:hidden fixed top-4 left-4 z-[60] w-10 h-10 rounded-lg flex items-center justify-center text-zinc-900 dark:text-white shadow-lg transition-all duration-200 hover:bg-zinc-900/5 dark:hover:bg-white/5 hover:scale-105 active:scale-95"
       >
         <span className="relative w-5 h-5 block">
           <Menu className={`absolute inset-0 w-5 h-5 transition-all duration-200 ${mobileOpen ? "opacity-0 rotate-90 scale-75" : "opacity-100 rotate-0 scale-100"}`} />
@@ -215,14 +218,14 @@ export default function Sidebar() {
           mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
-        {/* Glassmorphism backdrop */}
+        {/* Dimming backdrop — stays dark regardless of theme, same as any modal scrim */}
         <div
           className="absolute inset-0 bg-zinc-950/60 backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
         />
-        {/* Glassmorphism drawer panel */}
+        {/* Glassmorphism drawer panel — follows the light/dark theme like the rest of the app */}
         <div
-          className={`absolute left-0 top-0 bottom-0 w-64 overflow-y-auto border-r border-white/10 bg-zinc-900/75 backdrop-blur-2xl backdrop-saturate-150 shadow-2xl transition-transform duration-300 ease-out ${
+          className={`glass absolute left-0 top-0 bottom-0 w-64 overflow-y-auto rounded-none border-y-0 border-l-0 shadow-2xl transition-transform duration-300 ease-out ${
             mobileOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -231,16 +234,17 @@ export default function Sidebar() {
       </div>
 
       {/* Desktop sidebar — same glass material as the mobile drawer, so the nav reads as one
-          consistent surface everywhere. AppLayout's ambient gradient sits directly behind it. */}
+          consistent surface everywhere, and follows the light/dark theme toggle instead of
+          always being dark. AppLayout's ambient gradient sits directly behind it. */}
       <div
-        className={`hidden lg:flex flex-col glass-dark border-y-0 border-l-0 h-screen sticky top-0 transition-all duration-200 ${
+        className={`glass hidden lg:flex flex-col rounded-none border-y-0 border-l-0 h-screen sticky top-0 transition-all duration-200 ${
           collapsed ? "w-[68px]" : "w-60"
         }`}
       >
         <NavContent {...navProps} />
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="absolute -right-3 top-8 w-6 h-6 bg-zinc-700 border border-zinc-600 rounded-full flex items-center justify-center text-zinc-300 hover:bg-blue-600 hover:border-blue-500 hover:text-white hover:scale-110 active:scale-95 transition-all duration-200"
+          className="absolute -right-3 top-8 w-6 h-6 bg-white dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-full flex items-center justify-center text-zinc-500 dark:text-zinc-300 shadow-sm hover:bg-blue-600 hover:border-blue-500 hover:text-white hover:scale-110 active:scale-95 transition-all duration-200"
         >
           <ChevronRight className={`w-3 h-3 transition-transform duration-300 ${collapsed ? "" : "rotate-180"}`} />
         </button>
