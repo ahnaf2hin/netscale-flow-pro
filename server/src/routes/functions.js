@@ -24,6 +24,7 @@ function wrap(handler) {
 // ---------------------------------------------------------------------------
 router.post(
   "/managePppoe",
+  requirePermission("mikrotik"),
   wrap(async (req, res) => {
     const body = req.body || {};
     const { action, router_id } = body;
@@ -174,6 +175,7 @@ router.post(
 // ---------------------------------------------------------------------------
 router.post(
   "/syncCustomerSpeed",
+  requirePermission("mikrotik"),
   wrap(async (req, res) => {
     const { router_id, pppoe_username } = req.body || {};
     if (!router_id || !pppoe_username) return res.status(400).json({ error: "router_id and pppoe_username required" });
@@ -235,6 +237,7 @@ router.post(
 // ---------------------------------------------------------------------------
 router.post(
   "/syncRouterInterfaces",
+  requirePermission("mikrotik"),
   wrap(async (req, res) => {
     const { router_id } = req.body || {};
     if (!router_id) return res.status(400).json({ error: "router_id required" });
@@ -290,6 +293,7 @@ router.post(
 // ---------------------------------------------------------------------------
 router.post(
   "/syncMonitoredInterfaces",
+  requirePermission("mikrotik"),
   wrap(async (req, res) => {
     const { router_id, interface_names } = req.body || {};
     if (!router_id || !Array.isArray(interface_names) || interface_names.length === 0) {
@@ -347,6 +351,7 @@ router.post(
 // ---------------------------------------------------------------------------
 router.post(
   "/syncRouterNow",
+  requirePermission("mikrotik"),
   wrap(async (req, res) => {
     const router_id = req.body?.router_id;
     if (!router_id) return res.status(400).json({ error: "router_id required" });
@@ -418,6 +423,7 @@ router.post(
 // ---------------------------------------------------------------------------
 router.post(
   "/fetchRouterSystemInfo",
+  requirePermission("mikrotik"),
   wrap(async (_req, res) => {
     const routers = await prisma.mikrotikRouter.findMany({ take: 50, orderBy: { created_date: "desc" } });
     const results = [];
@@ -555,11 +561,15 @@ router.post(
 
 router.post(
   "/generateCustomerInvoices",
+  requirePermission("customers"),
   wrap(async (req, res) => {
     const { customer_id } = req.body || {};
     if (!customer_id) return res.status(400).json({ error: "customer_id required" });
     const customer = await prisma.customer.findUnique({ where: { id: customer_id } });
     if (!customer) return res.status(404).json({ error: "Customer not found" });
+    if (req.user.role === "reseller" && customer.reseller_id !== req.user.reseller_id) {
+      return res.status(403).json({ error: "Not your customer" });
+    }
     if (!customer.connection_date) return res.json({ success: true, created: 0, message: "No connection date set" });
     if (!customer.package_id) return res.json({ success: true, created: 0, message: "No package assigned" });
     const pkg = await prisma.package.findUnique({ where: { id: customer.package_id } });
@@ -631,6 +641,7 @@ function requestOrigin(req) {
 router.post(
   "/getPortalData",
   wrap(async (req, res) => {
+    if (req.user.role !== "customer") return res.status(403).json({ error: "Customer accounts only" });
     const customer = await prisma.customer.findFirst({ where: { email: req.user.email } });
     if (!customer) return res.status(404).json({ error: "no_customer", message: "No customer account is linked to your email. Please contact support." });
     const invoices = await prisma.invoice.findMany({ where: { customer_id: customer.id } });
@@ -646,6 +657,7 @@ router.post(
 router.post(
   "/getPortalUsage",
   wrap(async (req, res) => {
+    if (req.user.role !== "customer") return res.status(403).json({ error: "Customer accounts only" });
     const customer = await prisma.customer.findFirst({ where: { email: req.user.email } });
     if (!customer) return res.status(404).json({ error: "no_customer", message: "No customer account is linked to your email." });
     const session = customer.pppoe_username
@@ -659,6 +671,7 @@ router.post(
 router.post(
   "/getPortalTickets",
   wrap(async (req, res) => {
+    if (req.user.role !== "customer") return res.status(403).json({ error: "Customer accounts only" });
     const customer = await prisma.customer.findFirst({ where: { email: req.user.email } });
     if (!customer) return res.status(404).json({ error: "no_customer", message: "No customer account is linked to your email." });
     const tickets = await prisma.supportTicket.findMany({ where: { customer_id: customer.id }, orderBy: { created_date: "desc" } });
@@ -669,6 +682,7 @@ router.post(
 router.post(
   "/createPortalTicket",
   wrap(async (req, res) => {
+    if (req.user.role !== "customer") return res.status(403).json({ error: "Customer accounts only" });
     const { subject, description, category, priority } = req.body || {};
     if (!subject) return res.status(400).json({ error: "Subject is required" });
     const customer = await prisma.customer.findFirst({ where: { email: req.user.email } });
@@ -704,6 +718,7 @@ router.post(
 router.post(
   "/createCheckout",
   wrap(async (req, res) => {
+    if (req.user.role !== "customer") return res.status(403).json({ error: "Customer accounts only" });
     const { type, invoice_id, package_id } = req.body || {};
     const customer = await prisma.customer.findFirst({ where: { email: req.user.email } });
     if (!customer) return res.status(404).json({ error: "No customer account linked to your email" });
@@ -739,6 +754,7 @@ router.post(
 router.post(
   "/confirmPayment",
   wrap(async (req, res) => {
+    if (req.user.role !== "customer") return res.status(403).json({ error: "Customer accounts only" });
     const { session_id } = req.body || {};
     if (!session_id) return res.status(400).json({ error: "Missing session_id" });
     const intent = await prisma.paymentIntent.findUnique({ where: { id: session_id } });

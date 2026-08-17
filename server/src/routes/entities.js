@@ -78,12 +78,18 @@ async function scopeWhere(user, entity, where) {
 
 // Throws (via thrown Response-shaped error) if a reseller is trying to write a record
 // outside their own customers. Call before create/update/delete on a scoped entity.
+// IMPORTANT: also strips the ownership field itself (Customer.reseller_id,
+// Invoice/Payment/SupportTicket.customer_id) from an update's `data` in place — otherwise
+// checking only the *existing* row's owner would still let a reseller PATCH their own
+// customer's reseller_id to someone else's, or an invoice's customer_id to a customer they
+// don't own, reassigning records outside their scope via the field itself.
 async function assertResellerCanWrite(user, entity, data, existingId) {
   if (user?.role !== "reseller" || !RESELLER_SCOPED_ENTITIES.has(entity)) return;
   if (entity === "Customer") {
     if (existingId) {
       const existing = await prisma.customer.findUnique({ where: { id: existingId }, select: { reseller_id: true } });
       if (!existing || existing.reseller_id !== user.reseller_id) throw { status: 403, message: "Not your customer" };
+      delete data.reseller_id; // can't reassign a customer to a different reseller
     }
     return;
   }
@@ -94,6 +100,7 @@ async function assertResellerCanWrite(user, entity, data, existingId) {
     if (!existing) throw { status: 404, message: "Not found" };
     const ids = await resellerCustomerIds(user.reseller_id);
     if (!ids.includes(existing.customer_id)) throw { status: 403, message: "Not your customer's record" };
+    delete data.customer_id; // can't reattribute this record to a different customer
   } else if (customerId) {
     const ids = await resellerCustomerIds(user.reseller_id);
     if (!ids.includes(customerId)) throw { status: 403, message: "Not your customer" };

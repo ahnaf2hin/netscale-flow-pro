@@ -71,10 +71,20 @@ export function defaultPermissionsForRole(role) {
   return {}; // customer (and any unrecognized role) starts with no generic-API access
 }
 
+// Hard ceiling on what a reseller can ever be granted, independent of the `permissions` JSON
+// an admin sets via the Users & Roles UI. Reseller data access is row-scoped per-customer
+// (see scopeWhere/assertResellerCanWrite in entities.js) only for these entities/features —
+// granting a reseller e.g. "mikrotik" or "resellers" would otherwise hand them unscoped,
+// system-wide access to every router or every other reseller's data, since no row-level
+// scoping exists for those tables. Enforced here (not just in the UI) so it holds even if a
+// super_admin mis-sets a reseller's permissions JSON directly via the API.
+const RESELLER_ALLOWED_FEATURES = new Set(["customers", "billing", "support"]);
+
 export function hasPermission(user, feature) {
   if (!user) return false;
   if (user.role === "super_admin") return true;
   if (user.role === "customer") return false; // customers only use the dedicated portal endpoints
+  if (user.role === "reseller" && !RESELLER_ALLOWED_FEATURES.has(feature)) return false;
   const perms = user.permissions || {};
   return perms[feature] === true;
 }

@@ -34,6 +34,19 @@ router.post("/", async (req, res) => {
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) return res.status(409).json({ error: "An account with this email already exists" });
 
+    const linkStaffId = role === "staff" ? staff_id || null : null;
+    const linkResellerId = role === "reseller" ? reseller_id || null : null;
+    if (linkStaffId) {
+      const staff = await prisma.staff.findUnique({ where: { id: linkStaffId } });
+      if (!staff) return res.status(400).json({ error: "Staff record not found" });
+      if (staff.user_id) return res.status(409).json({ error: "This staff record is already linked to another login" });
+    }
+    if (linkResellerId) {
+      const reseller = await prisma.reseller.findUnique({ where: { id: linkResellerId } });
+      if (!reseller) return res.status(400).json({ error: "Reseller record not found" });
+      if (reseller.user_id) return res.status(409).json({ error: "This reseller record is already linked to another login" });
+    }
+
     const tempPassword = randomPassword();
     const user = await prisma.user.create({
       data: {
@@ -41,18 +54,18 @@ router.post("/", async (req, res) => {
         full_name: full_name || "",
         role,
         permissions: permissions ?? defaultPermissionsForRole(role),
-        staff_id: role === "staff" ? staff_id || null : null,
-        reseller_id: role === "reseller" ? reseller_id || null : null,
+        staff_id: linkStaffId,
+        reseller_id: linkResellerId,
         password_hash: await hashPassword(tempPassword),
         must_change_password: true,
       },
     });
 
-    if (role === "reseller" && reseller_id) {
-      await prisma.reseller.update({ where: { id: reseller_id }, data: { user_id: user.id } }).catch(() => {});
+    if (linkResellerId) {
+      await prisma.reseller.update({ where: { id: linkResellerId }, data: { user_id: user.id } });
     }
-    if (role === "staff" && staff_id) {
-      await prisma.staff.update({ where: { id: staff_id }, data: { user_id: user.id } }).catch(() => {});
+    if (linkStaffId) {
+      await prisma.staff.update({ where: { id: linkStaffId }, data: { user_id: user.id } });
     }
 
     res.json({ user: safeUser(user), temp_password: tempPassword });
@@ -65,13 +78,59 @@ router.patch("/:id", async (req, res) => {
   try {
     const { full_name, role, permissions, staff_id, reseller_id } = req.body || {};
     if (role && !VALID_ROLES.includes(role)) return res.status(400).json({ error: "Invalid role" });
+
+    const current = await prisma.user.findUnique({ where: { id: req.params.id } });
+    if (!current) return res.status(404).json({ error: "User not found" });
+
+    // The resulting link is only kept if the *resulting* role still needs it — this is what
+    // clears staff_id/reseller_id automatically when an admin changes a user's role away from
+    // staff/reseller, instead of leaving a stale link to a record this account no longer maps to.
+    const nextRole = role !== undefined ? role : current.role;
+    const nextStaffId = nextRole === "staff" ? (staff_id !== undefined ? staff_id || null : current.staff_id) : null;
+    const nextResellerId =
+      nextRole === "reseller" ? (reseller_id !== undefined ? reseller_id || null : current.reseller_id) : null;
+
+    if (nextStaffId && nextStaffId !== current.staff_id) {
+      const staff = await prisma.staff.findUnique({ where: { id: nextStaffId } });
+      if (!staff) return res.status(400).json({ error: "Staff record not found" });
+      if (staff.user_id && staff.user_id !== current.id) {
+        return res.status(409).json({ error: "This staff record is already linked to another login" });
+      }
+    }
+    if (nextResellerId && nextResellerId !== current.reseller_id) {
+      const reseller = await prisma.reseller.findUnique({ where: { id: nextResellerId } });
+      if (!reseller) return res.status(400).json({ error: "Reseller record not found" });
+      if (reseller.user_id && reseller.user_id !== current.id) {
+        return res.status(409).json({ error: "This reseller record is already linked to another login" });
+      }
+    }
+
     const data = {};
     if (full_name !== undefined) data.full_name = full_name;
     if (role !== undefined) data.role = role;
     if (permissions !== undefined) data.permissions = permissions;
-    if (staff_id !== undefined) data.staff_id = staff_id || null;
-    if (reseller_id !== undefined) data.reseller_id = reseller_id || null;
+    data.staff_id = nextStaffId;
+    data.reseller_id = nextResellerId;
+
     const user = await prisma.user.update({ where: { id: req.params.id }, data });
+
+    // Keep the reverse links (Staff.user_id / Reseller.user_id) in sync with the change above.
+    if (current.staff_id && current.staff_id !== nextStaffId) {
+      await prisma.staff.updateMany({ where: { id: current.staff_id, user_id: current.id }, data: { user_id: null } });
+    }
+    if (nextStaffId && nextStaffId !== current.staff_id) {
+      await prisma.staff.update({ where: { id: nextStaffId }, data: { user_id: user.id } });
+    }
+    if (current.reseller_id && current.reseller_id !== nextResellerId) {
+      await prisma.reseller.updateMany({
+        where: { id: current.reseller_id, user_id: current.id },
+        data: { user_id: null },
+      });
+    }
+    if (nextResellerId && nextResellerId !== current.reseller_id) {
+      await prisma.reseller.update({ where: { id: nextResellerId }, data: { user_id: user.id } });
+    }
+
     res.json(safeUser(user));
   } catch (err) {
     res.status(500).json({ error: err.message });
