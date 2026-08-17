@@ -1,8 +1,10 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import cron from "node-cron";
 import { prisma } from "./db.js";
 import { attachUser } from "./lib/auth.js";
+import { runBillingCycle } from "./lib/billingCycle.js";
 
 import authRoutes from "./routes/auth.js";
 import entitiesRoutes from "./routes/entities.js";
@@ -41,3 +43,10 @@ app.use((err, _req, res, _next) => {
 app.listen(PORT, () => {
   console.log(`NetScale Flow Pro API listening on http://localhost:${PORT}`);
 });
+
+// Daily billing cycle: generates each customer's invoice on their own billing day and sends
+// the unpaid-bill SMS/email, without needing an external scheduler to hit an HTTP endpoint.
+// 8:00 AM Asia/Dhaka — after office hours start, comfortably before most people check bills.
+cron.schedule("0 8 * * *", () => {
+  runBillingCycle().catch((err) => console.error(`[billingCycle] scheduled run failed: ${err.message}`));
+}, { timezone: "Asia/Dhaka" });

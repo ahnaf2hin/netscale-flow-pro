@@ -4,6 +4,7 @@ import { BkashService } from "./payments/bkash.js";
 import { NagadService } from "./payments/nagad.js";
 import { createStripeSession } from "./payments/stripe.js";
 import { sendSms } from "./sms.js";
+import { sendEmail } from "./email.js";
 
 export async function getDefaultGateway() {
   return prisma.paymentGateway.findFirst({ where: { is_active: true, is_default: true } });
@@ -154,7 +155,14 @@ export async function completeIntent(intentId, gatewayRef, raw) {
       recipient_name: customer.name,
       message: `Dear ${customer.name}, your payment of ৳${intent.amount} has been received. Thank you.`,
       type: "notification",
-    });
+    }).catch(() => {});
+  }
+  if (customer?.email) {
+    await sendEmail({
+      to: customer.email,
+      subject: "Payment received — thank you",
+      body: `Hi ${customer.name},\n\nWe've received your payment of ৳${intent.amount}. Thank you for choosing NetScale.`,
+    }).catch(() => {});
   }
 
   return prisma.paymentIntent.findUnique({ where: { id: intentId } });

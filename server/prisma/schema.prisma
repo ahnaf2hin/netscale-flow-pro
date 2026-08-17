@@ -67,6 +67,9 @@ model Customer {
   free_connection    Boolean  @default(false)
   reseller_id        String?
   user_id            String?
+  // Day of month (1-28) this customer's invoice is generated/due each cycle. Falls back to
+  // connection_date's day-of-month, then the 1st, when unset — see billingCycle.js.
+  billing_day        Int?
   created_date       DateTime @default(now())
   updated_date       DateTime @updatedAt
 

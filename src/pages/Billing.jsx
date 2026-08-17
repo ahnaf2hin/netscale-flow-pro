@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { netscaleApi } from "@/api/apiClient";
-import { Loader2, CreditCard, Plus, Search, Package, CheckCircle, X, RefreshCw, AlertTriangle, Users, Send } from "lucide-react";
+import { Loader2, CreditCard, Plus, Search, Package, CheckCircle, X, RefreshCw, AlertTriangle, Users, Send, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -33,6 +33,7 @@ export default function Billing() {
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [bulkLoading, setBulkLoading] = useState(false);
   const [genLoading, setGenLoading] = useState(false);
+  const [remindingId, setRemindingId] = useState(null);
   const [genResult, setGenResult] = useState(null);
   const { toast } = useToast();
 
@@ -102,23 +103,39 @@ export default function Billing() {
   const allFilteredSelected = filteredInvoices.length > 0 && filteredInvoices.every(i => selectedIds.has(i.id));
   const markableCount = filteredInvoices.filter(i => selectedIds.has(i.id) && i.status !== "paid").length;
 
+  // Runs the same daily billing-cycle job that fires automatically every morning — safe to
+  // click any time (e.g. to catch up if the server was down, or just to confirm it's working).
+  // Each customer only gets an invoice once their own billing day arrives this month, and
+  // only if they don't already have one for this month.
   const handleGenerateMonthly = async () => {
-    if (!window.confirm("Generate and send monthly invoices for all active customers? This will email each customer their bill.")) return;
+    if (!window.confirm("Run the billing cycle now? This generates invoices for any customer whose billing day has arrived this month and hasn't been billed yet, and texts/emails them a payment link.")) return;
     setGenLoading(true);
     setGenResult(null);
     try {
-      const res = await netscaleApi.functions.invoke('generateMonthlyInvoices', {});
+      const res = await netscaleApi.functions.invoke('runBillingCycle', {});
       const data = res.data;
       setGenResult(data);
       toast({
-        title: "Invoices generated",
-        description: `${data.invoices_generated} created · ${data.notifications_sent} emailed · ${data.skipped} skipped (already exist)`,
+        title: "Billing cycle complete",
+        description: `${data.generated} invoice(s) generated and notified · ${data.skipped} skipped (not due yet / already billed)`,
       });
       loadData();
     } catch (err) {
-      toast({ title: "Generation failed", description: err.response?.data?.error || err.message, variant: "destructive" });
+      toast({ title: "Billing cycle failed", description: err.response?.data?.error || err.message, variant: "destructive" });
     } finally {
       setGenLoading(false);
+    }
+  };
+
+  const handleSendReminder = async (invoice) => {
+    setRemindingId(invoice.id);
+    try {
+      await netscaleApi.functions.invoke('sendInvoiceReminder', { invoice_id: invoice.id });
+      toast({ title: `Reminder sent to ${invoice.customer_name}` });
+    } catch (err) {
+      toast({ title: "Couldn't send reminder", description: err.response?.data?.error || err.message, variant: "destructive" });
+    } finally {
+      setRemindingId(null);
     }
   };
 
@@ -146,7 +163,7 @@ export default function Billing() {
           {genResult && (
             <div className="flex items-center gap-2 text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg px-3 py-1.5">
               <CheckCircle className="w-3.5 h-3.5" />
-              {genResult.invoices_generated} invoices · {genResult.notifications_sent} emails sent · {genResult.skipped} skipped
+              {genResult.generated} invoice(s) generated · {genResult.skipped} skipped{genResult.errors ? ` · ${genResult.errors} error(s)` : ""}
             </div>
           )}
           <div className="flex gap-2">
@@ -156,10 +173,11 @@ export default function Billing() {
             <button
               onClick={handleGenerateMonthly}
               disabled={genLoading}
+              title="Runs automatically every day at 8am — click to run it right now instead of waiting"
               className="flex items-center gap-2 text-xs text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60 rounded-lg px-3 py-2 shadow-sm"
             >
               {genLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-              {genLoading ? "Generating..." : "Generate & Send Monthly Invoices"}
+              {genLoading ? "Running…" : "Run Billing Cycle Now"}
             </button>
           </div>
         </div>
@@ -219,6 +237,7 @@ export default function Billing() {
                       <th className="text-left text-[11px] font-semibold text-slate-500 uppercase px-4 py-3">Amount</th>
                       <th className="text-left text-[11px] font-semibold text-slate-500 uppercase px-4 py-3 hidden md:table-cell">Due Date</th>
                       <th className="text-left text-[11px] font-semibold text-slate-500 uppercase px-4 py-3">Status</th>
+                      <th className="text-right text-[11px] font-semibold text-slate-500 uppercase px-4 py-3">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -233,6 +252,19 @@ export default function Billing() {
                         <td className="px-4 py-3 text-xs text-slate-500 hidden md:table-cell">{inv.due_date}</td>
                         <td className="px-4 py-3">
                           <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${inv.status === "paid" ? "bg-emerald-100 text-emerald-700" : inv.status === "overdue" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"}`}>{inv.status}</span>
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          {inv.status !== "paid" && (
+                            <button
+                              onClick={() => handleSendReminder(inv)}
+                              disabled={remindingId === inv.id}
+                              title="Send SMS + email reminder with payment link"
+                              className="inline-flex items-center gap-1 text-[11px] text-blue-600 hover:text-blue-800 disabled:opacity-50"
+                            >
+                              {remindingId === inv.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Bell className="w-3 h-3" />}
+                              Remind
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}

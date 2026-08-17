@@ -49,7 +49,7 @@ export default function Customers() {
     name: "", phone: "", email: "", address: "",
     latitude: "", longitude: "", connection_date: "",
     status: "active", package_id: "", pppoe_username: "", pppoe_password: "", customer_code: "", zone: "", notes: "",
-    provided_devices: "", connection_charge: "", discount: "", package_discount: "",
+    provided_devices: "", connection_charge: "", discount: "", package_discount: "", billing_day: "",
     referral: "", connected_by: "", free_connection: false
   });
 
@@ -78,13 +78,13 @@ export default function Customers() {
 
   const openCreate = () => {
     setEditCustomer(null);
-    setForm({ name: "", phone: "", email: "", address: "", latitude: "", longitude: "", connection_date: "", status: "active", package_id: "", pppoe_username: "", pppoe_password: "", customer_code: genCode(), zone: "", notes: "", provided_devices: "", connection_charge: "", discount: "", package_discount: "", referral: "", connected_by: "", free_connection: false });
+    setForm({ name: "", phone: "", email: "", address: "", latitude: "", longitude: "", connection_date: "", status: "active", package_id: "", pppoe_username: "", pppoe_password: "", customer_code: genCode(), zone: "", notes: "", provided_devices: "", connection_charge: "", discount: "", package_discount: "", billing_day: "", referral: "", connected_by: "", free_connection: false });
     setShowForm(true);
   };
 
   const openEdit = (c) => {
     setEditCustomer(c);
-    setForm({ name: c.name || "", phone: c.phone || "", email: c.email || "", address: c.address || "", latitude: c.latitude || "", longitude: c.longitude || "", connection_date: c.connection_date || "", status: c.status || "active", package_id: c.package_id || "", pppoe_username: c.pppoe_username || "", pppoe_password: c.pppoe_password || "", customer_code: c.customer_code || "", zone: c.zone || "", notes: c.notes || "", provided_devices: c.provided_devices || "", connection_charge: c.connection_charge || "", discount: c.discount || "", package_discount: c.package_discount || "", referral: c.referral || "", connected_by: c.connected_by || "", free_connection: c.free_connection || false });
+    setForm({ name: c.name || "", phone: c.phone || "", email: c.email || "", address: c.address || "", latitude: c.latitude || "", longitude: c.longitude || "", connection_date: c.connection_date || "", status: c.status || "active", package_id: c.package_id || "", pppoe_username: c.pppoe_username || "", pppoe_password: c.pppoe_password || "", customer_code: c.customer_code || "", zone: c.zone || "", notes: c.notes || "", provided_devices: c.provided_devices || "", connection_charge: c.connection_charge || "", discount: c.discount || "", package_discount: c.package_discount || "", billing_day: c.billing_day || "", referral: c.referral || "", connected_by: c.connected_by || "", free_connection: c.free_connection || false });
     setShowForm(true);
   };
 
@@ -96,6 +96,7 @@ export default function Customers() {
       connection_charge: form.connection_charge ? parseFloat(form.connection_charge) : 0,
       discount: form.discount ? parseFloat(form.discount) : 0,
       package_discount: form.package_discount ? parseFloat(form.package_discount) : 0,
+      billing_day: form.billing_day ? parseInt(form.billing_day) : null,
     };
     try {
       let custId;
@@ -467,6 +468,11 @@ export default function Customers() {
                 <div className="grid grid-cols-2 gap-4">
                   <div><Label className="text-xs">Monthly Discount (৳)</Label><Input type="number" value={form.discount} onChange={e => setForm({ ...form, discount: e.target.value })} placeholder="0" /></div>
                   <div><Label className="text-xs">Package Discount (৳)</Label><Input type="number" value={form.package_discount} onChange={e => setForm({ ...form, package_discount: e.target.value })} placeholder="0" /></div>
+                </div>
+                <div>
+                  <Label className="text-xs">Billing Day of Month</Label>
+                  <Input type="number" min="1" max="28" value={form.billing_day} onChange={e => setForm({ ...form, billing_day: e.target.value })} placeholder="Defaults to their connection date's day, or the 1st" />
+                  <p className="text-[11px] text-slate-400 mt-1">The daily billing job generates this customer's invoice on this day each month (1-28).</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div><Label className="text-xs">Referral</Label><Input value={form.referral} onChange={e => setForm({ ...form, referral: e.target.value })} placeholder="Referral name or code" /></div>

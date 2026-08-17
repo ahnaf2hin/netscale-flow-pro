@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { prisma } from "../db.js";
-import { requireAuth, requireAdmin } from "../lib/auth.js";
+import { requireAuth, requireAdmin, requirePermission } from "../lib/auth.js";
 import { ROSClient } from "../lib/routeros.js";
 import { sendEmail } from "../lib/email.js";
 import { startCheckout, completeIntent } from "../lib/checkout.js";
+import { runBillingCycle, sendInvoiceReminder } from "../lib/billingCycle.js";
 
 const router = Router();
 router.use(requireAuth);
@@ -521,6 +522,34 @@ router.post(
     }
 
     res.json({ success: true, billing_month: billingMonth, invoices_generated: createdCount, notifications_sent: notifiedCount, skipped: existingCustomerIds.size });
+  })
+);
+
+// This runs automatically once a day (see server/src/index.js), respecting each customer's
+// own billing_day instead of a fixed date. Also callable on demand — e.g. to catch up after
+// downtime, or for the "Run Billing Cycle Now" button on the Billing page. Restricted to
+// staff/super_admin regardless of the caller's "billing" permission flag: it processes every
+// customer system-wide, which resellers (who can also hold "billing" permission, scoped only
+// to their own customers everywhere else) must not be able to trigger.
+router.post(
+  "/runBillingCycle",
+  requirePermission("billing"),
+  wrap(async (req, res) => {
+    if (!["super_admin", "staff"].includes(req.user.role)) return res.status(403).json({ error: "Staff/admin accounts only" });
+    const result = await runBillingCycle();
+    res.json({ success: true, ...result });
+  })
+);
+
+router.post(
+  "/sendInvoiceReminder",
+  requirePermission("billing"),
+  wrap(async (req, res) => {
+    if (!["super_admin", "staff"].includes(req.user.role)) return res.status(403).json({ error: "Staff/admin accounts only" });
+    const { invoice_id } = req.body || {};
+    if (!invoice_id) return res.status(400).json({ error: "invoice_id is required" });
+    const result = await sendInvoiceReminder(invoice_id);
+    res.json(result);
   })
 );
 
