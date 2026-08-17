@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Settings, RefreshCw, Users, CreditCard, Radio, HardDrive, Store, Ticket, TrendingUp, Server, Wifi, DollarSign } from "lucide-react";
 
 const StatCard = ({ label, value, icon: Icon, bg, iconBg }) => (
@@ -23,17 +23,17 @@ export default function Management() {
   const loadData = async () => {
     try {
       const [customers, invoices, routers, olts, onus, pppoe, packages, staff, resellers, tickets, payments] = await Promise.all([
-        base44.entities.Customer.list("-created_date", 500),
-        base44.entities.Invoice.list("-created_date", 500),
-        base44.entities.MikrotikRouter.list("-created_date", 50),
-        base44.entities.OLTDevice.list("-created_date", 50),
-        base44.entities.ONU.list("-created_date", 500),
-        base44.entities.PPPoESession.list("-created_date", 500),
-        base44.entities.Package.list("-created_date", 100),
-        base44.entities.Staff.list("-created_date", 100),
-        base44.entities.Reseller.list("-created_date", 100),
-        base44.entities.SupportTicket.list("-created_date", 500),
-        base44.entities.Payment.list("-created_date", 200),
+        netscaleApi.entities.Customer.list("-created_date", 500),
+        netscaleApi.entities.Invoice.list("-created_date", 500),
+        netscaleApi.entities.MikrotikRouter.list("-created_date", 50),
+        netscaleApi.entities.OLTDevice.list("-created_date", 50),
+        netscaleApi.entities.ONU.list("-created_date", 500),
+        netscaleApi.entities.PPPoESession.list("-created_date", 500),
+        netscaleApi.entities.Package.list("-created_date", 100),
+        netscaleApi.entities.Staff.list("-created_date", 100),
+        netscaleApi.entities.Reseller.list("-created_date", 100),
+        netscaleApi.entities.SupportTicket.list("-created_date", 500),
+        netscaleApi.entities.Payment.list("-created_date", 200),
       ]);
 
       const collected = invoices.filter(i => i.status === "paid").reduce((s, i) => s + (i.amount || 0), 0);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Settings, Package, Radio, HardDrive, Map, KeyRound, Store, RefreshCw, CreditCard, MessageSquare, Building2, MapPin, Layers } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -12,11 +12,11 @@ export default function Configuration() {
   const loadData = async () => {
     try {
       const [pkg, routers, olts, resellers, zoneList] = await Promise.all([
-        base44.entities.Package.list("-created_date", 100),
-        base44.entities.MikrotikRouter.list("-created_date", 50),
-        base44.entities.OLTDevice.list("-created_date", 50),
-        base44.entities.Reseller.list("-created_date", 100),
-        base44.entities.Zone.list("-created_date", 100),
+        netscaleApi.entities.Package.list("-created_date", 100),
+        netscaleApi.entities.MikrotikRouter.list("-created_date", 50),
+        netscaleApi.entities.OLTDevice.list("-created_date", 50),
+        netscaleApi.entities.Reseller.list("-created_date", 100),
+        netscaleApi.entities.Zone.list("-created_date", 100),
       ]);
       setCounts({ packages: pkg.length, routers: routers.length, olts: olts.length, resellers: resellers.length, zones: zoneList.length });
     } catch (err) { console.error(err); }

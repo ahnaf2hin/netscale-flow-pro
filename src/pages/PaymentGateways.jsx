@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, CreditCard, Plus, Pencil, Trash2, RefreshCw, Eye, EyeOff, Star, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -47,7 +47,7 @@ export default function PaymentGateways() {
   const loadGateways = async () => {
     setLoading(true);
     try {
-      const data = await base44.entities.PaymentGateway.list("-created_date", 50);
+      const data = await netscaleApi.entities.PaymentGateway.list("-created_date", 50);
       setGateways(data);
     } catch (err) {
       toast({ variant: "destructive", title: "Failed to load gateways", description: err.message });
@@ -97,15 +97,15 @@ export default function PaymentGateways() {
     setSaving(true);
     try {
       if (editingId) {
-        await base44.entities.PaymentGateway.update(editingId, form);
+        await netscaleApi.entities.PaymentGateway.update(editingId, form);
       } else {
-        await base44.entities.PaymentGateway.create(form);
+        await netscaleApi.entities.PaymentGateway.create(form);
       }
       // enforce single default
       if (form.is_default) {
         const others = gateways.filter(g => g.id !== editingId && g.is_default);
         for (const g of others) {
-          await base44.entities.PaymentGateway.update(g.id, { is_default: false });
+          await netscaleApi.entities.PaymentGateway.update(g.id, { is_default: false });
         }
       }
       toast({ title: "Gateway saved", description: `${form.display_name} configuration stored.` });
@@ -119,7 +119,7 @@ export default function PaymentGateways() {
   const handleDelete = async (gw) => {
     if (!confirm(`Delete ${gw.display_name}?`)) return;
     try {
-      await base44.entities.PaymentGateway.delete(gw.id);
+      await netscaleApi.entities.PaymentGateway.delete(gw.id);
       toast({ title: "Gateway deleted" });
       loadGateways();
     } catch (err) {
@@ -129,7 +129,7 @@ export default function PaymentGateways() {
 
   const toggleActive = async (gw) => {
     try {
-      await base44.entities.PaymentGateway.update(gw.id, { is_active: !gw.is_active });
+      await netscaleApi.entities.PaymentGateway.update(gw.id, { is_active: !gw.is_active });
       loadGateways();
     } catch (err) {
       toast({ variant: "destructive", title: "Update failed", description: err.message });
@@ -138,10 +138,10 @@ export default function PaymentGateways() {
 
   const setDefault = async (gw) => {
     try {
-      await base44.entities.PaymentGateway.update(gw.id, { is_default: true });
+      await netscaleApi.entities.PaymentGateway.update(gw.id, { is_default: true });
       const others = gateways.filter(g => g.id !== gw.id && g.is_default);
       for (const g of others) {
-        await base44.entities.PaymentGateway.update(g.id, { is_default: false });
+        await netscaleApi.entities.PaymentGateway.update(g.id, { is_default: false });
       }
       toast({ title: `${gw.display_name} set as default` });
       loadGateways();

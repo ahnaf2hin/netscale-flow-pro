@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, MessageSquare, Send, RefreshCw, Search, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -24,8 +24,8 @@ export default function SMSService() {
   const loadData = async () => {
     try {
       const [m, c] = await Promise.all([
-        base44.entities.SMSMessage.list("-created_date", 500),
-        base44.entities.Customer.list("-created_date", 500),
+        netscaleApi.entities.SMSMessage.list("-created_date", 500),
+        netscaleApi.entities.Customer.list("-created_date", 500),
       ]);
       setMessages(m);
       setCustomers(c);
@@ -35,7 +35,7 @@ export default function SMSService() {
 
   const sendSMS = async () => {
     try {
-      await base44.entities.SMSMessage.create({ ...form, sent_at: new Date().toISOString() });
+      await netscaleApi.entities.SMSMessage.create({ ...form, sent_at: new Date().toISOString() });
       setShowForm(false);
       loadData();
       toast({ title: "SMS queued for sending" });

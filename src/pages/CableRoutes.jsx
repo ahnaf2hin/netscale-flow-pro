@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Cable, Plus, Trash2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -21,20 +21,20 @@ export default function CableRoutes() {
   useEffect(() => { loadData(); }, []);
 
   const loadData = async () => {
-    try { setRoutes(await base44.entities.CableRoute.list("-created_date", 500)); }
+    try { setRoutes(await netscaleApi.entities.CableRoute.list("-created_date", 500)); }
     catch (err) { console.error(err); } finally { setLoading(false); }
   };
 
   const save = async () => {
     const data = { ...form, start_lat: parseFloat(form.start_lat) || 0, start_lng: parseFloat(form.start_lng) || 0, end_lat: parseFloat(form.end_lat) || 0, end_lng: parseFloat(form.end_lng) || 0, length_meters: parseFloat(form.length_meters) || 0 };
     try {
-      await base44.entities.CableRoute.create(data);
+      await netscaleApi.entities.CableRoute.create(data);
       setShowForm(false); loadData();
       toast({ title: "Cable route added" });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
   };
 
-  const del = async (r) => { if (!window.confirm("Delete this cable route?")) return; try { await base44.entities.CableRoute.delete(r.id); loadData(); toast({ title: "Route deleted" }); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
+  const del = async (r) => { if (!window.confirm("Delete this cable route?")) return; try { await netscaleApi.entities.CableRoute.delete(r.id); loadData(); toast({ title: "Route deleted" }); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
 
   const totalLength = routes.reduce((s, r) => s + (r.length_meters || 0), 0);
   const byType = (type) => routes.filter(r => r.cable_type === type).length;

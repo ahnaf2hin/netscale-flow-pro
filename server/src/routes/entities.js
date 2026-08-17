@@ -2,7 +2,7 @@ import { Router } from "express";
 import { prisma } from "../db.js";
 import { requireAuth } from "../lib/auth.js";
 
-// Map of Base44 entity name -> Prisma model delegate name (camelCase).
+// Map of entity name -> Prisma model delegate name (camelCase).
 const ENTITY_MODELS = {
   Customer: "customer",
   Invoice: "invoice",

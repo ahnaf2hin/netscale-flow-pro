@@ -2,7 +2,7 @@
 //  Mikrotik SNMP Collector Agent
 //  Runs on a machine on the SAME network as your Mikrotik router(s).
 //  Polls PPPoE session traffic + system resource via SNMP (UDP,
-//  no login overhead) and pushes to your Base44 ISP app every
+//  no login overhead) and pushes to your ISP app's backend every
 //  POLL_INTERVAL seconds.
 //
 //  RouterOS API is used ONLY for command execution (suspend /

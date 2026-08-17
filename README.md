@@ -4,14 +4,13 @@ ISP CRM / network operations system: subscriber billing, MikroTik RouterOS + SNM
 OLT/ONU tracking, a customer self-service portal, HR/payroll, support desk, and online payment
 checkout (SSLCommerz / bKash / Nagad / Stripe).
 
-Originally scaffolded on Base44; now fully self-hosted on **Express + Prisma + MySQL**. See
-`AGENTS.md` for how the migration is structured.
+Fully self-hosted on **Express + Prisma + MySQL**. See `AGENTS.md` for the project layout.
 
 ## Stack
 
-- **Frontend**: Vite + React + React Router (`src/`) — unchanged from the original app
+- **Frontend**: Vite + React + React Router (`src/`)
 - **Backend**: Express + Prisma ORM 7 (MySQL, via `@prisma/adapter-mariadb`) (`server/`)
-- **Auth**: JWT (email/password + OTP-verified registration; Google sign-in is not wired up)
+- **Auth**: JWT (email/password + OTP-verified registration, plus Google Sign-In)
 - **Network integrations**: hand-rolled RouterOS binary-API client (`server/src/lib/routeros.js`),
   SNMP via an on-prem collector agent (`collector/`)
 
@@ -70,36 +69,34 @@ npm run dev        # frontend, in another
 | Payment checkout — **bKash, Nagad** | **Real**, but the original `PaymentGateway` table only has two generic credential fields (App Key/Secret). bKash also needs a merchant **username/password** and Nagad needs an RSA **keypair** — set `BKASH_USERNAME`, `BKASH_PASSWORD`, `NAGAD_MERCHANT_PRIVATE_KEY`, `NAGAD_PUBLIC_KEY` in `server/.env` in addition to the Settings UI fields. Nagad's integration is the least publicly documented of the three — verify endpoint paths against your own Nagad Merchant Integration Guide before going live. |
 | SMS sending | **Real** generic HTTP call once a default `SmsProvider` is configured (Settings page) — logs instead of sending otherwise |
 | Email (OTP, invoices, overdue reminders) | **Real** via SMTP once `SMTP_HOST`/`SMTP_USER`/`SMTP_PASS` are set in `server/.env` — otherwise OTP codes come back in the API response (`dev_otp`) so registration still works locally, and other emails just log |
-| Google sign-in | Not implemented — the button shows an alert. Email/password + OTP verification works fully. |
-| Real-time live-traffic charts | Downgraded from Base44's WebSocket push to the polling fallback the original components already had — same data, refreshes every few seconds instead of instantly |
+| Google sign-in | **Real**, once you set `GOOGLE_CLIENT_ID` (server) and `VITE_GOOGLE_CLIENT_ID` (frontend) from a Google Cloud OAuth Client ID. Falls back to email/password + OTP if unset. |
+| Real-time live-traffic charts | Polling-based refresh every few seconds rather than a WebSocket push |
 
 ## 5. Project structure
 
 ```
-server/prisma/schema.prisma   Full data model — 31 entities ported from base44/entities/*.jsonc, plus User/PaymentIntent
+server/prisma/schema.prisma   Full data model — 31 entities, plus User/PaymentIntent
 server/src/routes/entities.js Generic CRUD router — covers ~25 of the 31 entities uniformly
-server/src/routes/functions.js  The 17 original Base44 serverless functions, ported to Express
-server/src/routes/auth.js      Email/password + OTP registration, password reset
+server/src/routes/functions.js  17 server-side operations, exposed as Express routes
+server/src/routes/auth.js      Email/password + OTP registration, password reset, Google Sign-In
 server/src/routes/collector.js SNMP collector ingestion (separate auth: shared API key, not JWT)
 server/src/routes/publicPay.js Payment gateway callback handlers (SSLCommerz/bKash/Nagad)
 server/src/lib/routeros.js     RouterOS binary-protocol client (login, /ppp/secret, /interface, ...)
 server/src/lib/payments/       SSLCommerz / bKash / Nagad / Stripe gateway clients
-src/api/base44Client.js        Drop-in Base44 SDK replacement — same call shapes, talks to server/
-src/lib/AuthContext.jsx        Simplified auth context (same public API, no Base44 app-settings precheck)
+src/api/apiClient.js           Frontend API client — consistent call shapes, talks to server/
+src/lib/AuthContext.jsx        Auth context (current user, login/logout state)
 collector/collector.js         On-prem SNMP + RouterOS agent — update APP_BASE/COLLECTOR_API_KEY before running
-base44/                        Original Base44 entity schemas + function source, kept as reference only
 ```
 
-## 6. Known gaps carried over from the original app
+## 6. Known gaps
 
-- **No role/permission enforcement beyond "is logged in."** The original Base44 app relied on
-  platform-level row rules that aren't in this repo; any authenticated user can reach any page.
-  Admin-only *backend actions* (invoice generation, router status checks, bandwidth logging) do
-  check `role === 'admin'`, matching the original. Fixing this properly means adding real
-  role/permission checks per route — worth doing before a public-facing production deploy.
+- **No role/permission enforcement beyond "is logged in."** Any authenticated user can reach
+  any page. Admin-only *backend actions* (invoice generation, router status checks, bandwidth
+  logging) do check `role === 'admin'`. Fixing this properly means adding real role/permission
+  checks per route — worth doing before a public-facing production deploy.
 - **Reseller has no login and no `customer.reseller_id` FK** — it's a standalone CRM list, not
-  wired into billing, same as the original.
-- **OLT optical monitoring has no live data source** — same as the original (SNMP polling for
-  ONUs was never implemented, only the ingestion endpoint).
-- **HotspotVoucher has no redemption flow** — vouchers never transition from `unused` to `used`,
-  same as the original (no Hotspot API integration exists).
+  wired into billing.
+- **OLT optical monitoring has no live data source** — SNMP polling for ONUs isn't implemented,
+  only the ingestion endpoint.
+- **HotspotVoucher has no redemption flow** — vouchers never transition from `unused` to `used`
+  (no Hotspot API integration exists).

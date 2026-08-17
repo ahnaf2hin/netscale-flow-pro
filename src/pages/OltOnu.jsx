@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, HardDrive, Plus, Signal, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -33,8 +33,8 @@ export default function OltOnu() {
   const loadData = async () => {
     try {
       const [o, n] = await Promise.all([
-        base44.entities.OLTDevice.list("-created_date", 50),
-        base44.entities.ONU.list("-last_synced", 500),
+        netscaleApi.entities.OLTDevice.list("-created_date", 50),
+        netscaleApi.entities.ONU.list("-last_synced", 500),
       ]);
       setOlts(o);
       setOnus(n);
@@ -44,7 +44,7 @@ export default function OltOnu() {
 
   const saveOlt = async () => {
     try {
-      await base44.entities.OLTDevice.create({ ...oltForm, total_pon_ports: oltForm.total_pon_ports ? parseInt(oltForm.total_pon_ports) : undefined });
+      await netscaleApi.entities.OLTDevice.create({ ...oltForm, total_pon_ports: oltForm.total_pon_ports ? parseInt(oltForm.total_pon_ports) : undefined });
       setShowOltForm(false);
       loadData();
       toast({ title: "OLT added" });

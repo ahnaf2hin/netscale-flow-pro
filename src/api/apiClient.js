@@ -1,8 +1,7 @@
-// Drop-in replacement for the Base44 SDK client. Same call shapes as
-// `base44.entities.X.list/filter/get/create/update/delete/bulkCreate/bulkUpdate`,
-// `base44.auth.*`, `base44.functions.invoke`, `base44.integrations.Core.*` — backed by
-// our own Express + MySQL API instead of the Base44 cloud, so no page/component code
-// needed to change.
+// Client SDK for talking to our own Express + MySQL backend. Consistent call
+// shapes across `netscaleApi.entities.X.list/filter/get/create/update/delete/bulkCreate/bulkUpdate`,
+// `netscaleApi.auth.*`, `netscaleApi.functions.invoke`, and `netscaleApi.integrations.Core.*`
+// keep page/component code simple.
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 const TOKEN_KEY = "netscale_token";
@@ -64,7 +63,7 @@ function entityClient(name) {
   };
 }
 
-export const base44 = {
+export const netscaleApi = {
   auth: {
     async me() {
       return request("/api/auth/me");

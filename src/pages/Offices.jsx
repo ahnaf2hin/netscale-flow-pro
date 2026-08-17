@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Building2, Plus, Pencil, Trash2, RefreshCw, MapPin, Phone, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export default function Offices() {
   const loadOffices = async () => {
     setLoading(true);
     try {
-      const data = await base44.entities.Office.list("-created_date", 100);
+      const data = await netscaleApi.entities.Office.list("-created_date", 100);
       setOffices(data);
     } catch (err) {
       toast({ variant: "destructive", title: "Failed to load offices", description: err.message });
@@ -74,14 +74,14 @@ export default function Offices() {
         notes: form.notes,
       };
       if (editingId) {
-        await base44.entities.Office.update(editingId, payload);
+        await netscaleApi.entities.Office.update(editingId, payload);
       } else {
-        await base44.entities.Office.create(payload);
+        await netscaleApi.entities.Office.create(payload);
       }
       if (form.type === "head_office") {
         const others = offices.filter(o => o.id !== editingId && o.type === "head_office");
         for (const o of others) {
-          await base44.entities.Office.update(o.id, { type: "sub_office" });
+          await netscaleApi.entities.Office.update(o.id, { type: "sub_office" });
         }
       }
       toast({ title: "Office saved" });
@@ -95,7 +95,7 @@ export default function Offices() {
   const handleDelete = async (o) => {
     if (!confirm(`Delete ${o.name}?`)) return;
     try {
-      await base44.entities.Office.delete(o.id);
+      await netscaleApi.entities.Office.delete(o.id);
       toast({ title: "Office deleted" });
       loadOffices();
     } catch (err) {

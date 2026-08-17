@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Network, Loader2, Activity, Pause, Play } from "lucide-react";
 
@@ -20,7 +20,7 @@ export default function VlanTrafficMonitor() {
   selectedRef.current = selected;
 
   const fetchVlans = useCallback(async () => {
-    return await base44.entities.VlanTraffic.list("-last_synced", 200);
+    return await netscaleApi.entities.VlanTraffic.list("-last_synced", 200);
   }, []);
 
   // Initial load + auto-select first few VLANs

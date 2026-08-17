@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, RefreshCw, BarChart3, TrendingUp, TrendingDown, Users, Wallet, DollarSign } from "lucide-react";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell } from "recharts";
 import PageHeader from "@/components/dashboard/PageHeader";
@@ -20,9 +20,9 @@ export default function Reports() {
     setLoading(true);
     try {
       const [c, t, p] = await Promise.all([
-        base44.entities.Customer.list("-created_date", 3000),
-        base44.entities.AccountingTransaction.list("-created_date", 3000),
-        base44.entities.Payment.list("-created_date", 3000),
+        netscaleApi.entities.Customer.list("-created_date", 3000),
+        netscaleApi.entities.AccountingTransaction.list("-created_date", 3000),
+        netscaleApi.entities.Payment.list("-created_date", 3000),
       ]);
       setCustomers(c);
       setTransactions(t);

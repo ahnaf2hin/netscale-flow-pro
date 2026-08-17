@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -20,7 +20,7 @@ export default function InvoiceManager({ customer, invoices, onUpdated }) {
   const [loading, setLoading] = useState("");
 
   useEffect(() => {
-    base44.entities.Staff.list("-created_date", 100).then(setStaffList).catch(() => {});
+    netscaleApi.entities.Staff.list("-created_date", 100).then(setStaffList).catch(() => {});
   }, []);
 
   const formatBDT = (a) => `৳${(a || 0).toLocaleString("en-BD")}`;
@@ -54,13 +54,13 @@ export default function InvoiceManager({ customer, invoices, onUpdated }) {
       const now = new Date().toISOString();
       const newPaidAmount = currentPaid + amount;
       const isFullyPaid = newPaidAmount >= (markPaidInv.amount || 0) - 0.01;
-      await base44.entities.Invoice.update(markPaidInv.id, {
+      await netscaleApi.entities.Invoice.update(markPaidInv.id, {
         paid_amount: newPaidAmount,
         status: isFullyPaid ? "paid" : "unpaid",
         paid_date: isFullyPaid ? today : (markPaidInv.paid_date || undefined),
         payment_method: method,
       });
-      await base44.entities.Payment.create({
+      await netscaleApi.entities.Payment.create({
         invoice_id: markPaidInv.id,
         customer_id: customer.id,
         amount,
@@ -86,7 +86,7 @@ export default function InvoiceManager({ customer, invoices, onUpdated }) {
   const handlePayOnline = async (inv) => {
     setLoading("stripe-" + inv.id);
     try {
-      const res = await base44.functions.invoke("adminPayInvoice", { invoice_id: inv.id });
+      const res = await netscaleApi.functions.invoke("adminPayInvoice", { invoice_id: inv.id });
       if (res.data?.url) {
         window.location.href = res.data.url;
       } else {

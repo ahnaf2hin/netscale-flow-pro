@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, TrendingDown, Plus, Trash2, RefreshCw, Search, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -22,16 +22,16 @@ export default function AccountingExpenses() {
   useEffect(() => { loadData(); }, []);
 
   const loadData = async () => {
-    try { const t = await base44.entities.AccountingTransaction.filter({ type: "expense" }, "-created_date", 500); setTransactions(t); }
+    try { const t = await netscaleApi.entities.AccountingTransaction.filter({ type: "expense" }, "-created_date", 500); setTransactions(t); }
     catch (err) { console.error(err); } finally { setLoading(false); }
   };
 
   const save = async () => {
-    try { await base44.entities.AccountingTransaction.create({ ...form, type: "expense", amount: parseFloat(form.amount) }); setShowForm(false); loadData(); toast({ title: "Expense recorded" }); }
+    try { await netscaleApi.entities.AccountingTransaction.create({ ...form, type: "expense", amount: parseFloat(form.amount) }); setShowForm(false); loadData(); toast({ title: "Expense recorded" }); }
     catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
   };
 
-  const del = async (t) => { if (!window.confirm("Delete this record?")) return; try { await base44.entities.AccountingTransaction.delete(t.id); loadData(); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
+  const del = async (t) => { if (!window.confirm("Delete this record?")) return; try { await netscaleApi.entities.AccountingTransaction.delete(t.id); loadData(); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
 
   const filtered = transactions.filter(t => !search || t.description?.toLowerCase().includes(search.toLowerCase()) || t.category?.toLowerCase().includes(search.toLowerCase()));
   const total = transactions.reduce((s, t) => s + (t.amount || 0), 0);

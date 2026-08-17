@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, CreditCard, RefreshCw, Search, Check, X, Clock } from "lucide-react";
 import PageHeader from "@/components/dashboard/PageHeader";
 import ColorStatCard from "@/components/dashboard/ColorStatCard";
@@ -14,7 +14,7 @@ export default function Payments() {
 
   const loadData = async () => {
     try {
-      const p = await base44.entities.Payment.list("-created_date", 500);
+      const p = await netscaleApi.entities.Payment.list("-created_date", 500);
       setPayments(p);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }

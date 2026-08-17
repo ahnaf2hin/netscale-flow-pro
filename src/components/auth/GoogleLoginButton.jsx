@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { netscaleApi } from '@/api/apiClient';
 
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -32,7 +32,7 @@ export default function GoogleLoginButton({ redirectTo = '/' }) {
         client_id: CLIENT_ID,
         callback: async ({ credential }) => {
           try {
-            await base44.auth.loginWithGoogleCredential(credential);
+            await netscaleApi.auth.loginWithGoogleCredential(credential);
             window.location.href = redirectTo;
           } catch (err) {
             setError(err.message || 'Google sign-in failed');

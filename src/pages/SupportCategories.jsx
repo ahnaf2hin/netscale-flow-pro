@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, FolderKanban, Plus, Pencil, Trash2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -34,8 +34,8 @@ export default function SupportCategories() {
   const loadData = async () => {
     try {
       const [c, t] = await Promise.all([
-        base44.entities.SupportCategory.list("-created_date", 100),
-        base44.entities.SupportTicket.list("-created_date", 500),
+        netscaleApi.entities.SupportCategory.list("-created_date", 100),
+        netscaleApi.entities.SupportTicket.list("-created_date", 500),
       ]);
       setCategories(c); setTickets(t);
     } catch (err) { console.error(err); } finally { setLoading(false); }
@@ -45,14 +45,14 @@ export default function SupportCategories() {
 
   const save = async () => {
     try {
-      if (edit) await base44.entities.SupportCategory.update(edit.id, form);
-      else await base44.entities.SupportCategory.create(form);
+      if (edit) await netscaleApi.entities.SupportCategory.update(edit.id, form);
+      else await netscaleApi.entities.SupportCategory.create(form);
       setShowForm(false); loadData();
       toast({ title: edit ? "Category updated" : "Category created" });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
   };
 
-  const del = async (c) => { if (!window.confirm(`Delete category "${c.name}"?`)) return; try { await base44.entities.SupportCategory.delete(c.id); loadData(); toast({ title: "Category deleted" }); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
+  const del = async (c) => { if (!window.confirm(`Delete category "${c.name}"?`)) return; try { await netscaleApi.entities.SupportCategory.delete(c.id); loadData(); toast({ title: "Category deleted" }); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
 
   const ticketCount = (name) => tickets.filter(t => t.category === name).length;
   const active = categories.filter(c => c.status === "active").length;

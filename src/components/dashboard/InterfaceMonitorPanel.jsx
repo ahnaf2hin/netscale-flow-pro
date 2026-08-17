@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -18,7 +18,7 @@ export default function InterfaceMonitorPanel() {
   const monitoredNamesRef = useRef([]);
 
   useEffect(() => {
-    base44.entities.MikrotikRouter.list("-created_date", 100).then(r => {
+    netscaleApi.entities.MikrotikRouter.list("-created_date", 100).then(r => {
       setRouters(r);
       if (r.length > 0) setSelectedRouterId(r[0].id);
     }).catch(() => {}).finally(() => setLoading(false));
@@ -32,13 +32,13 @@ export default function InterfaceMonitorPanel() {
   // Load VlanTraffic for selected router — auto-fetch if empty
   useEffect(() => {
     if (!selectedRouterId) return;
-    base44.entities.VlanTraffic.filter({ router_id: selectedRouterId }, "-last_synced", 300).then(async v => {
+    netscaleApi.entities.VlanTraffic.filter({ router_id: selectedRouterId }, "-last_synced", 300).then(async v => {
       setVlans(v);
       if (v.length === 0) {
         setFetching(true);
         try {
-          await base44.functions.invoke('syncRouterInterfaces', { router_id: selectedRouterId });
-          const v2 = await base44.entities.VlanTraffic.filter({ router_id: selectedRouterId }, "-last_synced", 300);
+          await netscaleApi.functions.invoke('syncRouterInterfaces', { router_id: selectedRouterId });
+          const v2 = await netscaleApi.entities.VlanTraffic.filter({ router_id: selectedRouterId }, "-last_synced", 300);
           setVlans(v2);
         } catch (_) {}
         finally { setFetching(false); }
@@ -49,7 +49,7 @@ export default function InterfaceMonitorPanel() {
   // Real-time subscription — only process monitored interfaces to avoid 270+ re-renders
   useEffect(() => {
     if (!selectedRouterId) return;
-    const unsubscribe = base44.entities.VlanTraffic.subscribe((event) => {
+    const unsubscribe = netscaleApi.entities.VlanTraffic.subscribe((event) => {
       const data = event.data;
       if (!data || data.router_id !== selectedRouterId || !data.monitored) return;
       setVlans(prev => {
@@ -74,7 +74,7 @@ export default function InterfaceMonitorPanel() {
       const names = monitoredNamesRef.current;
       if (names.length > 0) {
         try {
-          const res = await base44.functions.invoke('syncMonitoredInterfaces', {
+          const res = await netscaleApi.functions.invoke('syncMonitoredInterfaces', {
             router_id: selectedRouterId,
             interface_names: names,
           });
@@ -100,8 +100,8 @@ export default function InterfaceMonitorPanel() {
     if (!selectedRouterId) return;
     setFetching(true);
     try {
-      await base44.functions.invoke('syncRouterInterfaces', { router_id: selectedRouterId });
-      const v = await base44.entities.VlanTraffic.filter({ router_id: selectedRouterId }, "-last_synced", 300);
+      await netscaleApi.functions.invoke('syncRouterInterfaces', { router_id: selectedRouterId });
+      const v = await netscaleApi.entities.VlanTraffic.filter({ router_id: selectedRouterId }, "-last_synced", 300);
       setVlans(v);
       toast({ title: "Interfaces fetched", description: `${v.length} interfaces found` });
     } catch (err) {
@@ -111,7 +111,7 @@ export default function InterfaceMonitorPanel() {
 
   const toggleMonitor = async (vlan) => {
     try {
-      await base44.entities.VlanTraffic.update(vlan.id, { monitored: !vlan.monitored });
+      await netscaleApi.entities.VlanTraffic.update(vlan.id, { monitored: !vlan.monitored });
       setVlans(prev => prev.map(v => v.id === vlan.id ? { ...v, monitored: !v.monitored } : v));
     } catch (err) {
       toast({ title: "Error", description: err.message, variant: "destructive" });
@@ -120,7 +120,7 @@ export default function InterfaceMonitorPanel() {
 
   const toggleFavorite = async (vlan) => {
     try {
-      await base44.entities.VlanTraffic.update(vlan.id, { favorite: !vlan.favorite });
+      await netscaleApi.entities.VlanTraffic.update(vlan.id, { favorite: !vlan.favorite });
       setVlans(prev => prev.map(v => v.id === vlan.id ? { ...v, favorite: !v.favorite } : v));
     } catch (_) {}
   };

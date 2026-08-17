@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Users, Plus, Pencil, Trash2, RefreshCw, Search, UserCheck, UserX, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -41,7 +41,7 @@ export default function Staff() {
 
   const loadData = async () => {
     try {
-      const s = await base44.entities.Staff.list("-created_date", 200);
+      const s = await netscaleApi.entities.Staff.list("-created_date", 200);
       setStaff(s);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
@@ -53,8 +53,8 @@ export default function Staff() {
   const saveStaff = async () => {
     const data = { ...form, salary: form.salary ? parseFloat(form.salary) : undefined };
     try {
-      if (editStaff) { await base44.entities.Staff.update(editStaff.id, data); }
-      else { await base44.entities.Staff.create(data); }
+      if (editStaff) { await netscaleApi.entities.Staff.update(editStaff.id, data); }
+      else { await netscaleApi.entities.Staff.create(data); }
       setShowForm(false);
       loadData();
       toast({ title: editStaff ? "Staff updated" : "Staff added" });
@@ -64,7 +64,7 @@ export default function Staff() {
   const deleteStaff = async (s) => {
     if (!window.confirm(`Remove staff member "${s.name}"?`)) return;
     try {
-      await base44.entities.Staff.delete(s.id);
+      await netscaleApi.entities.Staff.delete(s.id);
       loadData();
       toast({ title: "Staff removed" });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }

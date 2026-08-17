@@ -22,8 +22,8 @@ router.post("/upload-file", upload.single("file"), (req, res) => {
 });
 
 // Parses a CSV file's rows against the given field list from json_schema.properties.
-// (Only CSV is supported — the original Base44 AI-extraction step is replaced with a
-// direct parser since the schemas used in this app are simple, flat, header-driven rows.)
+// (Only CSV is supported — a direct parser is enough since the schemas used in this
+// app are simple, flat, header-driven rows.)
 router.post("/extract-data", (req, res) => {
   const { file_url, json_schema } = req.body || {};
   const id = (file_url || "").replace("upload://", "");

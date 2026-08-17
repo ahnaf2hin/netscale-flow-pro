@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Users, UserCheck, Wifi, Eye, Ban, X, Plus, Search, Phone, Download, Server, Trash2, MessageCircle, Pencil, Filter as FilterIcon, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,11 +58,11 @@ export default function Customers() {
   const loadData = async () => {
     try {
       const [custs, pkgs, rts, sessions, staffList] = await Promise.all([
-        base44.entities.Customer.list("-created_date", 500),
-        base44.entities.Package.list("-created_date", 100),
-        base44.entities.MikrotikRouter.list("-created_date", 50),
-        base44.entities.PPPoESession.list("-last_synced", 500),
-        base44.entities.Staff.list("-created_date", 100),
+        netscaleApi.entities.Customer.list("-created_date", 500),
+        netscaleApi.entities.Package.list("-created_date", 100),
+        netscaleApi.entities.MikrotikRouter.list("-created_date", 50),
+        netscaleApi.entities.PPPoESession.list("-last_synced", 500),
+        netscaleApi.entities.Staff.list("-created_date", 100),
       ]);
       setCustomers(custs);
       setPackages(pkgs);
@@ -100,11 +100,11 @@ export default function Customers() {
     try {
       let custId;
       if (editCustomer) {
-        await base44.entities.Customer.update(editCustomer.id, data);
+        await netscaleApi.entities.Customer.update(editCustomer.id, data);
         custId = editCustomer.id;
         toast({ title: "Customer updated" });
       } else {
-        const created = await base44.entities.Customer.create(data);
+        const created = await netscaleApi.entities.Customer.create(data);
         custId = created.id;
         toast({ title: "Customer created" });
       }
@@ -113,7 +113,7 @@ export default function Customers() {
       // Auto-generate monthly invoices from connection date
       if (data.connection_date && data.package_id) {
         try {
-          const res = await base44.functions.invoke("generateCustomerInvoices", { customer_id: custId });
+          const res = await netscaleApi.functions.invoke("generateCustomerInvoices", { customer_id: custId });
           if (res.data?.created > 0) {
             toast({ title: `${res.data.created} invoice(s) generated from connection date` });
           }
@@ -124,14 +124,14 @@ export default function Customers() {
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
-    try { await base44.entities.Customer.delete(deleteTarget.id); toast({ title: "Client deleted" }); setDeleteTarget(null); loadData(); }
+    try { await netscaleApi.entities.Customer.delete(deleteTarget.id); toast({ title: "Client deleted" }); setDeleteTarget(null); loadData(); }
     catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
   };
 
   const handleStatusToggle = async (c) => {
     const newStatus = c.status === "active" ? "suspended" : "active";
     try {
-      await base44.entities.Customer.update(c.id, { status: newStatus });
+      await netscaleApi.entities.Customer.update(c.id, { status: newStatus });
       toast({ title: newStatus === "active" ? "Client activated" : "Client suspended" });
       loadData();
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
@@ -201,8 +201,8 @@ export default function Customers() {
     if (!toSuspend.length) { toast({ title: "No customers to suspend", variant: "destructive" }); return; }
     setBulkActionLoading(true);
     try {
-      await base44.entities.Customer.bulkUpdate(toSuspend.map(c => ({ id: c.id, status: "suspended" })));
-      await Promise.all(toSuspend.map(c => c.pppoe_username ? base44.entities.CommandQueue.create({ customer_id: c.id, command_type: "suspend", pppoe_username: c.pppoe_username, status: "pending" }).catch(() => {}) : null));
+      await netscaleApi.entities.Customer.bulkUpdate(toSuspend.map(c => ({ id: c.id, status: "suspended" })));
+      await Promise.all(toSuspend.map(c => c.pppoe_username ? netscaleApi.entities.CommandQueue.create({ customer_id: c.id, command_type: "suspend", pppoe_username: c.pppoe_username, status: "pending" }).catch(() => {}) : null));
       toast({ title: `${toSuspend.length} customer(s) suspended` });
       clearSelection();
       loadData();
@@ -214,7 +214,7 @@ export default function Customers() {
     if (!importRouterId) { toast({ title: "Select a router first", variant: "destructive" }); return; }
     setImporting(true);
     try {
-      const res = await base44.functions.invoke("managePppoe", { action: "import_customers", router_id: importRouterId });
+      const res = await netscaleApi.functions.invoke("managePppoe", { action: "import_customers", router_id: importRouterId });
       const d = res.data;
       if (d.success === false) throw new Error(d.error);
       toast({ title: "Import complete", description: `${d.created} new client(s) imported, ${d.skipped} already existed.` });

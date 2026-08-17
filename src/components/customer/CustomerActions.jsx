@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -27,9 +27,9 @@ export default function CustomerActions({ customer, packages = [], zones = [], o
     const cmd = newStatus === "suspended" ? "suspend" : "reconnect";
     setActionLoading("status");
     try {
-      await base44.entities.Customer.update(customer.id, { status: newStatus });
+      await netscaleApi.entities.Customer.update(customer.id, { status: newStatus });
       if (customer.pppoe_username) {
-        await base44.entities.CommandQueue.create({
+        await netscaleApi.entities.CommandQueue.create({
           customer_id: customer.id, command_type: cmd,
           pppoe_username: customer.pppoe_username, status: "pending",
         }).catch(() => {});
@@ -49,7 +49,7 @@ export default function CustomerActions({ customer, packages = [], zones = [], o
         latitude: form.latitude ? parseFloat(form.latitude) : undefined,
         longitude: form.longitude ? parseFloat(form.longitude) : undefined,
       };
-      await base44.entities.Customer.update(customer.id, data);
+      await netscaleApi.entities.Customer.update(customer.id, data);
       toast({ title: "Customer updated" });
       setEditOpen(false);
       onUpdated();
@@ -66,7 +66,7 @@ export default function CustomerActions({ customer, packages = [], zones = [], o
     setActionLoading("invoice");
     try {
       const pkg = packages.find(p => p.id === customer.package_id);
-      await base44.entities.Invoice.create({
+      await netscaleApi.entities.Invoice.create({
         customer_id: customer.id,
         customer_name: customer.name,
         package_name: pkg?.name || "",
@@ -88,7 +88,7 @@ export default function CustomerActions({ customer, packages = [], zones = [], o
     if (!confirm(`Delete customer "${customer.name}"? This cannot be undone.`)) return;
     setActionLoading("delete");
     try {
-      await base44.entities.Customer.delete(customer.id);
+      await netscaleApi.entities.Customer.delete(customer.id);
       toast({ title: "Customer deleted" });
       window.location.href = "/customers";
     } catch (err) {

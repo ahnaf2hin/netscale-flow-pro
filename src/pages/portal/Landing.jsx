@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Wifi, Zap, Shield, Headset, Star, ArrowRight, CheckCircle, Phone } from "lucide-react";
 
 export default function Landing() {
@@ -8,7 +8,7 @@ export default function Landing() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.entities.Package.filter({ is_active: true })
+    netscaleApi.entities.Package.filter({ is_active: true })
       .then(setPackages)
       .catch(() => setPackages([]))
       .finally(() => setLoading(false));

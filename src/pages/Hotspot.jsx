@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Wifi, Plus, Pencil, Trash2, RefreshCw, Search, User, Ticket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -21,7 +21,7 @@ export default function Hotspot() {
 
   const loadData = async () => {
     try {
-      const u = await base44.entities.HotspotUser.list("-created_date", 500);
+      const u = await netscaleApi.entities.HotspotUser.list("-created_date", 500);
       setUsers(u);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
@@ -32,8 +32,8 @@ export default function Hotspot() {
 
   const saveUser = async () => {
     try {
-      if (editUser) { await base44.entities.HotspotUser.update(editUser.id, form); }
-      else { await base44.entities.HotspotUser.create(form); }
+      if (editUser) { await netscaleApi.entities.HotspotUser.update(editUser.id, form); }
+      else { await netscaleApi.entities.HotspotUser.create(form); }
       setShowForm(false);
       loadData();
       toast({ title: editUser ? "User updated" : "User created" });
@@ -42,7 +42,7 @@ export default function Hotspot() {
 
   const deleteUser = async (u) => {
     if (!window.confirm(`Delete hotspot user "${u.username}"?`)) return;
-    try { await base44.entities.HotspotUser.delete(u.id); loadData(); toast({ title: "User deleted" }); }
+    try { await netscaleApi.entities.HotspotUser.delete(u.id); loadData(); toast({ title: "User deleted" }); }
     catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
   };
 

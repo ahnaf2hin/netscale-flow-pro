@@ -36,7 +36,7 @@ export default function CollectorSetup() {
     {
       icon: Settings2,
       title: "1. Save it as an environment variable",
-      body: "In your Base44 dashboard go to Settings → Environment Variables, add a variable named COLLECTOR_API_KEY and paste this key as the value.",
+      body: "In your backend host's dashboard (e.g. Railway → your server service → Variables), add a variable named COLLECTOR_API_KEY and paste this key as the value.",
     },
     {
       icon: Terminal,

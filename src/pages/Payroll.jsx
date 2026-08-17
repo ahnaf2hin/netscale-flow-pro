@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Wallet, RefreshCw, Search, DollarSign, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -21,7 +21,7 @@ export default function Payroll() {
 
   const loadData = async () => {
     try {
-      const s = await base44.entities.Staff.list("-created_date", 200);
+      const s = await netscaleApi.entities.Staff.list("-created_date", 200);
       setStaff(s);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
@@ -31,7 +31,7 @@ export default function Payroll() {
 
   const savePayroll = async () => {
     try {
-      await base44.entities.Staff.update(editStaff.id, { salary: parseFloat(form.salary) || 0 });
+      await netscaleApi.entities.Staff.update(editStaff.id, { salary: parseFloat(form.salary) || 0 });
       setShowForm(false);
       loadData();
       toast({ title: "Salary updated" });

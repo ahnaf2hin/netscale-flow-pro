@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2, Wifi, AlertTriangle, RefreshCw, CheckCircle } from "lucide-react";
 import PortalNav from "@/components/portal/PortalNav";
@@ -22,7 +22,7 @@ export default function PortalDashboard() {
     setLoading(true);
     setError(null);
     try {
-      const res = await base44.functions.invoke("getPortalData", {});
+      const res = await netscaleApi.functions.invoke("getPortalData", {});
       setData(res.data);
     } catch (err) {
       const code = err.response?.data?.error;
@@ -52,7 +52,7 @@ export default function PortalDashboard() {
   const confirmPayment = async (sid) => {
     setConfirming(true);
     try {
-      const res = await base44.functions.invoke("confirmPayment", { session_id: sid });
+      const res = await netscaleApi.functions.invoke("confirmPayment", { session_id: sid });
       setConfirmResult(res.data);
       toast({ title: "Payment successful!", description: res.data.already_processed ? "This payment was already processed." : "Your account has been updated." });
       loadData();
@@ -67,7 +67,7 @@ export default function PortalDashboard() {
   const handlePay = async (invoice) => {
     setPayingId(invoice.id);
     try {
-      const res = await base44.functions.invoke("createCheckout", { type: "bill", invoice_id: invoice.id });
+      const res = await netscaleApi.functions.invoke("createCheckout", { type: "bill", invoice_id: invoice.id });
       window.location.href = res.data.url;
     } catch (err) {
       toast({ title: "Could not start payment", description: err.response?.data?.error || err.message, variant: "destructive" });
@@ -79,7 +79,7 @@ export default function PortalDashboard() {
   const handleUpgrade = async (pkg) => {
     setUpgradingId(pkg.id);
     try {
-      const res = await base44.functions.invoke("createCheckout", { type: "upgrade", package_id: pkg.id });
+      const res = await netscaleApi.functions.invoke("createCheckout", { type: "upgrade", package_id: pkg.id });
       window.location.href = res.data.url;
     } catch (err) {
       toast({ title: "Could not start upgrade", description: err.response?.data?.error || err.message, variant: "destructive" });
@@ -104,7 +104,7 @@ export default function PortalDashboard() {
           <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4"><AlertTriangle className="w-7 h-7 text-amber-600" /></div>
           <h2 className="text-lg font-bold text-slate-900">No account found</h2>
           <p className="text-sm text-slate-500 mt-2">{error.message}</p>
-          <button onClick={() => base44.auth.logout("/portal/login")} className="mt-6 text-sm font-semibold text-emerald-600 hover:underline">Back to login</button>
+          <button onClick={() => netscaleApi.auth.logout("/portal/login")} className="mt-6 text-sm font-semibold text-emerald-600 hover:underline">Back to login</button>
         </div>
       </>
     );

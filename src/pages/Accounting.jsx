@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Calculator, Plus, Trash2, RefreshCw, Search, TrendingUp, TrendingDown, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -23,7 +23,7 @@ export default function Accounting() {
 
   const loadData = async () => {
     try {
-      const t = await base44.entities.AccountingTransaction.list("-created_date", 500);
+      const t = await netscaleApi.entities.AccountingTransaction.list("-created_date", 500);
       setTransactions(t);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
@@ -32,7 +32,7 @@ export default function Accounting() {
   const saveTransaction = async () => {
     const data = { ...form, amount: parseFloat(form.amount) };
     try {
-      await base44.entities.AccountingTransaction.create(data);
+      await netscaleApi.entities.AccountingTransaction.create(data);
       setShowForm(false);
       loadData();
       toast({ title: "Transaction recorded" });
@@ -41,7 +41,7 @@ export default function Accounting() {
 
   const deleteTransaction = async (t) => {
     if (!window.confirm("Delete this transaction?")) return;
-    try { await base44.entities.AccountingTransaction.delete(t.id); loadData(); toast({ title: "Transaction deleted" }); }
+    try { await netscaleApi.entities.AccountingTransaction.delete(t.id); loadData(); toast({ title: "Transaction deleted" }); }
     catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
   };
 

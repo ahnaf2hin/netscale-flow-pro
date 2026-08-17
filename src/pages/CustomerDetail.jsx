@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Wifi, MapPin, Phone, Mail, Calendar, Loader2, Signal, Activity, Clock, Cpu, Play, Pause } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -25,14 +25,14 @@ export default function CustomerDetail() {
 
   useEffect(() => {
     loadCustomer();
-    base44.entities.Package.list("-created_date", 100).then(setPackages).catch(() => {});
-    base44.entities.Zone.list("-created_date", 200).then(setZones).catch(() => {});
+    netscaleApi.entities.Package.list("-created_date", 100).then(setPackages).catch(() => {});
+    netscaleApi.entities.Zone.list("-created_date", 200).then(setZones).catch(() => {});
   }, [id]);
 
   // Real-time session updates via subscription (replaces 10s polling)
   useEffect(() => {
     if (!customer?.pppoe_username) return;
-    const unsubscribe = base44.entities.PPPoESession.subscribe((event) => {
+    const unsubscribe = netscaleApi.entities.PPPoESession.subscribe((event) => {
       const data = event.data;
       if (!data || data.pppoe_username !== customer.pppoe_username) return;
       setSession(data);
@@ -45,7 +45,7 @@ export default function CustomerDetail() {
     if (!liveMode) return;
     const interval = setInterval(async () => {
       try {
-        const onus = await base44.entities.ONU.filter({ customer_id: id }, "-last_synced", 1);
+        const onus = await netscaleApi.entities.ONU.filter({ customer_id: id }, "-last_synced", 1);
         if (onus.length > 0) setOnu(onus[0]);
       } catch (err) { /* silent refresh */ }
     }, 30000);
@@ -58,7 +58,7 @@ export default function CustomerDetail() {
     const sessionId = urlParams.get('session_id');
     const payment = urlParams.get('payment');
     if (sessionId && payment === 'success') {
-      base44.functions.invoke('adminConfirmPayment', { session_id: sessionId })
+      netscaleApi.functions.invoke('adminConfirmPayment', { session_id: sessionId })
         .then(() => {
           toast({ title: 'Payment confirmed', description: 'Invoice paid successfully' });
           loadCustomer();
@@ -76,18 +76,18 @@ export default function CustomerDetail() {
 
   const loadCustomer = async () => {
     try {
-      const cust = await base44.entities.Customer.get(id);
+      const cust = await netscaleApi.entities.Customer.get(id);
       setCustomer(cust);
 
       // Load each piece independently so one failure doesn't hide the rest
       const results = await Promise.allSettled([
-        cust.package_id ? base44.entities.Package.get(cust.package_id) : Promise.resolve(null),
-        base44.entities.Invoice.filter({ customer_id: id }, "-due_date", 50),
+        cust.package_id ? netscaleApi.entities.Package.get(cust.package_id) : Promise.resolve(null),
+        netscaleApi.entities.Invoice.filter({ customer_id: id }, "-due_date", 50),
         cust.pppoe_username
-          ? base44.entities.PPPoESession.filter({ pppoe_username: cust.pppoe_username }, "-last_synced", 1)
+          ? netscaleApi.entities.PPPoESession.filter({ pppoe_username: cust.pppoe_username }, "-last_synced", 1)
           : Promise.resolve([]),
-        base44.entities.ONU.filter({ customer_id: id }, "-last_synced", 1),
-        base44.entities.CustomerBandwidthLog.filter({ customer_id: id }, "-log_date", 200),
+        netscaleApi.entities.ONU.filter({ customer_id: id }, "-last_synced", 1),
+        netscaleApi.entities.CustomerBandwidthLog.filter({ customer_id: id }, "-log_date", 200),
       ]);
       if (results[0].status === 'fulfilled') setPkg(results[0].value);
       if (results[1].status === 'fulfilled') setInvoices(results[1].value);

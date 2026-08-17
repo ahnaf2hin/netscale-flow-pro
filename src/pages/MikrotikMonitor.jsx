@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Radio, Wifi, RefreshCw, Plus, Pencil, Trash2, Server, Activity, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -42,8 +42,8 @@ export default function MikrotikMonitor() {
   const loadData = async () => {
     try {
       const [r, s] = await Promise.all([
-        base44.entities.MikrotikRouter.list("-created_date", 50),
-        base44.entities.PPPoESession.list("-last_synced", 500),
+        netscaleApi.entities.MikrotikRouter.list("-created_date", 50),
+        netscaleApi.entities.PPPoESession.list("-last_synced", 500),
       ]);
       setRouters(r);
       setSessions(s);
@@ -53,7 +53,7 @@ export default function MikrotikMonitor() {
 
   const loadSessions = async () => {
     try {
-      const s = await base44.entities.PPPoESession.list("-last_synced", 500);
+      const s = await netscaleApi.entities.PPPoESession.list("-last_synced", 500);
       setSessions(s);
     } catch (err) { console.error(err); }
   };
@@ -78,10 +78,10 @@ export default function MikrotikMonitor() {
     try {
       const payload = { ...routerForm, api_port: parseInt(routerForm.api_port), latitude: routerForm.latitude === "" ? undefined : Number(routerForm.latitude), longitude: routerForm.longitude === "" ? undefined : Number(routerForm.longitude) };
       if (editingRouter) {
-        await base44.entities.MikrotikRouter.update(editingRouter.id, payload);
+        await netscaleApi.entities.MikrotikRouter.update(editingRouter.id, payload);
         toast({ title: "Router updated" });
       } else {
-        await base44.entities.MikrotikRouter.create(payload);
+        await netscaleApi.entities.MikrotikRouter.create(payload);
         toast({ title: "Router added" });
       }
       setShowRouterForm(false);
@@ -93,7 +93,7 @@ export default function MikrotikMonitor() {
   const deleteRouter = async (router) => {
     if (!window.confirm(`Delete router "${router.name}"?`)) return;
     try {
-      await base44.entities.MikrotikRouter.delete(router.id);
+      await netscaleApi.entities.MikrotikRouter.delete(router.id);
       loadData();
       toast({ title: "Router deleted" });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
@@ -102,7 +102,7 @@ export default function MikrotikMonitor() {
   const syncNow = async (router) => {
     setSyncingId(router.id);
     try {
-      const res = await base44.functions.invoke('syncRouterNow', { router_id: router.id });
+      const res = await netscaleApi.functions.invoke('syncRouterNow', { router_id: router.id });
       const data = res?.data || res;
       if (data?.success) {
         toast({ title: `Synced ${data.sessions} session(s) from ${data.router}` });
@@ -117,7 +117,7 @@ export default function MikrotikMonitor() {
 
   const handleCommand = async (session, command) => {
     try {
-      await base44.entities.CommandQueue.create({ customer_id: session.customer_id, command_type: command, router_id: session.router_id, pppoe_username: session.pppoe_username, status: "pending" });
+      await netscaleApi.entities.CommandQueue.create({ customer_id: session.customer_id, command_type: command, router_id: session.router_id, pppoe_username: session.pppoe_username, status: "pending" });
       toast({ title: `${command} command queued for ${session.customer_name || session.pppoe_username}` });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
   };

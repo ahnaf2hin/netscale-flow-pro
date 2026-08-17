@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, UploadCloud, FileSpreadsheet, CheckCircle, AlertTriangle, ArrowRight, Trash2, Download } from "lucide-react";
 import PageHeader from "@/components/dashboard/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -49,8 +49,8 @@ export default function BulkImport() {
     setStage("parsing");
     setRows([]); setErrors([]); setResult(null);
     try {
-      const up = await base44.integrations.Core.UploadFile({ file });
-      const extracted = await base44.integrations.Core.ExtractDataFromUploadedFile({
+      const up = await netscaleApi.integrations.Core.UploadFile({ file });
+      const extracted = await netscaleApi.integrations.Core.ExtractDataFromUploadedFile({
         file_url: up.file_url,
         json_schema: CUSTOMER_SCHEMA,
       });
@@ -83,7 +83,7 @@ export default function BulkImport() {
   const doImport = async () => {
     setImporting(true);
     try {
-      const created = await base44.entities.Customer.bulkCreate(rows);
+      const created = await netscaleApi.entities.Customer.bulkCreate(rows);
       setResult({ success: created.length, total: rows.length });
       setStage("done");
       toast({ title: `${created.length} customers imported` });

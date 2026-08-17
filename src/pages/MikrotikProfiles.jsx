@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Sliders, Plus, Pencil, Trash2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -20,7 +20,7 @@ export default function MikrotikProfiles() {
   useEffect(() => { loadData(); }, []);
 
   const loadData = async () => {
-    try { setProfiles(await base44.entities.PPPoEProfile.list("-created_date", 200)); }
+    try { setProfiles(await netscaleApi.entities.PPPoEProfile.list("-created_date", 200)); }
     catch (err) { console.error(err); } finally { setLoading(false); }
   };
 
@@ -29,14 +29,14 @@ export default function MikrotikProfiles() {
   const save = async () => {
     const data = { ...form, shared_users: parseInt(form.shared_users) || 1 };
     try {
-      if (edit) await base44.entities.PPPoEProfile.update(edit.id, data);
-      else await base44.entities.PPPoEProfile.create(data);
+      if (edit) await netscaleApi.entities.PPPoEProfile.update(edit.id, data);
+      else await netscaleApi.entities.PPPoEProfile.create(data);
       setShowForm(false); loadData();
       toast({ title: edit ? "Profile updated" : "Profile created" });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
   };
 
-  const del = async (p) => { if (!window.confirm(`Delete profile "${p.name}"?`)) return; try { await base44.entities.PPPoEProfile.delete(p.id); loadData(); toast({ title: "Profile deleted" }); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
+  const del = async (p) => { if (!window.confirm(`Delete profile "${p.name}"?`)) return; try { await netscaleApi.entities.PPPoEProfile.delete(p.id); loadData(); toast({ title: "Profile deleted" }); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
 
   const active = profiles.filter(p => p.status === "active").length;
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, BarChart3, RefreshCw, TrendingUp, TrendingDown, DollarSign, Wallet } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend, PieChart, Pie, Cell } from "recharts";
 import PageHeader from "@/components/dashboard/PageHeader";
@@ -14,7 +14,7 @@ export default function AccountingReports() {
   useEffect(() => { loadData(); }, []);
 
   const loadData = async () => {
-    try { setTransactions(await base44.entities.AccountingTransaction.list("-created_date", 1000)); }
+    try { setTransactions(await netscaleApi.entities.AccountingTransaction.list("-created_date", 1000)); }
     catch (err) { console.error(err); } finally { setLoading(false); }
   };
 

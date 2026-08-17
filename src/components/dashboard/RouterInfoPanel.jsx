@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Server, RefreshCw, Loader2 } from "lucide-react";
 
 export default function RouterInfoPanel() {
@@ -9,7 +9,7 @@ export default function RouterInfoPanel() {
 
   const loadRouters = async () => {
     try {
-      const data = await base44.entities.MikrotikRouter.list("-created_date", 50);
+      const data = await netscaleApi.entities.MikrotikRouter.list("-created_date", 50);
       setRouters(data);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
@@ -18,7 +18,7 @@ export default function RouterInfoPanel() {
   const fetchSystemInfo = async () => {
     setRefreshing(true);
     try {
-      const res = await base44.functions.invoke('fetchRouterSystemInfo', {});
+      const res = await netscaleApi.functions.invoke('fetchRouterSystemInfo', {});
       if (res.data?.routers) {
         setRouters(res.data.routers);
       }

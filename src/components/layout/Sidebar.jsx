@@ -5,7 +5,7 @@ import {
   HardDrive, Globe, Store, UserCircle, Headset, ClipboardList, MessageSquare,
   Calculator, BarChart3, Menu, X, LogOut, ChevronRight, ChevronDown, UploadCloud, ClipboardCheck
 } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 
 const menuStructure = [
   { label: "Dashboard", path: "/", icon: LayoutDashboard },
@@ -168,7 +168,7 @@ export default function Sidebar() {
   });
   const location = useLocation();
 
-  const handleLogout = () => { base44.auth.logout("/login"); };
+  const handleLogout = () => { netscaleApi.auth.logout("/login"); };
 
   const isActive = (path) => {
     if (path === "/") return location.pathname === "/";

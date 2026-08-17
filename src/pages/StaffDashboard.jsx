@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, ClipboardList, Clock, Briefcase, Check, RefreshCw, Search, UserCircle, CalendarClock } from "lucide-react";
 import ColorStatCard from "@/components/dashboard/ColorStatCard";
 import { useToast } from "@/components/ui/use-toast";
@@ -29,22 +29,22 @@ export default function StaffDashboard() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const user = await base44.auth.me();
+      const user = await netscaleApi.auth.me();
       setMe(user);
       // Find the staff record matching this user (by email, fallback to name)
-      const allStaff = await base44.entities.Staff.list("-created_date", 200);
+      const allStaff = await netscaleApi.entities.Staff.list("-created_date", 200);
       const match = allStaff.find(s => (s.email && user.email && s.email.toLowerCase() === user.email.toLowerCase()))
         || allStaff.find(s => s.name && user.full_name && s.name.toLowerCase() === user.full_name.toLowerCase());
       setStaffProfile(match || null);
 
       let myReports = [];
       if (match) {
-        myReports = await base44.entities.WorkReport.filter({ staff_id: match.id }, "-report_date", 500);
+        myReports = await netscaleApi.entities.WorkReport.filter({ staff_id: match.id }, "-report_date", 500);
         if (myReports.length === 0) {
-          myReports = await base44.entities.WorkReport.filter({ staff_name: match.name }, "-report_date", 500);
+          myReports = await netscaleApi.entities.WorkReport.filter({ staff_name: match.name }, "-report_date", 500);
         }
       } else if (user.full_name) {
-        myReports = await base44.entities.WorkReport.filter({ staff_name: user.full_name }, "-report_date", 500);
+        myReports = await netscaleApi.entities.WorkReport.filter({ staff_name: user.full_name }, "-report_date", 500);
       }
       setReports(myReports);
     } catch (err) {

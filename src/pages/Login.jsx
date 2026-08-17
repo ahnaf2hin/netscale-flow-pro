@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { netscaleApi } from '@/api/apiClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -18,7 +18,7 @@ export default function Login() {
     setLoading(true);
     setError('');
     try {
-      await base44.auth.loginViaEmailPassword(email, password);
+      await netscaleApi.auth.loginViaEmailPassword(email, password);
       window.location.href = '/';
     } catch (err) {
       setError(err.message || 'Invalid credentials');

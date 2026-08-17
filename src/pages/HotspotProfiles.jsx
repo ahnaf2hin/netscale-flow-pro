@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Layers, Plus, Pencil, Trash2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -20,7 +20,7 @@ export default function HotspotProfiles() {
   useEffect(() => { loadData(); }, []);
 
   const loadData = async () => {
-    try { setProfiles(await base44.entities.HotspotProfile.list("-created_date", 200)); }
+    try { setProfiles(await netscaleApi.entities.HotspotProfile.list("-created_date", 200)); }
     catch (err) { console.error(err); } finally { setLoading(false); }
   };
 
@@ -29,14 +29,14 @@ export default function HotspotProfiles() {
   const save = async () => {
     const data = { ...form, shared_users: parseInt(form.shared_users) || 1, price: parseFloat(form.price) || 0 };
     try {
-      if (edit) await base44.entities.HotspotProfile.update(edit.id, data);
-      else await base44.entities.HotspotProfile.create(data);
+      if (edit) await netscaleApi.entities.HotspotProfile.update(edit.id, data);
+      else await netscaleApi.entities.HotspotProfile.create(data);
       setShowForm(false); loadData();
       toast({ title: edit ? "Profile updated" : "Profile created" });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
   };
 
-  const del = async (p) => { if (!window.confirm(`Delete profile "${p.name}"?`)) return; try { await base44.entities.HotspotProfile.delete(p.id); loadData(); toast({ title: "Profile deleted" }); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
+  const del = async (p) => { if (!window.confirm(`Delete profile "${p.name}"?`)) return; try { await netscaleApi.entities.HotspotProfile.delete(p.id); loadData(); toast({ title: "Profile deleted" }); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
 
   const active = profiles.filter(p => p.status === "active").length;
   const formatBDT = (a) => `৳${(a || 0).toLocaleString("en-BD")}`;

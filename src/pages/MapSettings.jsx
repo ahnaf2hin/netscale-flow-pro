@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, MapPin, RefreshCw, Save, Eye, EyeOff, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ export default function MapSettings() {
   const loadSettings = async () => {
     setLoading(true);
     try {
-      const list = await base44.entities.MapSetting.list("-created_date", 10);
+      const list = await netscaleApi.entities.MapSetting.list("-created_date", 10);
       if (list.length > 0) {
         const r = list[0];
         setRecordId(r.id);
@@ -47,9 +47,9 @@ export default function MapSettings() {
         notes: form.notes,
       };
       if (recordId) {
-        await base44.entities.MapSetting.update(recordId, payload);
+        await netscaleApi.entities.MapSetting.update(recordId, payload);
       } else {
-        const created = await base44.entities.MapSetting.create(payload);
+        const created = await netscaleApi.entities.MapSetting.create(payload);
         setRecordId(created.id);
       }
       toast({ title: "Map settings saved" });

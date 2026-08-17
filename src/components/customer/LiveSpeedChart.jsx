@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Pause } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 
 const MAX_POINTS = 180;
 const WINDOW_SECONDS = 90;
@@ -44,7 +44,7 @@ export default function LiveSpeedChart({ pppoeUsername, routerId, speedCapMbps, 
     };
 
     // Load initial data point immediately
-    base44.entities.PPPoESession.filter({ pppoe_username: pppoeUsername }, '-last_synced', 1)
+    netscaleApi.entities.PPPoESession.filter({ pppoe_username: pppoeUsername }, '-last_synced', 1)
       .then(sessions => {
         if (sessions.length > 0) {
           const s = sessions[0];
@@ -54,7 +54,7 @@ export default function LiveSpeedChart({ pppoeUsername, routerId, speedCapMbps, 
       .catch(() => {});
 
     // Subscribe to real-time updates pushed by the collector
-    const unsubscribe = base44.entities.PPPoESession.subscribe((event) => {
+    const unsubscribe = netscaleApi.entities.PPPoESession.subscribe((event) => {
       const data = event.data;
       if (!data || data.pppoe_username !== pppoeUsername) return;
       pushDataPoint(data.download_speed_kbps || 0, data.upload_speed_kbps || 0);
@@ -63,7 +63,7 @@ export default function LiveSpeedChart({ pppoeUsername, routerId, speedCapMbps, 
     // Fallback: poll directly when collector isn't pushing data
     const pollTimer = setInterval(() => {
       if (!routerId || Date.now() - lastPushTime < 800) return;
-      base44.functions.invoke('syncCustomerSpeed', {
+      netscaleApi.functions.invoke('syncCustomerSpeed', {
         router_id: routerId,
         pppoe_username: pppoeUsername,
       }).then(res => {

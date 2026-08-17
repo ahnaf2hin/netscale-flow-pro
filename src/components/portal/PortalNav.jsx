@@ -1,11 +1,11 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Wifi, LogOut } from "lucide-react";
 
 export default function PortalNav({ customerName, email }) {
   const location = useLocation();
-  const handleLogout = () => base44.auth.logout("/portal/login");
+  const handleLogout = () => netscaleApi.auth.logout("/portal/login");
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-100">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Ticket, Plus, Trash2, RefreshCw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -24,8 +24,8 @@ export default function HotspotVouchers() {
   const loadData = async () => {
     try {
       const [v, p] = await Promise.all([
-        base44.entities.HotspotVoucher.list("-created_date", 500),
-        base44.entities.HotspotProfile.list("-created_date", 100),
+        netscaleApi.entities.HotspotVoucher.list("-created_date", 500),
+        netscaleApi.entities.HotspotProfile.list("-created_date", 100),
       ]);
       setVouchers(v); setProfiles(p);
     } catch (err) { console.error(err); } finally { setLoading(false); }
@@ -44,13 +44,13 @@ export default function HotspotVouchers() {
       });
     }
     try {
-      await base44.entities.HotspotVoucher.bulkCreate(records);
+      await netscaleApi.entities.HotspotVoucher.bulkCreate(records);
       setShowForm(false); loadData();
       toast({ title: `${count} vouchers generated` });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
   };
 
-  const del = async (v) => { try { await base44.entities.HotspotVoucher.delete(v.id); loadData(); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
+  const del = async (v) => { try { await netscaleApi.entities.HotspotVoucher.delete(v.id); loadData(); } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); } };
 
   const filtered = vouchers.filter(v => !search || v.code?.toLowerCase().includes(search.toLowerCase()) || v.profile?.toLowerCase().includes(search.toLowerCase()));
   const unused = vouchers.filter(v => v.status === "unused").length;

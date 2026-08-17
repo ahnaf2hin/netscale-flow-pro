@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, MessageSquare, Plus, Pencil, Trash2, RefreshCw, Eye, EyeOff, Star, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,7 @@ export default function SmsProviders() {
   const loadProviders = async () => {
     setLoading(true);
     try {
-      const data = await base44.entities.SmsProvider.list("-created_date", 50);
+      const data = await netscaleApi.entities.SmsProvider.list("-created_date", 50);
       setProviders(data);
     } catch (err) {
       toast({ variant: "destructive", title: "Failed to load providers", description: err.message });
@@ -94,14 +94,14 @@ export default function SmsProviders() {
     setSaving(true);
     try {
       if (editingId) {
-        await base44.entities.SmsProvider.update(editingId, form);
+        await netscaleApi.entities.SmsProvider.update(editingId, form);
       } else {
-        await base44.entities.SmsProvider.create(form);
+        await netscaleApi.entities.SmsProvider.create(form);
       }
       if (form.is_default) {
         const others = providers.filter(p => p.id !== editingId && p.is_default);
         for (const p of others) {
-          await base44.entities.SmsProvider.update(p.id, { is_default: false });
+          await netscaleApi.entities.SmsProvider.update(p.id, { is_default: false });
         }
       }
       toast({ title: "Provider saved", description: `${form.display_name} configuration stored.` });
@@ -115,7 +115,7 @@ export default function SmsProviders() {
   const handleDelete = async (p) => {
     if (!confirm(`Delete ${p.display_name}?`)) return;
     try {
-      await base44.entities.SmsProvider.delete(p.id);
+      await netscaleApi.entities.SmsProvider.delete(p.id);
       toast({ title: "Provider deleted" });
       loadProviders();
     } catch (err) {
@@ -125,7 +125,7 @@ export default function SmsProviders() {
 
   const toggleActive = async (p) => {
     try {
-      await base44.entities.SmsProvider.update(p.id, { is_active: !p.is_active });
+      await netscaleApi.entities.SmsProvider.update(p.id, { is_active: !p.is_active });
       loadProviders();
     } catch (err) {
       toast({ variant: "destructive", title: "Update failed", description: err.message });
@@ -134,10 +134,10 @@ export default function SmsProviders() {
 
   const setDefault = async (p) => {
     try {
-      await base44.entities.SmsProvider.update(p.id, { is_default: true });
+      await netscaleApi.entities.SmsProvider.update(p.id, { is_default: true });
       const others = providers.filter(g => g.id !== p.id && g.is_default);
       for (const g of others) {
-        await base44.entities.SmsProvider.update(g.id, { is_default: false });
+        await netscaleApi.entities.SmsProvider.update(g.id, { is_default: false });
       }
       toast({ title: `${p.display_name} set as default` });
       loadProviders();

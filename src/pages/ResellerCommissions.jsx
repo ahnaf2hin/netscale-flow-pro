@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Handshake, RefreshCw, TrendingUp, Users, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -20,7 +20,7 @@ export default function ResellerCommissions() {
   useEffect(() => { loadData(); }, []);
 
   const loadData = async () => {
-    try { setResellers(await base44.entities.Reseller.list("-created_date", 200)); }
+    try { setResellers(await netscaleApi.entities.Reseller.list("-created_date", 200)); }
     catch (err) { console.error(err); } finally { setLoading(false); }
   };
 
@@ -28,7 +28,7 @@ export default function ResellerCommissions() {
 
   const save = async () => {
     try {
-      await base44.entities.Reseller.update(editId, { commission_rate: parseFloat(form.commission_rate) || 0 });
+      await netscaleApi.entities.Reseller.update(editId, { commission_rate: parseFloat(form.commission_rate) || 0 });
       setShowForm(false); loadData();
       toast({ title: "Commission rate updated" });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }

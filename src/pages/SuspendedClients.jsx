@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, UserX, RefreshCw, Power, Search, Phone } from "lucide-react";
 import PageHeader from "@/components/dashboard/PageHeader";
 import ColorStatCard from "@/components/dashboard/ColorStatCard";
@@ -18,8 +18,8 @@ export default function SuspendedClients() {
   const loadData = async () => {
     try {
       const [c, p] = await Promise.all([
-        base44.entities.Customer.filter({ status: "suspended" }, "-created_date", 500),
-        base44.entities.Package.list("-created_date", 100),
+        netscaleApi.entities.Customer.filter({ status: "suspended" }, "-created_date", 500),
+        netscaleApi.entities.Package.list("-created_date", 100),
       ]);
       setCustomers(c);
       setPackages(p);
@@ -30,7 +30,7 @@ export default function SuspendedClients() {
   const reactivate = async (c) => {
     setReactivating(c.id);
     try {
-      await base44.entities.Customer.update(c.id, { status: "active" });
+      await netscaleApi.entities.Customer.update(c.id, { status: "active" });
       toast({ title: `${c.name} reactivated` });
       loadData();
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }

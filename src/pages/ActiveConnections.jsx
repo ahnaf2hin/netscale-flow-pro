@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Wifi, Activity, RefreshCw, Search, Plus, Pencil, Trash2, Power, PowerOff, Eye, EyeOff, Users, Server, UserPlus, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,7 +48,7 @@ export default function ActiveConnections() {
   useEffect(() => {
     (async () => {
       try {
-        const rts = await base44.entities.MikrotikRouter.list("-created_date", 50);
+        const rts = await netscaleApi.entities.MikrotikRouter.list("-created_date", 50);
         setRouters(rts);
         if (rts.length > 0) {
           setSelectedRouter(rts[0].id);
@@ -70,7 +70,7 @@ export default function ActiveConnections() {
 
   const loadFromDB = async (routerId) => {
     try {
-      const s = await base44.entities.PPPoESession.filter({ router_id: routerId }, "-last_synced", 500);
+      const s = await netscaleApi.entities.PPPoESession.filter({ router_id: routerId }, "-last_synced", 500);
       setSessions(s);
     } catch (e) { console.error(e); }
   };
@@ -78,7 +78,7 @@ export default function ActiveConnections() {
   const syncFromRouter = async (routerId) => {
     setSyncing(true);
     try {
-      const res = await base44.functions.invoke("managePppoe", { action: "list", router_id: routerId });
+      const res = await netscaleApi.functions.invoke("managePppoe", { action: "list", router_id: routerId });
       const d = res.data;
       if (d.success === false) { toast({ title: "Sync failed", description: d.error, variant: "destructive" }); }
       else { setProfiles(d.profiles || []); await loadFromDB(routerId); }
@@ -89,7 +89,7 @@ export default function ActiveConnections() {
   const handlePppoeAction = async (action, payload, successMsg) => {
     setActionLoading(true);
     try {
-      const res = await base44.functions.invoke("managePppoe", { action, router_id: selectedRouter, ...payload });
+      const res = await netscaleApi.functions.invoke("managePppoe", { action, router_id: selectedRouter, ...payload });
       if (res.data.success === false) throw new Error(res.data.error);
       toast({ title: successMsg });
       await syncFromRouter(selectedRouter);
@@ -107,7 +107,7 @@ export default function ActiveConnections() {
       const payload = editMode
         ? { action: "update", id: form.id, name: form.name, profile: form.profile, comment: form.comment, ...(form.password ? { password: form.password } : {}) }
         : { action: "add", name: form.name, password: form.password, profile: form.profile, comment: form.comment };
-      const res = await base44.functions.invoke("managePppoe", { router_id: selectedRouter, ...payload });
+      const res = await netscaleApi.functions.invoke("managePppoe", { router_id: selectedRouter, ...payload });
       if (res.data.success === false) throw new Error(res.data.error);
       toast({ title: editMode ? "PPPoE user updated" : "PPPoE user created" });
       setShowForm(false);
@@ -120,7 +120,7 @@ export default function ActiveConnections() {
     if (!deleteTarget) return;
     setActionLoading(true);
     try {
-      const res = await base44.functions.invoke("managePppoe", { action: "delete", router_id: selectedRouter, id: deleteTarget.secret_id });
+      const res = await netscaleApi.functions.invoke("managePppoe", { action: "delete", router_id: selectedRouter, id: deleteTarget.secret_id });
       if (res.data.success === false) throw new Error(res.data.error);
       toast({ title: "User deleted" });
       setDeleteTarget(null);
@@ -135,7 +135,7 @@ export default function ActiveConnections() {
       setDetailsMode("edit");
       setDetailsLoading(true);
       try {
-        const c = await base44.entities.Customer.get(s.customer_id);
+        const c = await netscaleApi.entities.Customer.get(s.customer_id);
         setDetailsForm({
           name: c.name || "", phone: c.phone || "", email: c.email || "", address: c.address || "",
           latitude: c.latitude ? String(c.latitude) : "", longitude: c.longitude ? String(c.longitude) : "",
@@ -161,7 +161,7 @@ export default function ActiveConnections() {
         longitude: detailsForm.longitude ? parseFloat(detailsForm.longitude) : undefined,
       };
       if (detailsMode === "add") {
-        await base44.entities.Customer.create({
+        await netscaleApi.entities.Customer.create({
           ...data,
           pppoe_username: detailsTarget.pppoe_username,
           pppoe_password: detailsTarget.password || "",
@@ -171,7 +171,7 @@ export default function ActiveConnections() {
         });
         toast({ title: "Client details added", description: "Customer ID: " + (detailsForm.customer_code || "") });
       } else {
-        await base44.entities.Customer.update(detailsTarget.customer_id, data);
+        await netscaleApi.entities.Customer.update(detailsTarget.customer_id, data);
         toast({ title: "Client details updated" });
       }
       setDetailsTarget(null);

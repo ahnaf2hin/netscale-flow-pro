@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Map as MapIcon, Pencil, Check, Cable, Network, GitBranch, Boxes, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -63,13 +63,13 @@ export default function NetworkMap() {
   const loadData = async () => {
     try {
       const [custs, routes, pkgs, onuList, officeList, devList, settingsList] = await Promise.all([
-        base44.entities.Customer.list("-created_date", 500),
-        base44.entities.CableRoute.list("-created_date", 200),
-        base44.entities.Package.list("-created_date", 100),
-        base44.entities.ONU.list("-last_synced", 500),
-        base44.entities.Office.list("-created_date", 100),
-        base44.entities.NetworkDevice.list("-created_date", 200),
-        base44.entities.MapSetting.list("-created_date", 10),
+        netscaleApi.entities.Customer.list("-created_date", 500),
+        netscaleApi.entities.CableRoute.list("-created_date", 200),
+        netscaleApi.entities.Package.list("-created_date", 100),
+        netscaleApi.entities.ONU.list("-last_synced", 500),
+        netscaleApi.entities.Office.list("-created_date", 100),
+        netscaleApi.entities.NetworkDevice.list("-created_date", 200),
+        netscaleApi.entities.MapSetting.list("-created_date", 10),
       ]);
       setCustomers(custs);
       setCableRoutes(routes);
@@ -120,7 +120,7 @@ export default function NetworkMap() {
     if (!cableForm.name.trim()) { toast({ variant: "destructive", title: "Route name is required" }); return; }
     setSaving(true);
     try {
-      await base44.entities.CableRoute.create({
+      await netscaleApi.entities.CableRoute.create({
         name: cableForm.name,
         cable_type: cableForm.cable_type,
         color: cableForm.color,
@@ -141,7 +141,7 @@ export default function NetworkMap() {
     if (!deviceForm.name.trim()) { toast({ variant: "destructive", title: "Device name is required" }); return; }
     setSaving(true);
     try {
-      await base44.entities.NetworkDevice.create({
+      await netscaleApi.entities.NetworkDevice.create({
         name: deviceForm.name,
         type: deviceDraft.type,
         latitude: deviceDraft.lat,
@@ -159,13 +159,13 @@ export default function NetworkMap() {
 
   const deleteRoute = async (id) => {
     if (!confirm("Delete this cable route?")) return;
-    try { await base44.entities.CableRoute.delete(id); toast({ title: "Route deleted" }); loadData(); }
+    try { await netscaleApi.entities.CableRoute.delete(id); toast({ title: "Route deleted" }); loadData(); }
     catch (err) { toast({ variant: "destructive", title: "Delete failed", description: err.message }); }
   };
 
   const deleteDevice = async (id) => {
     if (!confirm("Delete this device?")) return;
-    try { await base44.entities.NetworkDevice.delete(id); toast({ title: "Device deleted" }); loadData(); }
+    try { await netscaleApi.entities.NetworkDevice.delete(id); toast({ title: "Device deleted" }); loadData(); }
     catch (err) { toast({ variant: "destructive", title: "Delete failed", description: err.message }); }
   };
 

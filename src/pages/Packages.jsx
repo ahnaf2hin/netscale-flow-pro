@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Package, Plus, Pencil, Trash2, RefreshCw, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -33,8 +33,8 @@ export default function Packages() {
   const loadData = async () => {
     try {
       const [pkg, custs] = await Promise.all([
-        base44.entities.Package.list("-created_date", 100),
-        base44.entities.Customer.list("-created_date", 500),
+        netscaleApi.entities.Package.list("-created_date", 100),
+        netscaleApi.entities.Customer.list("-created_date", 500),
       ]);
       setPackages(pkg);
       setCustomers(custs);
@@ -48,8 +48,8 @@ export default function Packages() {
   const savePkg = async () => {
     const data = { ...pkgForm, speed_mbps: parseFloat(pkgForm.speed_mbps), monthly_price: parseFloat(pkgForm.monthly_price), validity_days: parseInt(pkgForm.validity_days) };
     try {
-      if (editPkg) { await base44.entities.Package.update(editPkg.id, data); }
-      else { await base44.entities.Package.create(data); }
+      if (editPkg) { await netscaleApi.entities.Package.update(editPkg.id, data); }
+      else { await netscaleApi.entities.Package.create(data); }
       setShowForm(false);
       loadData();
       toast({ title: editPkg ? "Package updated" : "Package created" });
@@ -59,7 +59,7 @@ export default function Packages() {
   const deletePkg = async (p) => {
     if (!window.confirm(`Delete package "${p.name}"?`)) return;
     try {
-      await base44.entities.Package.delete(p.id);
+      await netscaleApi.entities.Package.delete(p.id);
       loadData();
       toast({ title: "Package deleted" });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }

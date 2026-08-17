@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Store, Plus, Pencil, Trash2, RefreshCw, Search, UserCheck, DollarSign, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -33,7 +33,7 @@ export default function Reseller() {
 
   const loadData = async () => {
     try {
-      const r = await base44.entities.Reseller.list("-created_date", 200);
+      const r = await netscaleApi.entities.Reseller.list("-created_date", 200);
       setResellers(r);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
@@ -45,8 +45,8 @@ export default function Reseller() {
   const saveReseller = async () => {
     const data = { ...form, balance: parseFloat(form.balance), commission_rate: parseFloat(form.commission_rate), total_customers: parseInt(form.total_customers) };
     try {
-      if (editReseller) { await base44.entities.Reseller.update(editReseller.id, data); }
-      else { await base44.entities.Reseller.create(data); }
+      if (editReseller) { await netscaleApi.entities.Reseller.update(editReseller.id, data); }
+      else { await netscaleApi.entities.Reseller.create(data); }
       setShowForm(false);
       loadData();
       toast({ title: editReseller ? "Reseller updated" : "Reseller added" });
@@ -56,7 +56,7 @@ export default function Reseller() {
   const deleteReseller = async (r) => {
     if (!window.confirm(`Delete reseller "${r.name}"?`)) return;
     try {
-      await base44.entities.Reseller.delete(r.id);
+      await netscaleApi.entities.Reseller.delete(r.id);
       loadData();
       toast({ title: "Reseller deleted" });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }

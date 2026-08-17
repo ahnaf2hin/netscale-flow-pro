@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,7 +20,7 @@ export default function Zones() {
 
   const load = async () => {
     try {
-      const data = await base44.entities.Zone.list("-created_date", 200);
+      const data = await netscaleApi.entities.Zone.list("-created_date", 200);
       setZones(data);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
@@ -32,8 +32,8 @@ export default function Zones() {
   const save = async () => {
     if (!form.name) { toast({ title: "Name required", variant: "destructive" }); return; }
     try {
-      if (editId) await base44.entities.Zone.update(editId, form);
-      else await base44.entities.Zone.create(form);
+      if (editId) await netscaleApi.entities.Zone.update(editId, form);
+      else await netscaleApi.entities.Zone.create(form);
       toast({ title: editId ? "Zone updated" : "Zone created" });
       setOpen(false);
       load();
@@ -42,7 +42,7 @@ export default function Zones() {
 
   const remove = async (id) => {
     if (!confirm("Delete this zone?")) return;
-    try { await base44.entities.Zone.delete(id); toast({ title: "Zone deleted" }); load(); }
+    try { await netscaleApi.entities.Zone.delete(id); toast({ title: "Zone deleted" }); load(); }
     catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }
   };
 

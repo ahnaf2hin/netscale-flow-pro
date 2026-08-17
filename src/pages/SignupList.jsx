@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, UserPlus, RefreshCw, Search, Check, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -24,8 +24,8 @@ export default function SignupList() {
   const loadData = async () => {
     try {
       const [s, p] = await Promise.all([
-        base44.entities.SignupRequest.list("-created_date", 500),
-        base44.entities.Package.list("-created_date", 100),
+        netscaleApi.entities.SignupRequest.list("-created_date", 500),
+        netscaleApi.entities.Package.list("-created_date", 100),
       ]);
       setSignups(s);
       setPackages(p);
@@ -35,7 +35,7 @@ export default function SignupList() {
 
   const saveSignup = async () => {
     try {
-      await base44.entities.SignupRequest.create(form);
+      await netscaleApi.entities.SignupRequest.create(form);
       setShowForm(false);
       loadData();
       toast({ title: "Signup request added" });
@@ -44,7 +44,7 @@ export default function SignupList() {
 
   const updateStatus = async (s, status) => {
     try {
-      await base44.entities.SignupRequest.update(s.id, { status });
+      await netscaleApi.entities.SignupRequest.update(s.id, { status });
       loadData();
       toast({ title: `Request ${status}` });
     } catch (err) { toast({ title: "Error", description: err.message, variant: "destructive" }); }

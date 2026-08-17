@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, Ticket, Plus, RefreshCw, Search, Check, AlertTriangle, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -37,8 +37,8 @@ export default function Support() {
   const loadData = async () => {
     try {
       const [t, c] = await Promise.all([
-        base44.entities.SupportTicket.list("-created_date", 500),
-        base44.entities.Customer.list("-created_date", 500),
+        netscaleApi.entities.SupportTicket.list("-created_date", 500),
+        netscaleApi.entities.Customer.list("-created_date", 500),
       ]);
       setTickets(t);
       setCustomers(c);
@@ -51,8 +51,8 @@ export default function Support() {
 
   const saveTicket = async () => {
     try {
-      if (editTicket) { await base44.entities.SupportTicket.update(editTicket.id, form); }
-      else { await base44.entities.SupportTicket.create(form); }
+      if (editTicket) { await netscaleApi.entities.SupportTicket.update(editTicket.id, form); }
+      else { await netscaleApi.entities.SupportTicket.create(form); }
       setShowForm(false);
       loadData();
       toast({ title: editTicket ? "Ticket updated" : "Ticket created" });

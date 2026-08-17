@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Link } from "react-router-dom";
 import { Users, UserCheck, UserX, CreditCard, AlertTriangle, TrendingUp, RefreshCw, Loader2, Wifi } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -38,10 +38,10 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const [customers, invoices, pppoe, bwLogs] = await Promise.all([
-        base44.entities.Customer.list("-created_date", 500),
-        base44.entities.Invoice.list("-created_date", 500),
-        base44.entities.PPPoESession.filter({ status: "online" }, "-last_synced", 500),
-        base44.entities.BandwidthLog.list("-log_date", 30),
+        netscaleApi.entities.Customer.list("-created_date", 500),
+        netscaleApi.entities.Invoice.list("-created_date", 500),
+        netscaleApi.entities.PPPoESession.filter({ status: "online" }, "-last_synced", 500),
+        netscaleApi.entities.BandwidthLog.list("-log_date", 30),
       ]);
 
       const activeCustomers = customers.filter(c => c.status === "active").length;

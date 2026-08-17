@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { netscaleApi } from "@/api/apiClient";
 import { Loader2, CreditCard, Plus, Search, Package, CheckCircle, X, RefreshCw, AlertTriangle, Users, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,9 +43,9 @@ export default function Billing() {
   const loadData = async () => {
     try {
       const [inv, pkg, pay] = await Promise.all([
-        base44.entities.Invoice.list("-created_date", 500),
-        base44.entities.Package.list("-created_date", 100),
-        base44.entities.Payment.list("-created_date", 200),
+        netscaleApi.entities.Invoice.list("-created_date", 500),
+        netscaleApi.entities.Package.list("-created_date", 100),
+        netscaleApi.entities.Payment.list("-created_date", 200),
       ]);
       setInvoices(inv);
       setPackages(pkg);
@@ -60,8 +60,8 @@ export default function Billing() {
   const savePkg = async () => {
     const data = { ...pkgForm, speed_mbps: parseFloat(pkgForm.speed_mbps), monthly_price: parseFloat(pkgForm.monthly_price), validity_days: parseInt(pkgForm.validity_days) };
     try {
-      if (editPkg) { await base44.entities.Package.update(editPkg.id, data); }
-      else { await base44.entities.Package.create(data); }
+      if (editPkg) { await netscaleApi.entities.Package.update(editPkg.id, data); }
+      else { await netscaleApi.entities.Package.create(data); }
       setShowPkgForm(false);
       loadData();
       toast({ title: editPkg ? "Package updated" : "Package created" });
@@ -90,8 +90,8 @@ export default function Billing() {
     setBulkLoading(true);
     try {
       const today = new Date().toISOString().split("T")[0];
-      await base44.entities.Invoice.bulkUpdate(toMark.map(i => ({ id: i.id, status: "paid", paid_date: today, payment_method: "cash" })));
-      await base44.entities.Payment.bulkCreate(toMark.map(i => ({ invoice_id: i.id, customer_id: i.customer_id, amount: i.amount, gateway: "cash", transaction_id: "CASH-" + Date.now() + "-" + i.id.slice(-4), status: "completed", paid_at: new Date().toISOString() })));
+      await netscaleApi.entities.Invoice.bulkUpdate(toMark.map(i => ({ id: i.id, status: "paid", paid_date: today, payment_method: "cash" })));
+      await netscaleApi.entities.Payment.bulkCreate(toMark.map(i => ({ invoice_id: i.id, customer_id: i.customer_id, amount: i.amount, gateway: "cash", transaction_id: "CASH-" + Date.now() + "-" + i.id.slice(-4), status: "completed", paid_at: new Date().toISOString() })));
       toast({ title: `${toMark.length} invoice(s) marked paid` });
       clearSelection();
       loadData();
@@ -107,7 +107,7 @@ export default function Billing() {
     setGenLoading(true);
     setGenResult(null);
     try {
-      const res = await base44.functions.invoke('generateMonthlyInvoices', {});
+      const res = await netscaleApi.functions.invoke('generateMonthlyInvoices', {});
       const data = res.data;
       setGenResult(data);
       toast({
